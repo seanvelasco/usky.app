@@ -1,4 +1,4 @@
-import { Show, For, Suspense, createResource } from "solid-js"
+import { Show, For, Suspense } from "solid-js"
 import { Outlet, A, useLocation, useNavigate } from "@solidjs/router"
 import { HomeIcon } from "./assets/HomeIcon"
 import { SearchIcon } from "./assets/SearchIcon"
@@ -27,11 +27,7 @@ import Profile, {
 } from "./routes/profile/[profile]"
 import Feed, { FeedData } from "./routes/profile/[profile]/feed/[feed]"
 import SearchPage from "./routes/search"
-import getFeed from "./api/feed/getFeed"
-import FeedPost from "./components/Post"
-import Spinner from "./components/Spinner"
 import styles from "./App.module.css"
-import { Title, Meta } from "@solidjs/meta"
 import Discover, { DiscoverData } from "./routes"
 
 const Header = () => {
