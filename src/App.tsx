@@ -3,8 +3,7 @@ import { Outlet, A, useLocation, useNavigate } from "@solidjs/router"
 import { HomeIcon } from "./assets/HomeIcon"
 import { SearchIcon } from "./assets/SearchIcon"
 import { FeedsIcon } from "./assets/FeedsIcon"
-import { Routes, Route } from "@solidjs/router"
-import { useRouteData } from "@solidjs/router"
+import { Routes, Route, useRouteData } from "@solidjs/router"
 import Search from "./components/Search"
 import { ChevronLeft } from "./assets/ChevronLeft"
 import Sidebar from "./components/layout/Sidebar"
@@ -32,6 +31,8 @@ import getFeed from "./api/feed/getFeed"
 import FeedPost from "./components/Post"
 import Spinner from "./components/Spinner"
 import styles from "./App.module.css"
+import { Title, Meta } from "@solidjs/meta"
+import Discover, { DiscoverData } from "./routes"
 
 const Header = () => {
 	const navigate = useNavigate()
@@ -124,17 +125,13 @@ const FeedView = () => {
 	return (
 		<Routes>
 			<Route path="/">
-				<Route path="/" component={Timeline} data={DiscoverFeedData} />
 				<Route
-					path="/hot"
-					component={Timeline}
-					data={DiscoverFeedData}
-				/>
-				<Route
-					path="/live"
-					component={Timeline}
-					data={DiscoverFeedData}
-				/>
+					path="/"
+					component={Discover}
+					data={DiscoverData}
+				></Route>
+				<Route path="/hot" component={Discover} data={DiscoverData} />
+				<Route path="/live" component={Discover} data={DiscoverData} />
 				<Route path="/search" component={SearchPage} />
 				<Route path="/feeds" component={SearchPage} />
 				<Route
@@ -178,30 +175,6 @@ const FeedView = () => {
 				/>
 			</Route>
 		</Routes>
-	)
-}
-
-export const DiscoverFeedData = () => {
-	const [feed] = createResource(
-		() =>
-			"at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot",
-		getFeed
-	)
-	return feed
-}
-
-const Timeline = () => {
-	const feed = useRouteData<typeof DiscoverFeedData>()
-	return (
-		<Suspense
-			fallback={
-				<div>
-					<Spinner />
-				</div>
-			}
-		>
-			<For each={feed()?.feed}>{(post) => <FeedPost {...post} />}</For>
-		</Suspense>
 	)
 }
 

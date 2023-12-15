@@ -55,7 +55,7 @@ const RelevantSection = () => {
 	const post = useRouteData<typeof PostData>()
 
 	return (
-		<Show when={post()?.actors}>
+		<Show when={post && post()?.actors}>
 			{(actors) => (
 				<ActorsSection title="Relevant people" actors={actors()} />
 			)}

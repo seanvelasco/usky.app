@@ -1,6 +1,6 @@
 /* @refresh reload */
 import App from "./App"
-import { render } from "solid-js/web"
+import { ErrorBoundary, render } from "solid-js/web"
 import { MetaProvider } from "@solidjs/meta"
 import { Router } from "@solidjs/router"
 
@@ -10,7 +10,15 @@ render(
 	() => (
 		<Router>
 			<MetaProvider>
-				<App />
+				<ErrorBoundary
+					fallback={(error) => (
+						<div>
+							<code>Error occured: {error?.message}</code>
+						</div>
+					)}
+				>
+					<App />
+				</ErrorBoundary>
 			</MetaProvider>
 		</Router>
 	),
