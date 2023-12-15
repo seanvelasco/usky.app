@@ -1,9 +1,16 @@
 import { Show, For, Suspense } from "solid-js"
-import { Outlet, A, useLocation, useNavigate } from "@solidjs/router"
+import {
+	Outlet,
+	A,
+	useLocation,
+	useNavigate,
+	Routes,
+	Route,
+	useRouteData
+} from "@solidjs/router"
 import { HomeIcon } from "./assets/HomeIcon"
 import { SearchIcon } from "./assets/SearchIcon"
 import { FeedsIcon } from "./assets/FeedsIcon"
-import { Routes, Route, useRouteData } from "@solidjs/router"
 import Search from "./components/Search"
 import { ChevronLeft } from "./assets/ChevronLeft"
 import Sidebar from "./components/layout/Sidebar"
