@@ -25,7 +25,7 @@ import Profile, {
 	FeedsData,
 	ListsData
 } from "./routes/profile/[profile]"
-import Feed, { FeedData } from "./routes/profile/feed/[feed]"
+import Feed, { FeedData } from "./routes/profile/[profile]/feed/[feed]"
 import SearchPage from "./routes/search"
 import getFeed from "./api/feed/getFeed"
 import FeedPost from "./components/Post"

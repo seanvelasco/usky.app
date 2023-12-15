@@ -1,8 +1,8 @@
 import { createResource, Suspense } from "solid-js"
 import { useRouteData, type RouteDataFuncArgs } from "@solidjs/router"
-import getFeedGenerator from "../../../../api/feed/getFeedGenerator"
+import getFeedGenerator from "../../../../../api/feed/getFeedGenerator"
 import styles from "./styles.module.css"
-import Avatar from "../../../../components/Avatar"
+import Avatar from "../../../../../components/Avatar"
 
 export const FeedData = ({ params }: RouteDataFuncArgs) => {
 	const uri = () =>
