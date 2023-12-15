@@ -1,0 +1,22 @@
+.wrapper {
+	background-color: rgba(43, 45, 48, 255);
+	border-radius: 16px;
+	border: 1px solid var(--border);
+	overflow: hidden;
+	gap: 1px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.image {
+	position: relative;
+	width: 100%;
+	height: auto;
+}
+
+.image img {
+	object-fit: cover;
+	vertical-align: middle;
+	height: 100%;
+	width: 100%;
+}

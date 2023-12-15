@@ -1,0 +1,37 @@
+.container {
+	display: flex;
+	align-content: center;
+	align-items: center;
+	justify-content: center;
+	justify-items: center;
+	height: 100%;
+	width: 100%;
+}
+
+.spinner {
+	/* border-radius: 50%;
+	border-top: 2px solid var(--text-secondary);
+	width: 2rem;
+	height: 2rem;
+	animation: spin 1s linear infinite; */
+
+	display: inline-block;
+	width: 2rem;
+	height: 2rem;
+	vertical-align: text-bottom;
+	border: 0.25em solid currentColor;
+	border-right-color: currentcolor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	-webkit-animation: spin 0.75s linear infinite;
+	animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

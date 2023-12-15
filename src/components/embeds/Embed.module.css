@@ -1,0 +1,97 @@
+.embed {
+	position: relative;
+	z-index: 1;
+	display: block;
+	border: 1px solid var(--border);
+	width: 100%;
+	border-radius: 16px;
+	background-color: inherit;
+	overflow: hidden;
+	transition: background-color 0.2s ease;
+	animation: incomingMessageAnimation 0.15s linear;
+}
+
+.record {
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	transition: background-color 0.2s ease;
+	animation: incomingMessageAnimation 0.15s linear;
+}
+
+.embed:hover {
+	background-color: #323232;
+}
+
+.image {
+	aspect-ratio: 2 / 1;
+	object-fit: cover;
+	height: auto;
+	vertical-align: middle;
+	max-height: 16rem;
+	width: 100%;
+}
+
+.text {
+	justify-content: center;
+	vertical-align: middle;
+	justify-items: center;
+	padding: 1rem 1.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+@media only screen and (max-width: 540px) {
+	.text {
+		padding: 0.75rem 1rem;
+	}
+}
+
+.url {
+	color: var(--text-secondary);
+	z-index: 1;
+	position: relative;
+}
+
+.name {
+	color: white;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	font-weight: 500;
+	position: relative;
+	z-index: 1;
+}
+
+.handle {
+	color: var(--text-secondary);
+}
+
+.title {
+	font-weight: 500;
+	color: var(--text-primary);
+	z-index: 1;
+	position: relative;
+}
+.name:hover,
+.handle a:hover,
+.url:hover,
+.title:hover {
+	text-decoration: underline;
+}
+
+.description {
+	color: var(--text-secondary);
+	text-overflow: ellipsis;
+	word-break: break-word;
+	white-space: pre-wrap;
+}
+
+.wrapper {
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}

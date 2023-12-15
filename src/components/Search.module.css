@@ -1,0 +1,22 @@
+.search {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	display: block;
+	height: 2.5rem;
+	border-radius: 2.5rem;
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-secondary);
+	display: flex;
+	letter-spacing: 0.25px;
+	font-weight: 400;
+	color: rgb(255, 255, 255);
+	font-size: 1em;
+	align-items: center;
+	justify-content: center;
+	transition: background-color 100ms ease-in;
+}
+.search:focus {
+	outline-style: solid;
+	outline-width: 2px;
+	outline-color: var(--link-primary);
+}
