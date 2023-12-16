@@ -71,6 +71,7 @@ const PostEmbed = (props: PostEmbedType) => {
 						</Show>
 					</div>
 					<A
+						aria-label="Post embed"
 						class={postStyles.wrapper}
 						href={`/profile/${props.author?.handle}/post/${id(
 							props?.uri
