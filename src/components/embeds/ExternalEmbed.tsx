@@ -21,6 +21,7 @@ const ExternalEmbed = (props: { external: ExternalEmbedType }) => {
 							image: image(),
 							did: did(props.external.uri)
 						})}
+						alt={props.external.title}
 					/>
 				)}
 			</Show>

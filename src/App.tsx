@@ -104,7 +104,12 @@ const Navigation = () => {
 			<For each={links}>
 				{(link) => (
 					<div>
-						<A end activeClass="highlight" href={link.href}>
+						<A
+							end
+							activeClass="highlight"
+							aria-label={link.label}
+							href={link.href}
+						>
 							{link.icon}
 						</A>
 					</div>

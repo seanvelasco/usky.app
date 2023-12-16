@@ -21,7 +21,11 @@ const SectionItem = (props: {
 				{/* <A href={props.href}>{props.handle}</A> */}
 				{/* <A href={props.href}>{props.name}</A> */}
 			</div>
-			<A class={styles.wrapper} href={props.href}></A>
+			<A
+				aria-label={props.name}
+				class={styles.wrapper}
+				href={props.href}
+			></A>
 		</div>
 	)
 }

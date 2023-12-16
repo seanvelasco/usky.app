@@ -218,7 +218,9 @@ export const Media = () => {
 					>
 						{(images) => (
 							<For each={images()}>
-								{(image) => <img src={image?.thumb} />}
+								{(image) => (
+									<img src={image?.thumb} alt={image.alt} />
+								)}
 							</For>
 						)}
 					</Show>
