@@ -5,6 +5,9 @@
 .footer a {
 	color: var(--text-secondary);
 }
-.footer a:hover {
-	text-decoration: underline;
+
+@media (hover: hover) and (pointer: fine) {
+	.footer a:hover {
+		text-decoration: underline;
+	}
 }

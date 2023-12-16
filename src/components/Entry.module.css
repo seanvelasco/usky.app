@@ -8,10 +8,6 @@
 	transition: background-color 0.2s ease;
 }
 
-.entry:hover {
-	background-color: var(--background-secondary);
-}
-
 @media only screen and (max-width: 540px) {
 	.entry {
 		padding: 1rem;
@@ -40,10 +36,14 @@
 	white-space: pre-wrap;
 	color: var(--text-primary);
 }
-
-.name:hover,
-.handle:hover {
-	text-decoration: underline;
+@media (hover: hover) and (pointer: fine) {
+	.name:hover,
+	.handle:hover {
+		text-decoration: underline;
+	}
+	.entry:hover {
+		background-color: var(--background-secondary);
+	}
 }
 
 @keyframes incomingMessageAnimation {
