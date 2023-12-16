@@ -1,0 +1,16 @@
+{
+	"name": "usky.app (Bluesky)",
+	"short_name": "usky.app",
+	"description": "Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know.",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#000000",
+	"icons": [
+		{
+			"src": "/usky.svg",
+			"sizes": "192x192",
+			"type": "image/png"
+		}
+	]
+}

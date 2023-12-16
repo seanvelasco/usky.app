@@ -18,7 +18,7 @@ const Discover = () => {
 	const feed = useRouteData<typeof DiscoverData>()
 	const title = "Bluesky (usky.app)"
 	const description =
-		"Minimalist web client for the decentralized social media network Bluesky - see what's happening, discover new things, and look up people you know."
+		"Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
 
 	return (
 		<>
