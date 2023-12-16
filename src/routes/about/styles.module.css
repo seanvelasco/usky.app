@@ -1,0 +1,31 @@
+.about img {
+	height: 5rem;
+}
+
+.about hr {
+	border: none;
+	border-bottom: 1px solid var(--border);
+}
+.about strong {
+	font-weight: 550;
+}
+.about h3 {
+	font-size: 1rem;
+	font-weight: 550;
+}
+.about p,
+.about li {
+	line-height: 1.6;
+	font-size: 1rem;
+	margin-top: 0;
+	margin-bottom: 0.75rem;
+}
+.about {
+	padding: 1.5rem;
+}
+
+@media only screen and (max-width: 540px) {
+	.about {
+		padding: 1rem;
+	}
+}

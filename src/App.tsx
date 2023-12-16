@@ -36,6 +36,7 @@ import Feed, { FeedData } from "./routes/profile/[profile]/feed/[feed]"
 import SearchPage from "./routes/search"
 import styles from "./App.module.css"
 import Discover, { DiscoverData } from "./routes"
+import About from "./routes/about"
 
 const Header = () => {
 	const navigate = useNavigate()
@@ -142,6 +143,7 @@ const FeedView = () => {
 				<Route path="/live" component={Discover} data={DiscoverData} />
 				<Route path="/search" component={SearchPage} />
 				<Route path="/feeds" component={SearchPage} />
+				<Route path="/about" component={About} />
 				<Route
 					path="/profile/:profile"
 					component={Profile}
@@ -165,6 +167,7 @@ const FeedView = () => {
 						component={Following}
 						data={FollowingData}
 					/>
+					R
 				</Route>
 				<Route
 					path="/profile/:profile/post/:post"
