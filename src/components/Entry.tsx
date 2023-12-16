@@ -33,7 +33,11 @@ const Entry = (props: {
 					<p class={styles.description}>{props.description}</p>
 				</Show>
 			</div>
-			<A class={styles.wrapper} href={props.href} />
+			<A
+				aria-label={props?.displayName ?? props.handle}
+				class={styles.wrapper}
+				href={props.href}
+			/>
 		</div>
 	)
 }

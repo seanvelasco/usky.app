@@ -8,10 +8,11 @@ import {
 	createEffect
 } from "solid-js"
 import {
+	A,
 	useRouteData,
-	type RouteDataFuncArgs,
 	useLocation,
-	useParams
+	useParams,
+	type RouteDataFuncArgs
 } from "@solidjs/router"
 import { Title, Link, Meta } from "@solidjs/meta"
 import Avatar from "../../../../../components/Avatar"
@@ -192,13 +193,21 @@ const PostExapnded = (props: ThreadPost) => {
 							/>
 						</div>
 						<div class={styles.header}>
-							<a rel="author" class={postStyles.name}>
+							<A
+								rel="author"
+								href={`/profile/${props.post?.author?.handle}`}
+								class={postStyles.name}
+							>
 								{props.post?.author?.displayName ??
 									props.post?.author?.handle}
-							</a>
-							<a rel="author" class={postStyles.handle}>
+							</A>
+							<A
+								rel="author"
+								href={`/profile/${props.post?.author?.handle}`}
+								class={postStyles.handle}
+							>
 								@{props.post?.author?.handle}
-							</a>
+							</A>
 						</div>
 					</div>
 					<div class={postStyles.content}>

@@ -1,4 +1,5 @@
 import { Show } from "solid-js/web"
+import { A } from "@solidjs/router"
 import { createImageLink, did } from "../../utils"
 import styles from "./Embed.module.css"
 import type { ExternalEmbed as ExternalEmbedType } from "../../types"
@@ -26,13 +27,13 @@ const ExternalEmbed = (props: { external: ExternalEmbedType }) => {
 				)}
 			</Show>
 			<div class={styles.text}>
-				<a class={styles.url} href={baseUrl.origin}>
+				<A class={styles.url} href={baseUrl.origin}>
 					{baseUrl.host}
-				</a>
+				</A>
 				<Show when={props?.external?.title}>
-					<a class={styles.title} href={props.external?.uri}>
+					<A class={styles.title} href={props.external?.uri}>
 						{props.external.title}
-					</a>
+					</A>
 				</Show>
 				<Show when={props?.external?.description}>
 					<p class={styles.description}>
@@ -40,7 +41,7 @@ const ExternalEmbed = (props: { external: ExternalEmbedType }) => {
 					</p>
 				</Show>
 			</div>
-			<a
+			<A
 				aria-label={`External embed to ${
 					props.external?.title ?? baseUrl.origin
 				}`}
