@@ -57,12 +57,7 @@ const AuthModal = () => {
 
 	return (
 		<>
-			<button
-				style={{
-					all: "unset"
-				}}
-				onClick={handleOpen}
-			>
+			<button onClick={handleOpen}>
 				<PlusIcon />
 			</button>
 			<dialog ref={dialog} class={styles.dialog}>

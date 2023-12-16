@@ -20,10 +20,6 @@
 	animation: incomingMessageAnimation 0.15s linear;
 }
 
-.embed:hover {
-	background-color: #323232;
-}
-
 .image {
 	aspect-ratio: 2 / 1;
 	object-fit: cover;
@@ -73,12 +69,6 @@
 	z-index: 1;
 	position: relative;
 }
-.name:hover,
-.handle a:hover,
-.url:hover,
-.title:hover {
-	text-decoration: underline;
-}
 
 .description {
 	color: var(--text-secondary);
@@ -94,4 +84,17 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.name:hover,
+	.handle a:hover,
+	.url:hover,
+	.title:hover {
+		text-decoration: underline;
+	}
+
+	.embed:hover {
+		background-color: #323232;
+	}
 }

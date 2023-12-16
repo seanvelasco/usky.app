@@ -9,8 +9,14 @@
 	animation: incomingMessageAnimation 0.15s linear;
 }
 
-.article:hover {
-	background-color: var(--background-primary-hover);
+@media (hover: hover) and (pointer: fine) {
+	.article:hover {
+		background-color: var(--background-primary-hover);
+	}
+	.name:hover,
+	.handle:hover {
+		text-decoration: underline;
+	}
 }
 
 .header {
@@ -47,11 +53,6 @@
 	color: var(--text-secondary);
 	position: relative;
 	z-index: 1;
-}
-
-.name:hover,
-.handle:hover {
-	text-decoration: underline;
 }
 
 .left {

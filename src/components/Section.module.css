@@ -33,10 +33,6 @@
 	min-height: 3.5rem;
 }
 
-.item:hover {
-	background-color: var(--background-secondary);
-}
-
 .name {
 	position: relative;
 	z-index: 1;
@@ -45,8 +41,13 @@
 	color: var(--text-primary);
 }
 
-.name:hover {
-	text-decoration: underline;
+@media (hover: hover) and (pointer: fine) {
+	.item:hover {
+		background-color: var(--background-secondary);
+	}
+	.name:hover {
+		text-decoration: underline;
+	}
 }
 
 .wrapper {

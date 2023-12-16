@@ -36,6 +36,7 @@ import Feed, { FeedData } from "./routes/profile/[profile]/feed/[feed]"
 import SearchPage from "./routes/search"
 import styles from "./App.module.css"
 import Discover, { DiscoverData } from "./routes"
+import AuthModal from "./components/auth/AuthModal"
 import About from "./routes/about"
 
 const Header = () => {
@@ -122,10 +123,10 @@ const Navigation = () => {
 				}}
 			>
 				<Avatar size="1.5rem" />
-			</div>
+			</div> */}
 			<div>
 				<AuthModal />
-			</div> */}
+			</div>
 		</nav>
 	)
 }

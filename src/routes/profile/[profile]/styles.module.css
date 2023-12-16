@@ -25,11 +25,6 @@
 	font-weight: 500;
 }
 
-.button:hover {
-	font-weight: 500;
-	background-color: var(--button-secondary-hover);
-}
-
 .banner {
 	user-select: none;
 	width: 100%;
@@ -135,9 +130,7 @@
 	color: var(--text-secondary);
 }
 
-/* .active::before, */
-.nav a:active::before,
-.nav a:hover::before {
+.nav a:active::before {
 	content: "";
 	position: absolute;
 	bottom: -1px;
@@ -145,6 +138,22 @@
 	width: 100%;
 	height: 2px;
 	background-color: var(--link-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.button:hover {
+		font-weight: 500;
+		background-color: var(--button-secondary-hover);
+	}
+	.nav a:hover::before {
+		content: "";
+		position: absolute;
+		bottom: -1px;
+		left: 0;
+		width: 100%;
+		height: 2px;
+		background-color: var(--link-primary);
+	}
 }
 
 @media only screen and (max-width: 540px) {
