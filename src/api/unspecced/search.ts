@@ -1,41 +1,41 @@
-import type { Profile } from './../../types'
+import type { Profile } from "./../../types";
 
 interface SearchActorsBody {
-	actors: Profile[]
-	cursor?: string
+	actors: Profile[];
+	cursor?: string;
 }
 
 const search = async (
 	query: string,
-	timeout: number = 20000
+	timeout = 20000,
 ): Promise<SearchActorsBody | undefined> => {
-	const controller = new AbortController()
+	const controller = new AbortController();
 
 	const abortTimeout = setTimeout(() => {
-		controller.abort()
-	}, timeout)
+		controller.abort();
+	}, timeout);
 
 	try {
 		if (query) {
 			const response = await fetch(`/api/search?q=${query}`, {
-				signal: controller.signal
-			})
+				signal: controller.signal,
+			});
 
 			if (response.status !== 200) {
-				return
+				return;
 			}
 
-			const body = await response.json()
+			const body = await response.json();
 
-			return body
+			return body;
 		}
 	} catch (error) {
-		console.error(`Cancelled searchActors()`, error)
+		console.error(`Cancelled searchActors()`, error);
 	} finally {
-		clearTimeout(abortTimeout)
+		clearTimeout(abortTimeout);
 	}
-}
+};
 
-export { search }
+export { search };
 
-export default search
+export default search;

@@ -6,8 +6,8 @@ const ranges: { [key: string]: number } = {
 	hour: 3600,
 	minute: 60,
 	seconds: 1,
-	millisecond: 0.001
-}
+	millisecond: 0.001,
+};
 
 const shortcut: { [key: string]: string } = {
 	year: "y",
@@ -17,19 +17,19 @@ const shortcut: { [key: string]: string } = {
 	hour: "h",
 	minute: "m",
 	seconds: "s",
-	millisecond: "ms"
-}
+	millisecond: "ms",
+};
 
 const timeAgo = (date: Date) => {
-	const secondsElapsedAbs = Math.abs((date.getTime() - Date.now()) / 1000)
+	const secondsElapsedAbs = Math.abs((date.getTime() - Date.now()) / 1000);
 
 	for (const key in ranges) {
 		if (ranges[key] < secondsElapsedAbs) {
-			const delta = secondsElapsedAbs / ranges[key]
-			return Math.round(delta).toString() + shortcut[key]
+			const delta = secondsElapsedAbs / ranges[key];
+			return Math.round(delta).toString() + shortcut[key];
 		}
 	}
-}
+};
 
 const TimeAgo = (props: { time: Date }) => {
 	return (
@@ -39,12 +39,12 @@ const TimeAgo = (props: { time: Date }) => {
 				color: "var(--text-secondary)",
 				cursor: "default",
 				"font-size": "0.875rem",
-				"white-space": "nowrap"
+				"white-space": "nowrap",
 			}}
 		>
 			{timeAgo(props.time)}
 		</time>
-	)
-}
+	);
+};
 
-export default TimeAgo
+export default TimeAgo;

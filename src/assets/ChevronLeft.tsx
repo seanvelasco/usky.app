@@ -13,5 +13,5 @@ export const ChevronLeft = () => {
 				clip-rule="evenodd"
 			/>
 		</svg>
-	)
-}
+	);
+};

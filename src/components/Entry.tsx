@@ -1,21 +1,21 @@
-import { Show } from "solid-js"
-import { A } from "@solidjs/router"
-import Avatar from "./Avatar"
-import styles from "./Entry.module.css"
+import { A } from "@solidjs/router";
+import { Show } from "solid-js";
+import Avatar from "./Avatar";
+import styles from "./Entry.module.css";
 
 const Entry = (props: {
-	displayName: string
-	handle?: string
-	description?: string
-	avatar: string
-	href: string
-	type?: "creator"
+	displayName: string;
+	handle?: string;
+	description?: string;
+	avatar: string;
+	href: string;
+	type?: "creator";
 }) => {
 	return (
 		<div class={styles.entry}>
 			<Avatar
 				style={{
-					"border-radius": props.type === "creator" ? "12px" : "50%"
+					"border-radius": props.type === "creator" ? "12px" : "50%",
 				}}
 				src={props.avatar}
 				alt={props.displayName}
@@ -39,7 +39,7 @@ const Entry = (props: {
 				href={props.href}
 			/>
 		</div>
-	)
-}
+	);
+};
 
-export default Entry
+export default Entry;

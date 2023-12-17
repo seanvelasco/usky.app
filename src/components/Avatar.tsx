@@ -1,14 +1,14 @@
-import type { JSX } from "solid-js"
+import type { JSX } from "solid-js";
 
 const Avatar = (
 	props: {
-		src?: string
-		alt?: string
-		size?: string
-		style?: JSX.CSSProperties
-	} = { size: "3.5rem" }
+		src?: string;
+		alt?: string;
+		size?: string;
+		style?: JSX.CSSProperties;
+	} = { size: "3.5rem" },
 ) => {
-	props.size = props.size ?? "3rem"
+	props.size = props.size ?? "3rem";
 	return (
 		<img
 			loading="lazy"
@@ -22,10 +22,10 @@ const Avatar = (
 				"vertical-align": "middle",
 				"object-fit": "cover",
 				"border-radius": "50%",
-				...props.style
+				...props.style,
 			}}
 		/>
-	)
-}
+	);
+};
 
-export default Avatar
+export default Avatar;

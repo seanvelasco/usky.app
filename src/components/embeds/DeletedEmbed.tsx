@@ -1,4 +1,4 @@
-import commonStyles from "./Embed.module.css"
+import commonStyles from "./Embed.module.css";
 
 const DeletedEmbed = () => {
 	return (
@@ -6,12 +6,12 @@ const DeletedEmbed = () => {
 			class={`${commonStyles.embed} ${commonStyles.record}`}
 			style={{
 				display: "flex",
-				"flex-direction": "column"
+				"flex-direction": "column",
 			}}
 		>
 			<p>This post is deleted</p>
 		</div>
-	)
-}
+	);
+};
 
-export default DeletedEmbed
+export default DeletedEmbed;

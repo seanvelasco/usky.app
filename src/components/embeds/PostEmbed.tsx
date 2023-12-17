@@ -1,13 +1,13 @@
-import commonStyles from "./Embed.module.css"
-import Avatar from "../Avatar"
-import { A } from "@solidjs/router"
-import type { PostEmbed as PostEmbedType } from "../../types"
-import TimeAgo from "../TimeAgo"
-import { Show, For, Switch, Match } from "solid-js"
-import Embed from "./Embed"
-import postStyles from "../Post.module.css"
-import LazyLoadEmbed from "./LazyLoadEmbed"
-import { id } from "../../utils"
+import { A } from "@solidjs/router";
+import { For, Match, Show, Switch } from "solid-js";
+import type { PostEmbed as PostEmbedType } from "../../types";
+import { id } from "../../utils";
+import Avatar from "../Avatar";
+import postStyles from "../Post.module.css";
+import TimeAgo from "../TimeAgo";
+import Embed from "./Embed";
+import commonStyles from "./Embed.module.css";
+import LazyLoadEmbed from "./LazyLoadEmbed";
 
 const PostEmbed = (props: PostEmbedType) => {
 	return (
@@ -19,8 +19,7 @@ const PostEmbed = (props: PostEmbedType) => {
 							size="1.75rem"
 							src={props.author?.avatar ?? "/avatar.svg"}
 							alt={`${
-								props.author?.displayName ??
-								`@${props.author?.handle}`
+								props.author?.displayName ?? `@${props.author?.handle}`
 							} avatar`}
 						/>
 						<div class={postStyles.header}>
@@ -29,8 +28,7 @@ const PostEmbed = (props: PostEmbedType) => {
 								class={postStyles.name}
 								href={`/profile/${props.author?.handle}`}
 							>
-								{props.author?.displayName ??
-									props.author?.handle}
+								{props.author?.displayName ?? props.author?.handle}
 							</A>{" "}
 							<A
 								rel="author"
@@ -48,34 +46,17 @@ const PostEmbed = (props: PostEmbedType) => {
 						</Show>
 						<Show when={props?.embeds}>
 							<For each={props.embeds}>
-								{(embed) => (
-									<Embed
-										embed={embed}
-										did={props.author?.did}
-									/>
-								)}
+								{(embed) => <Embed embed={embed} did={props.author?.did} />}
 							</For>
 						</Show>
-						<Show
-							when={
-								props?.embeds === undefined &&
-								props?.value?.embed
-							}
-						>
-							{(embed) => (
-								<Embed
-									embed={embed()}
-									did={props.author?.did}
-								/>
-							)}
+						<Show when={props?.embeds === undefined && props?.value?.embed}>
+							{(embed) => <Embed embed={embed()} did={props.author?.did} />}
 						</Show>
 					</div>
 					<A
 						aria-label="Post embed"
 						class={postStyles.wrapper}
-						href={`/profile/${props.author?.handle}/post/${id(
-							props?.uri
-						)}`}
+						href={`/profile/${props.author?.handle}/post/${id(props?.uri)}`}
 					></A>
 				</article>
 			</Match>
@@ -83,7 +64,7 @@ const PostEmbed = (props: PostEmbedType) => {
 				<LazyLoadEmbed {...props} />
 			</Match>
 		</Switch>
-	)
-}
+	);
+};
 
-export default PostEmbed
+export default PostEmbed;

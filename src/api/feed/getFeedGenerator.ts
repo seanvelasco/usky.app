@@ -1,16 +1,16 @@
-import type { FeedGenerator } from './../../types'
+import type { FeedGenerator } from "./../../types";
 
 const getFeedGenerator = async (feed: string): Promise<FeedGenerator> => {
 	const request = new Request(
-		`https://api.bsky.app/xrpc/app.bsky.feed.getFeedGenerator?feed=${feed}`
-	)
+		`https://api.bsky.app/xrpc/app.bsky.feed.getFeedGenerator?feed=${feed}`,
+	);
 
-	const response = await fetch(request)
+	const response = await fetch(request);
 
-	const body = await response.json()
-	return body
-}
+	const body = await response.json();
+	return body;
+};
 
-export { getFeedGenerator }
+export { getFeedGenerator };
 
-export default getFeedGenerator
+export default getFeedGenerator;

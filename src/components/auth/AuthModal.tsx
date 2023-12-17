@@ -1,4 +1,4 @@
-import { createSignal, createResource, onMount, onCleanup } from "solid-js"
+import { createResource, createSignal, onCleanup, onMount } from "solid-js"
 import createSession from "../../api/identity/createSession"
 import { PlusIcon } from "../../assets/PlusIcon"
 import styles from "./AuthModal.module.css"
@@ -62,7 +62,7 @@ const AuthModal = () => {
 
 	return (
 		<>
-			<button onClick={handleOpen}>
+			<button type="button" onClick={handleOpen}>
 				<PlusIcon />
 			</button>
 			<dialog ref={dialog} class={styles.dialog}>
@@ -87,7 +87,7 @@ const AuthModal = () => {
 					<button class={styles.input} type="submit">
 						Submit
 					</button>
-					<a>Create an account</a>
+					<button type="button">Create an account</button>
 				</form>
 			</dialog>
 		</>

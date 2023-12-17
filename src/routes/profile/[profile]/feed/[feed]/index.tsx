@@ -1,19 +1,19 @@
-import { createResource, Suspense } from "solid-js"
-import { useRouteData, type RouteDataFuncArgs } from "@solidjs/router"
-import getFeedGenerator from "../../../../../api/feed/getFeedGenerator"
-import styles from "./styles.module.css"
-import Avatar from "../../../../../components/Avatar"
+import { type RouteDataFuncArgs, useRouteData } from "@solidjs/router";
+import { Suspense, createResource } from "solid-js";
+import getFeedGenerator from "../../../../../api/feed/getFeedGenerator";
+import Avatar from "../../../../../components/Avatar";
+import styles from "./styles.module.css";
 
 export const FeedData = ({ params }: RouteDataFuncArgs) => {
 	const uri = () =>
-		`at://${params.profile}/app.bsky.feed.generator/${params.feed}`
+		`at://${params.profile}/app.bsky.feed.generator/${params.feed}`;
 
-	const [feedGenerator] = createResource(() => uri(), getFeedGenerator)
-	return feedGenerator
-}
+	const [feedGenerator] = createResource(() => uri(), getFeedGenerator);
+	return feedGenerator;
+};
 
 const Feed = () => {
-	const feedGenerator = useRouteData<typeof FeedData>()
+	const feedGenerator = useRouteData<typeof FeedData>();
 
 	return (
 		<Suspense>
@@ -21,7 +21,7 @@ const Feed = () => {
 				<Avatar
 					size="3.5rem"
 					style={{
-						"border-radius": "12px"
+						"border-radius": "12px",
 					}}
 					src={feedGenerator()?.view?.avatar ?? "/feed.svg"}
 				/>
@@ -32,7 +32,7 @@ const Feed = () => {
 				</div>
 			</div>
 		</Suspense>
-	)
-}
+	);
+};
 
-export default Feed
+export default Feed;

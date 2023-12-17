@@ -1,30 +1,30 @@
-import {
-	Show,
-	For,
-	createResource,
-	ErrorBoundary,
-	createSignal,
-	onMount,
-	createEffect
-} from "solid-js"
+import { Link, Meta, Title } from "@solidjs/meta"
 import {
 	A,
-	useRouteData,
+	type RouteDataFuncArgs,
 	useLocation,
 	useParams,
-	type RouteDataFuncArgs
+	useRouteData
 } from "@solidjs/router"
-import { Title, Link, Meta } from "@solidjs/meta"
-import Avatar from "../../../../../components/Avatar"
-import Embed from "../../../../../components/embeds/Embed"
-import PostFooter from "../../../../../components/PostFooter"
-import { PostExpandedChildPost } from "../../../../../components/Post"
+import {
+	ErrorBoundary,
+	For,
+	Show,
+	createEffect,
+	createResource,
+	createSignal,
+	onMount
+} from "solid-js"
 import getPostThread from "../../../../../api/feed/getPostThread"
 import resolveHandle from "../../../../../api/identity/resolveHandle"
-import { did } from "../../../../../utils"
-import styles from "./styles.module.css"
+import Avatar from "../../../../../components/Avatar"
+import { PostExpandedChildPost } from "../../../../../components/Post"
 import postStyles from "../../../../../components/Post.module.css"
-import type { ThreadPost, ThreadParentOrReply } from "../../../../../types"
+import PostFooter from "../../../../../components/PostFooter"
+import Embed from "../../../../../components/embeds/Embed"
+import { did } from "../../../../../utils"
+import type { ThreadParentOrReply, ThreadPost } from "../../../../../types"
+import styles from "./styles.module.css"
 
 const Timestamp = (props: { date: Date }) => {
 	// const date = createMemo(() => new Date(props.date))
@@ -80,13 +80,13 @@ const PostExapnded = (props: ThreadPost) => {
 			postHeight() + repliesHeight() + 61,
 			useLocation().pathname
 		)
-		postRef() && postRef()?.scrollIntoView()
+		postRef()?.scrollIntoView()
 	})
 
 	onMount(() => {
 		setPostHeight(postRef()?.clientHeight!)
 		setRepliesHeight(repliesRef()?.clientHeight!)
-		postRef() && postRef()?.scrollIntoView()
+		postRef()?.scrollIntoView()
 	})
 
 	// $: url =
@@ -182,7 +182,7 @@ const PostExapnded = (props: ThreadPost) => {
 										top: "-1.5rem",
 										height: "1.5rem"
 									}}
-								></div>
+								/>
 							</Show>
 							<Avatar
 								src={props.post?.author?.avatar}

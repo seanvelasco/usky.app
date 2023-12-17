@@ -1,11 +1,10 @@
 import { A } from "@solidjs/router"
-import Avatar from "../Avatar"
 import type { GeneratorEmbed as GeneratorEmbedType } from "../../types"
+import Avatar from "../Avatar"
 import commonStyles from "./Embed.module.css"
+import { id } from "./../../utils"
 
 const GeneratorEmbed = (props: GeneratorEmbedType) => {
-	const id = ""
-
 	return (
 		<div class={`${commonStyles.embed} ${commonStyles.record}`}>
 			<Avatar
@@ -17,7 +16,9 @@ const GeneratorEmbed = (props: GeneratorEmbedType) => {
 				<div>
 					<A
 						class={commonStyles.name}
-						href={`/profile/${props?.creator.handle}/feed/${id}`}
+						href={`/profile/${props?.creator.handle}/feed/${id(
+							props.uri
+						)}`}
 					>
 						{props?.displayName}
 					</A>
@@ -36,8 +37,10 @@ const GeneratorEmbed = (props: GeneratorEmbedType) => {
 			</div>
 			<A
 				aria-label={`${props?.displayName} feed`}
-				href={`/profile/${props?.creator?.handle}/feed/${id}`}
-			></A>
+				href={`/profile/${props?.creator?.handle}/feed/${id(
+					props.uri
+				)}`}
+			/>
 		</div>
 	)
 }

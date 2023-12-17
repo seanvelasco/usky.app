@@ -1,18 +1,18 @@
-import { createResource, For } from "solid-js"
-import { useRouteData, type RouteDataFuncArgs } from "@solidjs/router"
-import getFollowers from "../../../../api/graph/getFollowers"
-import Entry from "../../../../components/Entry"
+import { type RouteDataFuncArgs, useRouteData } from "@solidjs/router";
+import { For, createResource } from "solid-js";
+import getFollowers from "../../../../api/graph/getFollowers";
+import Entry from "../../../../components/Entry";
 
 export const FollowersData = ({ params }: RouteDataFuncArgs) => {
-	const [followers] = createResource(() => params.profile, getFollowers)
-	return followers
-}
+	const [followers] = createResource(() => params.profile, getFollowers);
+	return followers;
+};
 
 export const Followers = () => {
-	const followers = useRouteData<typeof FollowersData>()
+	const followers = useRouteData<typeof FollowersData>();
 
 	if (followers.error) {
-		return <p>Unable to retrieve posts</p>
+		return <p>Unable to retrieve posts</p>;
 	}
 
 	return (
@@ -27,7 +27,7 @@ export const Followers = () => {
 				/>
 			)}
 		</For>
-	)
-}
+	);
+};
 
-export default Followers
+export default Followers;

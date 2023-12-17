@@ -1,11 +1,11 @@
-import { createResource, Suspense, Show, For } from "solid-js"
+import { Link, Meta, Title } from "@solidjs/meta"
 import {
 	A,
 	Outlet,
-	useRouteData,
-	type RouteDataFuncArgs
+	type RouteDataFuncArgs,
+	useRouteData
 } from "@solidjs/router"
-import { Title, Link, Meta } from "@solidjs/meta"
+import { For, Show, Suspense, createResource } from "solid-js"
 
 import Post from "../../../components/Post"
 import Spinner from "../../../components/Spinner"
@@ -163,7 +163,9 @@ const Profile = () => {
 							/>
 						</div>
 						<div class={styles.buttons}>
-							<button class={styles.button}>Follow</button>
+							<button type="button" class={styles.button}>
+								Follow
+							</button>
 						</div>
 						<div class={styles.info}>
 							<p class={styles.name}>

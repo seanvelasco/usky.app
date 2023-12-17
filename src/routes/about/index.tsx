@@ -3,7 +3,7 @@ import styles from "./styles.module.css"
 const About = () => {
 	return (
 		<div class={styles.about}>
-			<img src="/usky.svg" />
+			<img alt="usky.app logo" src="/usky.svg" />
 			<h3>About usky.app</h3>
 			<p>
 				usky.app is a lightweight (29.91 kB gzipped) and minimalist web
@@ -43,11 +43,11 @@ const About = () => {
 					If someone wants to view a Bluesky profile or post, but they
 					don't have an account yet, they can easily preview the
 					content by changing just one character in the URL - change{" "}
-					<i>b</i>sky.app to <i>u</i>sky.app .
+					<i>b</i>sky.app to <i>u</i>
+					sky.app .
 				</li>
 				<li>All the good domain names are taken. 😔</li>
 			</ol>
-			<p></p>
 			<h3>Stack</h3>
 			<p>
 				usky.app is a statically exported Solid.js SPA and PWA

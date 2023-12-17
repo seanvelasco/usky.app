@@ -25,5 +25,5 @@ export const PlusIcon = () => {
 		// 		clip-rule="evenodd"
 		// 	/>
 		// </svg>
-	)
-}
+	);
+};

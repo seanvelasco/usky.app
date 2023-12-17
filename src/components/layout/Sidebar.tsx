@@ -1,19 +1,19 @@
-import { Show, createResource, Suspense } from "solid-js"
-import { A, useLocation, useParams, useRouteData } from "@solidjs/router"
-import Search from "../Search"
-import Section, { ActorsSection } from "../Section"
-import getPopularFeedGenerators from "../../api/unspecced/getPopularFeedGenerators"
-import getSuggestions from "../../api/actor/getSuggestions"
-import styles from "./Sidebar.module.css"
-import { PostData } from "../../routes/profile/[profile]/post/[post]"
-import { Routes, Route } from "@solidjs/router"
+import { A, useLocation, useParams, useRouteData } from "@solidjs/router";
+import { Route, Routes } from "@solidjs/router";
+import { Show, Suspense, createResource } from "solid-js";
+import getSuggestions from "../../api/actor/getSuggestions";
+import getPopularFeedGenerators from "../../api/unspecced/getPopularFeedGenerators";
+import { PostData } from "../../routes/profile/[profile]/post/[post]";
+import Search from "../Search";
+import Section, { ActorsSection } from "../Section";
+import styles from "./Sidebar.module.css";
 
 const Sidebar = () => {
-	const location = useLocation()
-	const params = useParams()
+	const location = useLocation();
+	const params = useParams();
 
-	const [users] = createResource(() => params.profile ?? "", getSuggestions)
-	const [feeds] = createResource(getPopularFeedGenerators)
+	const [users] = createResource(() => params.profile ?? "", getSuggestions);
+	const [feeds] = createResource(getPopularFeedGenerators);
 
 	return (
 		<Suspense>
@@ -36,9 +36,7 @@ const Sidebar = () => {
 					users()
 				}
 			>
-				{(actors) => (
-					<ActorsSection title="People" actors={actors().actors} />
-				)}
+				{(actors) => <ActorsSection title="People" actors={actors().actors} />}
 			</Show>
 
 			<Show when={location.pathname !== "/feeds" && feeds()?.feeds}>
@@ -48,19 +46,17 @@ const Sidebar = () => {
 				<A href="/about">About</A>
 			</footer>
 		</Suspense>
-	)
-}
+	);
+};
 
 const RelevantSection = () => {
-	const post = useRouteData<typeof PostData>()
+	const post = useRouteData<typeof PostData>();
 
 	return (
 		<Show when={post && post()?.actors}>
-			{(actors) => (
-				<ActorsSection title="Relevant people" actors={actors()} />
-			)}
+			{(actors) => <ActorsSection title="Relevant people" actors={actors()} />}
 		</Show>
-	)
-}
+	);
+};
 
-export default Sidebar
+export default Sidebar;

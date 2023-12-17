@@ -1,18 +1,20 @@
-import type { List } from './../../types'
+import type { List } from "./../../types";
 
 const getLists = async (
-	actor: string
+	actor: string,
 ): Promise<{
-	lists: List[]
-	cursor: string
+	lists: List[];
+	cursor: string;
 }> => {
-	const response = await fetch(`https://api.bsky.app/xrpc/app.bsky.graph.getLists?actor=${actor}`)
+	const response = await fetch(
+		`https://api.bsky.app/xrpc/app.bsky.graph.getLists?actor=${actor}`,
+	);
 
-	const body = await response.json()
+	const body = await response.json();
 
-	return body
-}
+	return body;
+};
 
-export { getLists }
+export { getLists };
 
-export default getLists
+export default getLists;
