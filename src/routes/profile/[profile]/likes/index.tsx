@@ -1,9 +1,9 @@
 import { createResource, For, Suspense } from "solid-js"
 import { useRouteData, type RouteDataFuncArgs } from "@solidjs/router"
-import listRecords from "../../../../api/repo/listRecords.ts"
-import getPosts from "../../../../api/getPostsOld.ts"
-import Post from "../../../../components/Post.tsx"
-import Spinner from "../../../../components/Spinner.tsx"
+import listRecords from "../../../../api/repo/listRecords"
+import getPosts from "../../../../api/getPostsOld"
+import Post from "../../../../components/Post"
+import Spinner from "../../../../components/Spinner"
 import type { FeedPost } from "../../../../types"
 
 const getLikes = async (profile: string): Promise<{ posts: FeedPost[] }> => {

@@ -1,7 +1,7 @@
 import { createResource, For } from "solid-js"
 import { useRouteData, type RouteDataFuncArgs } from "@solidjs/router"
-import getFollowers from "../../../../api/graph/getFollowers.ts"
-import Entry from "../../../../components/Entry.tsx"
+import getFollowers from "../../../../api/graph/getFollowers"
+import Entry from "../../../../components/Entry"
 
 export const FollowersData = ({ params }: RouteDataFuncArgs) => {
 	const [followers] = createResource(() => params.profile, getFollowers)

@@ -7,11 +7,11 @@ import {
 } from "@solidjs/router"
 import { Title, Link, Meta } from "@solidjs/meta"
 
-import Post from "../../../components/Post.tsx"
-import Spinner from "../../../components/Spinner.tsx"
+import Post from "../../../components/Post"
+import Spinner from "../../../components/Spinner"
 
-import getProfile from "../../../api/actor/getProfile.ts"
-import getAuthorFeed from "../../../api/feed/getAuthorFeed.ts"
+import getProfile from "../../../api/actor/getProfile"
+import getAuthorFeed from "../../../api/feed/getAuthorFeed"
 
 import styles from "./styles.module.css"
 
