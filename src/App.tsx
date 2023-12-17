@@ -1,4 +1,4 @@
-import { Show, For, Suspense } from "solid-js"
+import { createSignal, Show, For, Suspense } from "solid-js"
 import {
 	Outlet,
 	A,
@@ -38,49 +38,6 @@ import styles from "./App.module.css"
 import Discover, { DiscoverData } from "./routes"
 import AuthModal from "./components/auth/AuthModal"
 import About from "./routes/about"
-
-const Header = () => {
-	const navigate = useNavigate()
-	const location = useLocation()
-
-	const isHome = () => ["/", "/hot", "/live"].includes(location.pathname)
-
-	return (
-		<header
-			style={{
-				position: "sticky",
-				top: 0,
-				"background-color": "var(--background-primary)",
-				"border-bottom": " 1px solid var(--border)",
-
-				"z-index": 2,
-				padding: " 0 1.5rem"
-			}}
-		>
-			<div
-				style={{
-					display: "flex",
-					"align-items": "center",
-					height: "3.25rem",
-					gap: "1rem"
-				}}
-			>
-				<Show when={history && !isHome()}>
-					<button
-						style={{
-							all: "unset",
-							display: "flex"
-						}}
-						onClick={() => navigate(-1)}
-					>
-						<ChevronLeft />
-					</button>
-				</Show>
-				<Outlet />
-			</div>
-		</header>
-	)
-}
 
 const Navigation = () => {
 	const links = [
@@ -228,10 +185,6 @@ const ProfilePageHeader = () => {
 	return <p>{profile()?.displayName ?? profile()?.handle} </p>
 }
 
-const PostPageHeader = () => {
-	return <p>Post</p>
-}
-
 const TimelineHeader = () => {
 	return (
 		<div
@@ -311,6 +264,49 @@ const FeedHeader = () => {
 	)
 }
 
+const Header = () => {
+	const navigate = useNavigate()
+	const location = useLocation()
+
+	const isHome = () => ["/", "/hot", "/live"].includes(location.pathname)
+
+	return (
+		<header
+			style={{
+				position: "sticky",
+				top: 0,
+				"background-color": "var(--background-primary)",
+				"border-bottom": " 1px solid var(--border)",
+
+				"z-index": 2,
+				padding: " 0 1.5rem"
+			}}
+		>
+			<div
+				style={{
+					display: "flex",
+					"align-items": "center",
+					height: "3.25rem",
+					gap: "1rem"
+				}}
+			>
+				<Show when={history && !isHome()}>
+					<button
+						style={{
+							all: "unset",
+							display: "flex"
+						}}
+						onClick={() => navigate(-1)}
+					>
+						<ChevronLeft />
+					</button>
+				</Show>
+				<Outlet />
+			</div>
+		</header>
+	)
+}
+
 export const Heading = () => {
 	return (
 		<Routes>
@@ -331,11 +327,9 @@ export const Heading = () => {
 					data={FeedData}
 				/>
 				<Route path="/profile/:profile/list/:list" />
-				<Route
-					path="/profile/:profile/post/:post"
-					component={PostPageHeader}
-					data={ProfileData}
-				/>
+				<Route path="/profile/:profile/post/:post" data={ProfileData}>
+					<p>Post</p>
+				</Route>
 			</Route>
 		</Routes>
 	)

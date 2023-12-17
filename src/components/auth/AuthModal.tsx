@@ -2,6 +2,7 @@ import { createSignal, createResource, onMount, onCleanup } from "solid-js"
 import createSession from "../../api/identity/createSession"
 import { PlusIcon } from "../../assets/PlusIcon"
 import styles from "./AuthModal.module.css"
+import { cookieStorage, makePersisted } from "@solid-primitives/storage"
 
 const [identifier, setIdentifier] = createSignal("")
 const [password, setPassword] = createSignal("")
@@ -15,14 +16,18 @@ const handleLogin = (event: Event) => {
 	console.log(credentials())
 	const [session] = createResource(credentials(), createSession)
 
+	// const session = await createSession(credentials())
+
+	// const [signal, setSignal] = makePersisted(createSignal())
+
 	if (session.error) {
 		return
 	}
 
-	if (session.state === "ready") {
-		sessionStorage.setItem("accessJwt", session().accessJwt)
-		sessionStorage.setItem("refreshJwt", session().refreshJwt)
-	}
+	// if (session()) {
+	// 	cookieStorage.setItem("accessJwt", session().accessJwt)
+	// 	cookieStorage.setItem("refreshJwt", session().refreshJwt)
+	// }
 }
 
 const AuthModal = () => {
