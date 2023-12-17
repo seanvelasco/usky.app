@@ -28,17 +28,8 @@ const Discover = () => {
 			<Meta property="og:description" content={description} />
 			<Meta name="twitter:title" content={title} />
 			<Meta name="twitter:description" content={description} />
-			<Meta name="twitter:site" content="@uskyapp" />
-			<Meta property="og:site_name" content="usky.app" />
-			<Meta property="twitter:domain" content="usky.app" />
-			<Meta property="og:locale" content="en_US" />
-			<Suspense
-				fallback={
-					<div>
-						<Spinner />
-					</div>
-				}
-			>
+
+			<Suspense fallback={<Spinner />}>
 				<For each={feed()?.feed}>
 					{(post) => <FeedPost {...post} />}
 				</For>

@@ -2,7 +2,7 @@ import { createSignal, createResource, onMount, onCleanup } from "solid-js"
 import createSession from "../../api/identity/createSession"
 import { PlusIcon } from "../../assets/PlusIcon"
 import styles from "./AuthModal.module.css"
-import { cookieStorage, makePersisted } from "@solid-primitives/storage"
+// import { cookieStorage, makePersisted } from "@solid-primitives/storage"
 
 const [identifier, setIdentifier] = createSignal("")
 const [password, setPassword] = createSignal("")

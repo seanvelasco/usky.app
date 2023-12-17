@@ -1,4 +1,4 @@
-import { createSignal, Show, For, Suspense } from "solid-js"
+import { Show, For, Suspense } from "solid-js"
 import {
 	Outlet,
 	A,
@@ -8,36 +8,36 @@ import {
 	Route,
 	useRouteData
 } from "@solidjs/router"
+
+import Discover, { DiscoverData } from "./routes"
+import Hot from "./routes/hot"
+import About from "./routes/about"
+import SearchPage from "./routes/search"
+import Profile, {
+	ProfileData,
+	Posts,
+	PostsData
+} from "./routes/profile/[profile]"
+import Replies from "./routes/profile/[profile]/replies"
+import Media from "./routes/profile/[profile]/media"
+import Likes, { LikesData } from "./routes/profile/[profile]/likes"
+import Feeds, { FeedsData } from "./routes/profile/[profile]/feed"
+import Lists, { ListsData } from "./routes/profile/[profile]/lists"
+import Following, { FollowingData } from "./routes/profile/[profile]/following"
+import Followers, { FollowersData } from "./routes/profile/[profile]/followers"
+import Post, { PostData } from "./routes/profile/[profile]/post/[post]"
+import Feed, { FeedData } from "./routes/profile/[profile]/feed/[feed]"
+
+import Sidebar from "./components/layout/Sidebar"
+import AuthModal from "./components/auth/AuthModal"
+import Search from "./components/Search"
+
 import { HomeIcon } from "./assets/HomeIcon"
 import { SearchIcon } from "./assets/SearchIcon"
 import { FeedsIcon } from "./assets/FeedsIcon"
-import Search from "./components/Search"
 import { ChevronLeft } from "./assets/ChevronLeft"
-import Sidebar from "./components/layout/Sidebar"
-import Post, { PostData } from "./routes/profile/[profile]/post/[post]"
-import Profile, {
-	Posts,
-	Replies,
-	Media,
-	Likes,
-	Feeds,
-	Lists,
-	Followers,
-	Following,
-	ProfileData,
-	PostsData,
-	LikesData,
-	FollowersData,
-	FollowingData,
-	FeedsData,
-	ListsData
-} from "./routes/profile/[profile]"
-import Feed, { FeedData } from "./routes/profile/[profile]/feed/[feed]"
-import SearchPage from "./routes/search"
+
 import styles from "./App.module.css"
-import Discover, { DiscoverData } from "./routes"
-import AuthModal from "./components/auth/AuthModal"
-import About from "./routes/about"
 
 const Navigation = () => {
 	const links = [
@@ -97,7 +97,7 @@ const FeedView = () => {
 					component={Discover}
 					data={DiscoverData}
 				></Route>
-				<Route path="/hot" component={Discover} data={DiscoverData} />
+				<Route path="/hot" component={Hot} data={DiscoverData} />
 				<Route path="/live" component={Discover} data={DiscoverData} />
 				<Route path="/search" component={SearchPage} />
 				<Route path="/feeds" component={SearchPage} />
