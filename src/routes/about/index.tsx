@@ -28,7 +28,7 @@ const About = () => {
 			<p>
 				What started out as a humble side project became a frontend
 				experiment of figuring out how to piece together posts to form a
-				thread or a feed. The end result is this app. 😁
+				thread or a feed. The end result is this app.
 			</p>
 			<h3>
 				Why the name <i>usky.app</i>?
@@ -46,7 +46,7 @@ const About = () => {
 					<i>b</i>sky.app to <i>u</i>
 					sky.app .
 				</li>
-				<li>All the good domain names are taken. 😔</li>
+				<li>All the good domain names are taken.</li>
 			</ol>
 			<h3>Stack</h3>
 			<p>
@@ -55,7 +55,6 @@ const About = () => {
 				for styling. Has two external dependencies: solid-router and
 				solid-meta. All icons are from Heroicons (including app logo).
 			</p>
-			<p>The whole app is open-source. Please feel free to contribute!</p>
 		</div>
 	)
 }
