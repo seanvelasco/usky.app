@@ -1,4 +1,4 @@
-<img src="https://usky.app/usky.svg" width="150" >
+<img src="https://usky.app/usky.svg" width="150"></img>
 
 # usky.app
 
