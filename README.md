@@ -28,4 +28,4 @@ npm run dev
 
 ## Stack
 
-usky.app is a statically exported [Solid.js](https://www.solidjs.com/) SPA and PWA (previously a server-rendered SvelteKit app). Uses CSS modules for styling. Has two external dependencies: solid-router and solid-meta. All icons are from [Heroicons](https://heroicons.com/) (including app logo).
+usky.app is a statically exported [Solid.js](https://www.solidjs.com/) SPA and PWA (previously a server-rendered SvelteKit app). Uses CSS modules for styling. Has two external dependencies: solid-router and solid-meta. All icons are from [Heroicons](https://heroicons.com/) (including app logo). Runs on [Cloudflare Pages](https://pages.cloudflare.com).
