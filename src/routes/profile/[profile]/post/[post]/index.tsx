@@ -7,6 +7,7 @@ import {
 	createSignal,
 	onMount
 } from "solid-js"
+
 import {
 	A,
 	useLocation,
@@ -14,6 +15,7 @@ import {
 	useRouteData,
 	type RouteDataFuncArgs
 } from "@solidjs/router"
+
 import { Link, Meta, Title } from "@solidjs/meta"
 
 import Avatar from "../../../../../components/Avatar"
