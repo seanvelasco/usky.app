@@ -169,6 +169,23 @@ export interface Reason {
 	indexedAt: string;
 }
 
+export interface FirehosePost {
+	text: string
+	$type: "app.bsky.feed.post"
+	langs: string[]
+	reply: {
+		root: {
+			cid: string
+			uri: string
+		},
+		parent: {
+			cid: string
+			uri: string
+		}
+	},
+	createdAt: string
+}
+
 export interface FeedPost {
 	uri: string;
 	cid: string;

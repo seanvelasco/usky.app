@@ -1,11 +1,3 @@
-import { Link, Meta, Title } from "@solidjs/meta"
-import {
-	A,
-	type RouteDataFuncArgs,
-	useLocation,
-	useParams,
-	useRouteData
-} from "@solidjs/router"
 import {
 	ErrorBoundary,
 	For,
@@ -15,16 +7,30 @@ import {
 	createSignal,
 	onMount
 } from "solid-js"
-import getPostThread from "../../../../../api/feed/getPostThread"
-import resolveHandle from "../../../../../api/identity/resolveHandle"
+import {
+	A,
+	useLocation,
+	useParams,
+	useRouteData,
+	type RouteDataFuncArgs
+} from "@solidjs/router"
+import { Link, Meta, Title } from "@solidjs/meta"
+
 import Avatar from "../../../../../components/Avatar"
 import { PostExpandedChildPost } from "../../../../../components/Post"
-import postStyles from "../../../../../components/Post.module.css"
 import PostFooter from "../../../../../components/PostFooter"
 import Embed from "../../../../../components/embeds/Embed"
-import { did } from "../../../../../utils"
-import type { ThreadParentOrReply, ThreadPost } from "../../../../../types"
+
+import getPostThread from "../../../../../api/feed/getPostThread"
+import resolveHandle from "../../../../../api/identity/resolveHandle"
+
+import { did, isDID } from "../../../../../utils"
+
+import postStyles from "../../../../../components/Post.module.css"
 import styles from "./styles.module.css"
+
+import type { ThreadParentOrReply, ThreadPost } from "../../../../../types"
+
 
 const Timestamp = (props: { date: Date }) => {
 	// const date = createMemo(() => new Date(props.date))
@@ -268,8 +274,8 @@ const getThread = async ({
 	profileId: string
 	postId: string
 }) => {
-	const did = await resolveHandle(profileId)
-
+	const did = isDID(profileId) ? profileId : await resolveHandle(profileId)
+	
 	const post = await getPostThread(`at://${did}/app.bsky.feed.post/${postId}`)
 
 	const actors: ThreadPost["post"]["author"][] = []

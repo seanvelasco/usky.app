@@ -4,35 +4,34 @@ import Spinner from "../../components/Spinner"
 import { CarReader } from "@ipld/car"
 import { decode } from "@ipld/dag-cbor"
 import { decodeMultiple } from "cbor-x"
-import type { ThreadParentOrReply} from "../../types"
+import { FirehosePost, ThreadParentOrReply} from "../../types"
 
 const BASE_URL = "wss://bsky.network/xrpc/com.atproto.sync.subscribeRepos"
 
-const shape = (event: {
+interface FirehosePayload extends FirehosePost {
 	did: string
-	text: string
-	timestamp: Date
 	path: string
-}): ThreadParentOrReply => {
-	console.log('asd')
+}
+
+const shape = (post: FirehosePayload): ThreadParentOrReply => {
 	return {
 		post: {
-			uri: event.path,
-			cid: event.path,
+			uri: post.path,
+			cid: post.path,
 			author: {
-				did: event.did,
-				handle: event.did,
+				did: post.did,
+				handle: post.did,
 				labels: []
 			},
 			record: {
-				text: event.text,
-				createdAt: event.timestamp.toISOString(),
-				langs: []
+				text: post.text,
+				createdAt: post.createdAt,
+				langs: post.langs
 			},
 			replyCount: 0,
 			repostCount: 0,
 			likeCount: 0,
-			indexedAt: event.timestamp.toISOString(),
+			indexedAt: post.createdAt,
 			labels: []
 		}
 	}
@@ -42,7 +41,6 @@ const handleRepo = async (message: any) => {
 	const {
 		ops,
 		repo,
-		time,
 		blocks
 	} = message
 	
@@ -55,13 +53,12 @@ const handleRepo = async (message: any) => {
 					for await (const { cid: cid2 } of reader.blocks()) {
 						const block = await reader.get(cid2)
 						if (block) {
-							const decoded = decode(block?.bytes) as any
+							const decoded = decode(block?.bytes) as FirehosePost
 							if (decoded.$type === "app.bsky.feed.post") {
 								return {
 									did: repo,
-									text: decoded.text,
-									timestamp: new Date(time),
-									path
+									path: path,
+									...decoded
 								}
 							}
 						}

@@ -26,6 +26,11 @@ export const did = (uri: string) => {
 	return "";
 };
 
+export const isDID = (did: string) => {
+	const regex = /did:plc:\w+/
+	return regex.test(did)
+}
+
 export const createImageLink = (
 	props: { image?: ImageBlob | string; did?: string } | { image: string },
 ) => {
