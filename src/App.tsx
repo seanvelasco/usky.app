@@ -102,6 +102,21 @@ const FeedView = () => {
 				<Route path="/feeds" component={SearchPage} />
 				<Route path="/about" component={About} />
 				<Route
+					path="/profile/:profile/post/:post"
+					component={Post}
+					data={PostData}
+				/>
+				<Route
+					path="/profile/:profile/feed/:feed"
+					component={Feed}
+					data={FeedData}
+				/>
+				<Route
+					path="/profile/:profile/lists/:list"
+					component={Feed}
+					data={FeedData}
+				/>
+				<Route
 					path="/profile/:profile"
 					component={Profile}
 					data={ProfileData}
@@ -124,30 +139,13 @@ const FeedView = () => {
 						component={Following}
 						data={FollowingData}
 					/>
-					R
 				</Route>
-				<Route
-					path="/profile/:profile/post/:post"
-					component={Post}
-					data={PostData}
-				></Route>
-				<Route
-					path="/profile/:profile/feed/:feed"
-					component={Feed}
-					data={FeedData}
-				/>
-				<Route
-					path="/profile/:profile/lists/:list"
-					component={Feed}
-					data={FeedData}
-				/>
 			</Route>
 		</Routes>
 	)
 }
 
 const App = () => {
-	// const token = sessionStorage.getItem("token")
 
 	return (
 		<div
