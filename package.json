@@ -9,6 +9,8 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@ipld/car": "^5.3.0",
+		"@ipld/dag-cbor": "^9.2.0",
 		"@solid-primitives/storage": "^2.1.1",
 		"@solidjs/meta": "^0.29.3",
 		"@solidjs/router": "^0.9.1",
