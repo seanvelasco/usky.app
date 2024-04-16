@@ -26,6 +26,7 @@ import Media from "./routes/profile/[profile]/media"
 import Post, { PostData } from "./routes/profile/[profile]/post/[post]"
 import Replies from "./routes/profile/[profile]/replies"
 import SearchPage from "./routes/search"
+import Firehose from "./routes/live"
 
 import Search from "./components/Search"
 import AuthModal from "./components/auth/AuthModal"
@@ -97,7 +98,7 @@ const FeedView = () => {
 					data={DiscoverData}
 				></Route>
 				<Route path="/hot" component={Hot} data={DiscoverData} />
-				<Route path="/live" component={Discover} data={DiscoverData} />
+				<Route path="/live" component={Firehose}  />
 				<Route path="/search" component={SearchPage} />
 				<Route path="/feeds" component={SearchPage} />
 				<Route path="/about" component={About} />

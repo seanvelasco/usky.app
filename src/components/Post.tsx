@@ -6,7 +6,7 @@ import Avatar from "./Avatar";
 import styles from "./Post.module.css";
 import PostFooter from "./PostFooter";
 import TimeAgo from "./TimeAgo";
-import Embed from "./embeds/Embed";
+import Embed from "./embeds/Embed"
 
 export const PostExpandedChildPost = (
 	props: { hasChild?: boolean; hasParent?: boolean } & ThreadParentOrReply,
