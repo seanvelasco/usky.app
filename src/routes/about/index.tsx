@@ -1,9 +1,9 @@
-import styles from "./styles.module.css"
+import styles from './styles.module.css'
 
 const About = () => {
 	return (
 		<div class={styles.about}>
-			<img alt="usky.app logo" src="/usky.svg" />
+			<img alt='usky.app logo' src='/usky.svg' />
 			<h3>About usky.app</h3>
 			<p>
 				usky.app is a lightweight (29.91 kB gzipped) and minimalist web
@@ -17,7 +17,7 @@ const About = () => {
 			<p>
 				Having no Twitter account (I only have Facebook), I painfully
 				learned there are numerous parts of what makes a post. I
-				thought,{" "}
+				thought,{' '}
 				<i>
 					"is this post an original post or a repost, is this a parent
 					post or a reply post, how many replies does this have, does
@@ -42,7 +42,7 @@ const About = () => {
 				<li>
 					If someone wants to view a Bluesky profile or post, but they
 					don't have an account yet, they can easily preview the
-					content by changing just one character in the URL - change{" "}
+					content by changing just one character in the URL - change{' '}
 					<i>b</i>sky.app to <i>u</i>
 					sky.app .
 				</li>

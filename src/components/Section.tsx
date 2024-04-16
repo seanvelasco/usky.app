@@ -1,19 +1,19 @@
-import { A } from "@solidjs/router";
-import { For } from "solid-js";
-import type { Feed, Profile } from "../types";
-import { id } from "../utils";
-import Avatar from "./Avatar";
-import styles from "./Section.module.css";
+import { A } from '@solidjs/router'
+import { For } from 'solid-js'
+import type { Feed, Profile } from '../types'
+import { id } from '../utils'
+import Avatar from './Avatar'
+import styles from './Section.module.css'
 
 const SectionItem = (props: {
-	href: string;
-	avatar: string;
-	name: string;
-	handle?: string;
+	href: string
+	avatar: string
+	name: string
+	handle?: string
 }) => {
 	return (
 		<div class={styles.item}>
-			<Avatar size="2.25rem" src={props.avatar} />
+			<Avatar size='2.25rem' src={props.avatar} />
 			<div>
 				<A class={styles.name} href={props.href}>
 					{props.name}
@@ -21,10 +21,14 @@ const SectionItem = (props: {
 				{/* <A href={props.href}>{props.handle}</A> */}
 				{/* <A href={props.href}>{props.name}</A> */}
 			</div>
-			<A aria-label={props.name} class={styles.wrapper} href={props.href}></A>
+			<A
+				aria-label={props.name}
+				class={styles.wrapper}
+				href={props.href}
+			></A>
 		</div>
-	);
-};
+	)
+}
 
 const Section = (props: { title: string; list: Feed[] }) => {
 	return (
@@ -34,18 +38,18 @@ const Section = (props: { title: string; list: Feed[] }) => {
 				{(list) => (
 					<SectionItem
 						href={`/profile/${list.creator.did}/feed/${id(list.uri)}`}
-						avatar={list?.avatar ?? "/feed.svg"}
+						avatar={list?.avatar ?? '/feed.svg'}
 						name={list.displayName}
 					/>
 				)}
 			</For>
 		</section>
-	);
-};
+	)
+}
 
 export const ActorsSection = (props: {
-	title: string;
-	actors: Pick<Profile, "displayName" | "handle" | "avatar" | "banner">[];
+	title: string
+	actors: Pick<Profile, 'displayName' | 'handle' | 'avatar' | 'banner'>[]
 }) => {
 	return (
 		<section class={styles.section}>
@@ -54,13 +58,13 @@ export const ActorsSection = (props: {
 				{(actor) => (
 					<SectionItem
 						href={`/profile/${actor.handle}`}
-						avatar={actor.avatar ?? "/avatar.svg"}
+						avatar={actor.avatar ?? '/avatar.svg'}
 						name={actor?.displayName ?? actor.handle}
 					/>
 				)}
 			</For>
 		</section>
-	);
-};
+	)
+}
 
-export default Section;
+export default Section

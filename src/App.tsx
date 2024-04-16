@@ -5,55 +5,55 @@ import {
 	useLocation,
 	useNavigate,
 	useRouteData
-} from "@solidjs/router"
-import { For, Show, Suspense } from "solid-js"
+} from '@solidjs/router'
+import { For, Show, Suspense } from 'solid-js'
 
-import Discover, { DiscoverData } from "./routes"
-import About from "./routes/about"
-import Hot from "./routes/hot"
+import Discover, { DiscoverData } from './routes'
+import About from './routes/about'
+import Hot from './routes/hot'
 import Profile, {
 	Posts,
 	PostsData,
 	ProfileData
-} from "./routes/profile/[profile]"
-import Feeds, { FeedsData } from "./routes/profile/[profile]/feed"
-import Feed, { FeedData } from "./routes/profile/[profile]/feed/[feed]"
-import Followers, { FollowersData } from "./routes/profile/[profile]/followers"
-import Following, { FollowingData } from "./routes/profile/[profile]/following"
-import Likes, { LikesData } from "./routes/profile/[profile]/likes"
-import Lists, { ListsData } from "./routes/profile/[profile]/lists"
-import Media from "./routes/profile/[profile]/media"
-import Post, { PostData } from "./routes/profile/[profile]/post/[post]"
-import Replies from "./routes/profile/[profile]/replies"
-import SearchPage from "./routes/search"
-import Firehose from "./routes/live"
+} from './routes/profile/[profile]'
+import Feeds, { FeedsData } from './routes/profile/[profile]/feed'
+import Feed, { FeedData } from './routes/profile/[profile]/feed/[feed]'
+import Followers, { FollowersData } from './routes/profile/[profile]/followers'
+import Following, { FollowingData } from './routes/profile/[profile]/following'
+import Likes, { LikesData } from './routes/profile/[profile]/likes'
+import Lists, { ListsData } from './routes/profile/[profile]/lists'
+import Media from './routes/profile/[profile]/media'
+import Post, { PostData } from './routes/profile/[profile]/post/[post]'
+import Replies from './routes/profile/[profile]/replies'
+import SearchPage from './routes/search'
+import Firehose from './routes/live'
 
-import Search from "./components/Search"
-import AuthModal from "./components/auth/AuthModal"
-import Sidebar from "./components/layout/Sidebar"
+import Search from './components/Search'
+import AuthModal from './components/auth/AuthModal'
+import Sidebar from './components/layout/Sidebar'
 
-import { ChevronLeft } from "./assets/ChevronLeft"
-import { FeedsIcon } from "./assets/FeedsIcon"
-import { HomeIcon } from "./assets/HomeIcon"
-import { SearchIcon } from "./assets/SearchIcon"
+import { ChevronLeft } from './assets/ChevronLeft'
+import { FeedsIcon } from './assets/FeedsIcon'
+import { HomeIcon } from './assets/HomeIcon'
+import { SearchIcon } from './assets/SearchIcon'
 
-import styles from "./App.module.css"
+import styles from './App.module.css'
 
 const Navigation = () => {
 	const links = [
 		{
-			label: "Home",
-			href: "/",
+			label: 'Home',
+			href: '/',
 			icon: <HomeIcon />
 		},
 		{
-			label: "Search",
-			href: "/search",
+			label: 'Search',
+			href: '/search',
 			icon: <SearchIcon />
 		},
 		{
-			label: "Feeds",
-			href: "/feeds",
+			label: 'Feeds',
+			href: '/feeds',
 			icon: <FeedsIcon />
 		}
 	]
@@ -65,7 +65,7 @@ const Navigation = () => {
 					<div>
 						<A
 							end
-							activeClass="highlight"
+							activeClass='highlight'
 							aria-label={link.label}
 							href={link.href}
 						>
@@ -91,52 +91,52 @@ const Navigation = () => {
 const FeedView = () => {
 	return (
 		<Routes>
-			<Route path="/">
+			<Route path='/'>
 				<Route
-					path="/"
+					path='/'
 					component={Discover}
 					data={DiscoverData}
 				></Route>
-				<Route path="/hot" component={Hot} data={DiscoverData} />
-				<Route path="/live" component={Firehose}  />
-				<Route path="/search" component={SearchPage} />
-				<Route path="/feeds" component={SearchPage} />
-				<Route path="/about" component={About} />
+				<Route path='/hot' component={Hot} data={DiscoverData} />
+				<Route path='/live' component={Firehose} />
+				<Route path='/search' component={SearchPage} />
+				<Route path='/feeds' component={SearchPage} />
+				<Route path='/about' component={About} />
 				<Route
-					path="/profile/:profile/post/:post"
+					path='/profile/:profile/post/:post'
 					component={Post}
 					data={PostData}
 				/>
 				<Route
-					path="/profile/:profile/feed/:feed"
+					path='/profile/:profile/feed/:feed'
 					component={Feed}
 					data={FeedData}
 				/>
 				<Route
-					path="/profile/:profile/lists/:list"
+					path='/profile/:profile/lists/:list'
 					component={Feed}
 					data={FeedData}
 				/>
 				<Route
-					path="/profile/:profile"
+					path='/profile/:profile'
 					component={Profile}
 					data={ProfileData}
 				>
-					<Route path="/" data={PostsData}>
-						<Route path="/" component={Posts} />
-						<Route path="/replies" component={Replies} />
-						<Route path="/media" component={Media} />
+					<Route path='/' data={PostsData}>
+						<Route path='/' component={Posts} />
+						<Route path='/replies' component={Replies} />
+						<Route path='/media' component={Media} />
 					</Route>
-					<Route path="/likes" component={Likes} data={LikesData} />
-					<Route path="/feed" component={Feeds} data={FeedsData} />
-					<Route path="/lists" component={Lists} data={ListsData} />
+					<Route path='/likes' component={Likes} data={LikesData} />
+					<Route path='/feed' component={Feeds} data={FeedsData} />
+					<Route path='/lists' component={Lists} data={ListsData} />
 					<Route
-						path="/followers"
+						path='/followers'
 						component={Followers}
 						data={FollowersData}
 					/>
 					<Route
-						path="/following"
+						path='/following'
 						component={Following}
 						data={FollowingData}
 					/>
@@ -147,13 +147,12 @@ const FeedView = () => {
 }
 
 const App = () => {
-
 	return (
 		<div
 			style={{
-				display: "flex",
-				"flex-flow": "row nowrap",
-				"justify-content": "center"
+				display: 'flex',
+				'flex-flow': 'row nowrap',
+				'justify-content': 'center'
 			}}
 		>
 			<aside class={`${styles.sidebar} ${styles.left}`}>
@@ -162,9 +161,9 @@ const App = () => {
 			<main class={styles.main}>
 				<div
 					style={{
-						display: "flex",
-						"flex-direction": "column",
-						"min-height": "100%"
+						display: 'flex',
+						'flex-direction': 'column',
+						'min-height': '100%'
 					}}
 				>
 					<Header />
@@ -187,46 +186,46 @@ const TimelineHeader = () => {
 	return (
 		<div
 			style={{
-				display: "flex",
-				width: "100%",
-				gap: "1rem",
-				"font-weight": 500,
-				padding: "0 1rem"
+				display: 'flex',
+				width: '100%',
+				gap: '1rem',
+				'font-weight': 500,
+				padding: '0 1rem'
 			}}
 		>
 			<A
-				activeClass="highlight"
+				activeClass='highlight'
 				end
 				style={{
-					color: "var(--text-secondary)",
+					color: 'var(--text-secondary)',
 					flex: 1,
-					"text-align": "center"
+					'text-align': 'center'
 				}}
-				href="/"
+				href='/'
 			>
 				Discover
 			</A>
 			<A
-				activeClass="highlight"
+				activeClass='highlight'
 				end
 				style={{
-					color: "var(--text-secondary)",
+					color: 'var(--text-secondary)',
 					flex: 1,
-					"text-align": "center"
+					'text-align': 'center'
 				}}
-				href="/hot"
+				href='/hot'
 			>
 				What's Hot
 			</A>
 			<A
-				activeClass="highlight"
+				activeClass='highlight'
 				style={{
-					color: "var(--text-secondary)",
+					color: 'var(--text-secondary)',
 					flex: 1,
-					"text-align": "center"
+					'text-align': 'center'
 				}}
 				end
-				href="/live"
+				href='/live'
 			>
 				Live
 			</A>
@@ -239,16 +238,16 @@ const FeedHeader = () => {
 	return (
 		<Suspense>
 			<p>
-				{feedGenerator()?.view.displayName}{" "}
+				{feedGenerator()?.view.displayName}{' '}
 				<span
 					style={{
-						color: "var(--text-secondary)"
+						color: 'var(--text-secondary)'
 					}}
 				>
-					by{" "}
+					by{' '}
 					<a
 						style={{
-							color: "inherit"
+							color: 'inherit'
 						}}
 						href={`/profile/${
 							feedGenerator()?.view?.creator?.handle
@@ -266,33 +265,33 @@ const Header = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 
-	const isHome = () => ["/", "/hot", "/live"].includes(location.pathname)
+	const isHome = () => ['/', '/hot', '/live'].includes(location.pathname)
 
 	return (
 		<header
 			style={{
-				position: "sticky",
+				position: 'sticky',
 				top: 0,
-				"background-color": "var(--background-primary)",
-				"border-bottom": " 1px solid var(--border)",
+				'background-color': 'var(--background-primary)',
+				'border-bottom': ' 1px solid var(--border)',
 
-				"z-index": 2,
-				padding: " 0 1.5rem"
+				'z-index': 2,
+				padding: ' 0 1.5rem'
 			}}
 		>
 			<div
 				style={{
-					display: "flex",
-					"align-items": "center",
-					height: "3.25rem",
-					gap: "1rem"
+					display: 'flex',
+					'align-items': 'center',
+					height: '3.25rem',
+					gap: '1rem'
 				}}
 			>
 				<Show when={history && !isHome()}>
 					<button
 						style={{
-							all: "unset",
-							display: "flex"
+							all: 'unset',
+							display: 'flex'
 						}}
 						onClick={() => navigate(-1)}
 					>
@@ -301,23 +300,23 @@ const Header = () => {
 				</Show>
 				<Routes>
 					<Route
-						path={["/", "hot", "/live"]}
+						path={['/', 'hot', '/live']}
 						component={TimelineHeader}
 					/>
-					<Route path="/search" component={Search} />
+					<Route path='/search' component={Search} />
 					<Route
-						path="/profile/:profile/*"
+						path='/profile/:profile/*'
 						component={ProfilePageHeader}
 						data={ProfileData}
 					/>
 					<Route
-						path="/profile/:profile/feed/:feed"
+						path='/profile/:profile/feed/:feed'
 						component={FeedHeader}
 						data={FeedData}
 					/>
-					<Route path="/profile/:profile/list/:list" />
+					<Route path='/profile/:profile/list/:list' />
 					<Route
-						path="/profile/:profile/post/:post"
+						path='/profile/:profile/post/:post'
 						data={ProfileData}
 					>
 						<p>Post</p>

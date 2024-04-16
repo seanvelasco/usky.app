@@ -1,17 +1,17 @@
-import type { ThreadPost } from "../../types";
+import type { ThreadPost } from '../../types'
 
 const getPostThread = async (
-	uri: string,
+	uri: string
 ): Promise<{
-	thread: ThreadPost;
+	thread: ThreadPost
 }> => {
 	const response = await fetch(
-		`https://api.bsky.app/xrpc/app.bsky.feed.getPostThread?uri=${uri}`,
-	);
-	const body = await response.json();
-	return body;
-};
+		`https://api.bsky.app/xrpc/app.bsky.feed.getPostThread?uri=${uri}`
+	)
+	const body = await response.json()
+	return body
+}
 
-export { getPostThread };
+export { getPostThread }
 
-export default getPostThread;
+export default getPostThread

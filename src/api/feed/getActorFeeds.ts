@@ -1,20 +1,20 @@
-import type { Feed } from "../../types";
+import type { Feed } from '../../types'
 
 const getActorFeeds = async (
-	actor = "bsky.app",
+	actor = 'bsky.app'
 ): Promise<{
-	feeds: Feed[];
+	feeds: Feed[]
 }> => {
 	const response = await fetch(
 		`https://api.bsky.app/xrpc/app.bsky.feed.getActorFeeds?actor=${actor}&limit=100
-        `,
-	);
+        `
+	)
 
-	const body = await response.json();
+	const body = await response.json()
 
-	return body;
-};
+	return body
+}
 
-export { getActorFeeds };
+export { getActorFeeds }
 
-export default getActorFeeds;
+export default getActorFeeds

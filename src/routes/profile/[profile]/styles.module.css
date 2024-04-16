@@ -20,7 +20,10 @@
 	outline: none;
 	border: 1px solid #4e5058;
 	border: none;
-	transition: background-color 170ms ease, color 170ms ease, border 170ms ease;
+	transition:
+		background-color 170ms ease,
+		color 170ms ease,
+		border 170ms ease;
 	cursor: pointer;
 	font-weight: 500;
 }
@@ -131,7 +134,7 @@
 }
 
 .nav a:active::before {
-	content: "";
+	content: '';
 	position: absolute;
 	bottom: -1px;
 	left: 0;
@@ -146,7 +149,7 @@
 		background-color: var(--button-secondary-hover);
 	}
 	.nav a:hover::before {
-		content: "";
+		content: '';
 		position: absolute;
 		bottom: -1px;
 		left: 0;

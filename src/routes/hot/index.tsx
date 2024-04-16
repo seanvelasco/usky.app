@@ -1,5 +1,5 @@
 const Hot = () => {
-	return <></>;
-};
+	return <></>
+}
 
-export default Hot;
+export default Hot

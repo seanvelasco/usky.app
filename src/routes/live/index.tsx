@@ -1,12 +1,12 @@
-import { onMount, onCleanup, For, createSignal } from "solid-js"
-import Post from "../../components/Post"
-import Spinner from "../../components/Spinner"
-import { CarReader } from "@ipld/car"
-import { decode } from "@ipld/dag-cbor"
-import { decodeMultiple } from "cbor-x"
-import { FirehosePost, ThreadParentOrReply} from "../../types"
+import { onMount, onCleanup, For, createSignal } from 'solid-js'
+import Post from '../../components/Post'
+import Spinner from '../../components/Spinner'
+import { CarReader } from '@ipld/car'
+import { decode } from '@ipld/dag-cbor'
+import { decodeMultiple } from 'cbor-x'
+import { FirehosePost, ThreadParentOrReply } from '../../types'
 
-const BASE_URL = "wss://bsky.network/xrpc/com.atproto.sync.subscribeRepos"
+const BASE_URL = 'wss://bsky.network/xrpc/com.atproto.sync.subscribeRepos'
 
 interface FirehosePayload extends FirehosePost {
 	did: string
@@ -38,12 +38,8 @@ const shape = (post: FirehosePayload): ThreadParentOrReply => {
 }
 
 const handleRepo = async (message: any) => {
-	const {
-		ops,
-		repo,
-		blocks
-	} = message
-	
+	const { ops, repo, blocks } = message
+
 	if (blocks) {
 		const reader = await CarReader.fromBytes(blocks)
 		for (const op of ops) {
@@ -54,7 +50,7 @@ const handleRepo = async (message: any) => {
 						const block = await reader.get(cid2)
 						if (block) {
 							const decoded = decode(block?.bytes) as FirehosePost
-							if (decoded.$type === "app.bsky.feed.post") {
+							if (decoded.$type === 'app.bsky.feed.post') {
 								return {
 									did: repo,
 									path: path,
@@ -82,28 +78,29 @@ const handleCBOR = async (message: ArrayBuffer) => {
 }
 
 const Firehose = () => {
-	
 	const [posts, setPosts] = createSignal<any[]>([])
-	
+
 	const onMessage = async ({ data }: MessageEvent<ArrayBuffer>) => {
 		const decoded = await handleCBOR(data)
 		if (decoded) {
 			setPosts([...posts(), shape(decoded)])
 		}
 	}
-	
+
 	onMount(() => {
 		const ws = new WebSocket(BASE_URL)
-		ws.binaryType = "arraybuffer"
+		ws.binaryType = 'arraybuffer'
 		ws.onmessage = onMessage
 		onCleanup(() => ws.close())
 	})
-	
-	return <div>
-		<For each={posts()} fallback={<Spinner />}>
-			{(post) => <Post {...post} />}
-		</For>
-	</div>
+
+	return (
+		<div>
+			<For each={posts()} fallback={<Spinner />}>
+				{(post) => <Post {...post} />}
+			</For>
+		</div>
+	)
 }
 
 export default Firehose

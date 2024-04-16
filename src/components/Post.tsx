@@ -1,15 +1,15 @@
-import { A } from "@solidjs/router";
-import { For, Show } from "solid-js";
-import type { Thread, ThreadParentOrReply } from "../types";
-import { did, id } from "../utils";
-import Avatar from "./Avatar";
-import styles from "./Post.module.css";
-import PostFooter from "./PostFooter";
-import TimeAgo from "./TimeAgo";
-import Embed from "./embeds/Embed"
+import { A } from '@solidjs/router'
+import { For, Show } from 'solid-js'
+import type { Thread, ThreadParentOrReply } from '../types'
+import { did, id } from '../utils'
+import Avatar from './Avatar'
+import styles from './Post.module.css'
+import PostFooter from './PostFooter'
+import TimeAgo from './TimeAgo'
+import Embed from './embeds/Embed'
 
 export const PostExpandedChildPost = (
-	props: { hasChild?: boolean; hasParent?: boolean } & ThreadParentOrReply,
+	props: { hasChild?: boolean; hasParent?: boolean } & ThreadParentOrReply
 ) => {
 	return (
 		<>
@@ -27,10 +27,11 @@ export const PostExpandedChildPost = (
 			<article
 				class={styles.article}
 				style={{
-					"border-bottom":
-						props.hasChild || (props?.replies && props.replies.length !== 0)
-							? "none"
-							: "1px solid var(--border)",
+					'border-bottom':
+						props.hasChild ||
+						(props?.replies && props.replies.length !== 0)
+							? 'none'
+							: '1px solid var(--border)'
 				}}
 			>
 				<div class={styles.inner}>
@@ -38,11 +39,11 @@ export const PostExpandedChildPost = (
 						<Show when={props.hasParent || Boolean(props?.parent)}>
 							<div
 								style={{
-									position: "absolute",
-									width: "2px",
-									"background-color": "var(--border)",
+									position: 'absolute',
+									width: '2px',
+									'background-color': 'var(--border)',
 									top: 0,
-									height: "1.5rem",
+									height: '1.5rem'
 								}}
 							></div>
 						</Show>
@@ -55,15 +56,16 @@ export const PostExpandedChildPost = (
 						/>
 						<Show
 							when={
-								props.hasChild || (props?.replies && props.replies.length !== 0)
+								props.hasChild ||
+								(props?.replies && props.replies.length !== 0)
 							}
 						>
 							<div
 								style={{
-									position: "relative",
-									width: "2px",
-									"background-color": "var(--border)",
-									"flex-grow": 1,
+									position: 'relative',
+									width: '2px',
+									'background-color': 'var(--border)',
+									'flex-grow': 1
 								}}
 							></div>
 						</Show>
@@ -76,14 +78,16 @@ export const PostExpandedChildPost = (
 							>
 								{props?.post?.author?.displayName ??
 									props?.post?.author?.handle}
-							</A>{" "}
+							</A>{' '}
 							<A
 								class={styles.handle}
 								href={`/profile/${props?.post?.author?.handle}`}
 							>
 								@{props?.post?.author?.handle}
-							</A>{" "}
-							<TimeAgo time={new Date(props?.post?.record?.createdAt)} />
+							</A>{' '}
+							<TimeAgo
+								time={new Date(props?.post?.record?.createdAt)}
+							/>
 						</div>
 						<div class={styles.content}>
 							<Show when={props?.post?.record?.text}>
@@ -91,13 +95,16 @@ export const PostExpandedChildPost = (
 							</Show>
 							<Show when={props?.post.embed}>
 								{(embed) => (
-									<Embed embed={{ ...embed() }} did={did(props?.post?.uri)} />
+									<Embed
+										embed={{ ...embed() }}
+										did={did(props?.post?.uri)}
+									/>
 								)}
 							</Show>
 						</div>
 						<PostFooter
 							styles={{
-								"margin-top": "1rem",
+								'margin-top': '1rem'
 							}}
 							replyCount={props?.post?.replyCount}
 							repostCount={props?.post?.repostCount}
@@ -107,26 +114,31 @@ export const PostExpandedChildPost = (
 				</div>
 				<A
 					noScroll
-					aria-label="Post"
+					aria-label='Post'
 					class={styles.wrapper}
 					href={`/profile/${props?.post?.author?.handle}/post/${id(
-						props.post?.uri,
+						props.post?.uri
 					)}`}
 				/>
 			</article>
 			<Show when={props?.replies}>
 				{(replies) => (
 					<For each={replies()}>
-						{(reply) => <PostExpandedChildPost {...reply} hasParent={true} />}
+						{(reply) => (
+							<PostExpandedChildPost
+								{...reply}
+								hasParent={true}
+							/>
+						)}
 					</For>
 				)}
 			</Show>
 		</>
-	);
-};
+	)
+}
 
 export const Post = (
-	props: { hasChild?: boolean; hasParent?: boolean } & Thread,
+	props: { hasChild?: boolean; hasParent?: boolean } & Thread
 ) => {
 	return (
 		<>
@@ -137,12 +149,17 @@ export const Post = (
 				}
 			>
 				{(post) => (
-					<Post post={{ ...post() }} hasParent={false} hasChild={true} />
+					<Post
+						post={{ ...post() }}
+						hasParent={false}
+						hasChild={true}
+					/>
 				)}
 			</Show>
 			<Show
 				when={
-					props?.reply?.parent?.cid !== props?.reply?.root?.cid && props?.reply
+					props?.reply?.parent?.cid !== props?.reply?.root?.cid &&
+					props?.reply
 				}
 			>
 				{(reply) => (
@@ -164,23 +181,26 @@ export const Post = (
 			<article
 				class={styles.article}
 				style={{
-					"border-bottom": props.hasChild ? "none" : "1px solid var(--border)",
+					'border-bottom': props.hasChild
+						? 'none'
+						: '1px solid var(--border)'
 				}}
 			>
 				<div class={styles.inner}>
 					<div class={styles.left}>
 						<Show
 							when={
-								props.hasParent || (props.reply?.root && props.reply?.parent)
+								props.hasParent ||
+								(props.reply?.root && props.reply?.parent)
 							}
 						>
 							<div
 								style={{
-									position: "absolute",
-									width: "2px",
-									"background-color": "var(--border)",
+									position: 'absolute',
+									width: '2px',
+									'background-color': 'var(--border)',
 									top: 0,
-									height: "1.5rem",
+									height: '1.5rem'
 								}}
 							></div>
 						</Show>
@@ -194,10 +214,10 @@ export const Post = (
 						<Show when={props.hasChild}>
 							<div
 								style={{
-									position: "relative",
-									width: "2px",
-									"background-color": "var(--border)",
-									"flex-grow": 1,
+									position: 'relative',
+									width: '2px',
+									'background-color': 'var(--border)',
+									'flex-grow': 1
 								}}
 							></div>
 						</Show>
@@ -210,14 +230,16 @@ export const Post = (
 							>
 								{props?.post?.author?.displayName ??
 									props?.post?.author?.handle}
-							</A>{" "}
+							</A>{' '}
 							<A
 								class={styles.handle}
 								href={`/profile/${props?.post?.author?.handle}`}
 							>
 								@{props?.post?.author?.handle}
-							</A>{" "}
-							<TimeAgo time={new Date(props?.post?.record?.createdAt)} />
+							</A>{' '}
+							<TimeAgo
+								time={new Date(props?.post?.record?.createdAt)}
+							/>
 						</div>
 						<div class={styles.content}>
 							<Show when={props?.post?.record?.text}>
@@ -227,14 +249,17 @@ export const Post = (
 								{(embed) => (
 									<Embed
 										embed={{ ...embed() }}
-										did={props?.post?.author?.did ?? did(props?.post?.uri)}
+										did={
+											props?.post?.author?.did ??
+											did(props?.post?.uri)
+										}
 									/>
 								)}
 							</Show>
 						</div>
 						<PostFooter
 							styles={{
-								"margin-top": "1rem",
+								'margin-top': '1rem'
 							}}
 							replyCount={props?.post?.replyCount}
 							repostCount={props?.post?.repostCount}
@@ -243,15 +268,15 @@ export const Post = (
 					</div>
 				</div>
 				<A
-					aria-label="Post"
+					aria-label='Post'
 					class={styles.wrapper}
 					href={`/profile/${props?.post?.author?.handle}/post/${id(
-						props.post?.uri,
+						props.post?.uri
 					)}`}
 				/>
 			</article>
 		</>
-	);
-};
+	)
+}
 
-export default Post;
+export default Post

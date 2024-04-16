@@ -1,16 +1,16 @@
-import { Show } from "solid-js/web";
-import { LikesIcon } from "../assets/likes";
-import { RepliesIcon } from "../assets/replies";
-import { RepostsIcon } from "../assets/reposts";
-import styles from "./PostFooter.module.css";
+import { Show } from 'solid-js/web'
+import { LikesIcon } from '../assets/likes'
+import { RepliesIcon } from '../assets/replies'
+import { RepostsIcon } from '../assets/reposts'
+import styles from './PostFooter.module.css'
 
-import type { JSX } from "solid-js";
+import type { JSX } from 'solid-js'
 
 const PostFooter = (props: {
-	replyCount: number;
-	repostCount: number;
-	likeCount: number;
-	styles?: JSX.CSSProperties;
+	replyCount: number
+	repostCount: number
+	likeCount: number
+	styles?: JSX.CSSProperties
 }) => {
 	return (
 		<div class={styles.footer} style={props.styles}>
@@ -48,7 +48,7 @@ const PostFooter = (props: {
 				</Show>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default PostFooter;
+export default PostFooter

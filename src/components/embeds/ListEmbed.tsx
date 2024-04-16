@@ -1,17 +1,17 @@
-import { A } from "@solidjs/router";
-import type { ListEmbed as ListEmbedType } from "../../types";
-import Avatar from "../Avatar";
-import commonStyles from "./Embed.module.css";
+import { A } from '@solidjs/router'
+import type { ListEmbed as ListEmbedType } from '../../types'
+import Avatar from '../Avatar'
+import commonStyles from './Embed.module.css'
 
 const ListEmbed = (props: ListEmbedType) => {
-	const id = "";
+	const id = ''
 
 	return (
 		<div class={`${commonStyles.embed} ${commonStyles.record}`}>
 			<Avatar
-				src={props?.avatar ?? "/feed.svg"}
+				src={props?.avatar ?? '/feed.svg'}
 				alt={`${props?.name} avatar`}
-				size="3.5rem"
+				size='3.5rem'
 			/>
 			<div class={commonStyles.text}>
 				<div>
@@ -22,9 +22,9 @@ const ListEmbed = (props: ListEmbedType) => {
 						{props?.name}
 					</A>
 					<p>
-						List by{" "}
+						List by{' '}
 						<A
-							rel="author"
+							rel='author'
 							class={commonStyles.handle}
 							href={`/profile/${props?.creator?.handle}`}
 						>
@@ -39,7 +39,7 @@ const ListEmbed = (props: ListEmbedType) => {
 				href={`/profile/${props?.creator?.handle}/list/${id}`}
 			></A>
 		</div>
-	);
-};
+	)
+}
 
-export default ListEmbed;
+export default ListEmbed

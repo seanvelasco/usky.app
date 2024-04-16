@@ -1,19 +1,19 @@
-import { Link, Meta, Title } from "@solidjs/meta"
+import { Link, Meta, Title } from '@solidjs/meta'
 import {
 	A,
 	Outlet,
 	type RouteDataFuncArgs,
 	useRouteData
-} from "@solidjs/router"
-import { For, Show, Suspense, createResource } from "solid-js"
+} from '@solidjs/router'
+import { For, Show, Suspense, createResource } from 'solid-js'
 
-import Post from "../../../components/Post"
-import Spinner from "../../../components/Spinner"
+import Post from '../../../components/Post'
+import Spinner from '../../../components/Spinner'
 
-import getProfile from "../../../api/actor/getProfile"
-import getAuthorFeed from "../../../api/feed/getAuthorFeed"
+import getProfile from '../../../api/actor/getProfile'
+import getAuthorFeed from '../../../api/feed/getAuthorFeed'
 
-import styles from "./styles.module.css"
+import styles from './styles.module.css'
 
 export const ProfileData = ({ params }: RouteDataFuncArgs) => {
 	const [profile] = createResource(() => params.profile, getProfile)
@@ -54,7 +54,7 @@ const ProfileNav = (
 						<A
 							noScroll={true}
 							end={true}
-							activeClass="underline"
+							activeClass='underline'
 							href={route.href}
 						>
 							{route.title}
@@ -71,29 +71,29 @@ const Profile = () => {
 
 	const routes = [
 		{
-			title: "Posts",
-			href: ""
+			title: 'Posts',
+			href: ''
 		},
 		{
-			title: "Replies",
-			href: "replies"
+			title: 'Replies',
+			href: 'replies'
 		},
 		{
-			title: "Media",
-			href: "media"
+			title: 'Media',
+			href: 'media'
 		},
 		{
-			title: "Likes",
-			href: "likes"
+			title: 'Likes',
+			href: 'likes'
 		},
 		{
-			title: "Feeds",
-			href: "feed",
+			title: 'Feeds',
+			href: 'feed',
 			hidden: false
 		},
 		{
-			title: "Lists",
-			href: "lists",
+			title: 'Lists',
+			href: 'lists',
 			hidden: false
 		}
 	]
@@ -104,38 +104,38 @@ const Profile = () => {
 				{profile()?.displayName ?? profile()?.handle} (@
 				{profile()?.handle}) - Bluesky (usky.app)
 			</Title>
-			<Meta name="description" content={profile()?.description} />
-			<Meta property="og:description" content={profile()?.description} />
+			<Meta name='description' content={profile()?.description} />
+			<Meta property='og:description' content={profile()?.description} />
 			<Meta
-				property="og:url"
+				property='og:url'
 				content={`https://usky.app/profile/${profile()?.handle}`}
 			/>
 			<Meta
-				property="og:image"
-				content={profile()?.avatar ?? "/avatar.svg"}
+				property='og:image'
+				content={profile()?.avatar ?? '/avatar.svg'}
 			/>
 			<Meta
-				property="og:image:type"
-				content={profile()?.avatar ? "image/jpeg" : "image/svg"}
+				property='og:image:type'
+				content={profile()?.avatar ? 'image/jpeg' : 'image/svg'}
 			/>
-			<Meta property="og:type" content="profile" />
+			<Meta property='og:type' content='profile' />
 			<Meta
-				property="profile:first_name"
+				property='profile:first_name'
 				content={profile()?.displayName}
 			/>
-			<Meta property="profile:username" content={profile()?.handle} />
-			<Meta name="twitter:description" content={profile()?.description} />
+			<Meta property='profile:username' content={profile()?.handle} />
+			<Meta name='twitter:description' content={profile()?.description} />
 			<Meta
-				property="twitter:url"
+				property='twitter:url'
 				content={`https://usky.app/profile/${profile()?.handle}`}
 			/>
 			<Meta
-				name="twitter:image"
-				content={profile()?.avatar ?? "/avatar.svg"}
+				name='twitter:image'
+				content={profile()?.avatar ?? '/avatar.svg'}
 			/>
-			<Meta name="twitter:card" content="summary" />
+			<Meta name='twitter:card' content='summary' />
 			<Link
-				rel="canonical"
+				rel='canonical'
 				href={`https://usky.app/profile/${profile()?.handle}`}
 			/>
 			<div class={styles.profile}>
@@ -149,21 +149,21 @@ const Profile = () => {
 										profile()?.displayName ??
 										profile()?.handle
 									} banner`}
-									draggable="false"
+									draggable='false'
 								/>
 							</Show>
 						</div>
 						<div class={styles.avatar}>
 							<img
-								src={profile()?.avatar ?? "/avatar.svg"}
+								src={profile()?.avatar ?? '/avatar.svg'}
 								alt={`${
 									profile()?.displayName ?? profile()?.handle
 								} avatar`}
-								draggable="false"
+								draggable='false'
 							/>
 						</div>
 						<div class={styles.buttons}>
-							<button type="button" class={styles.button}>
+							<button type='button' class={styles.button}>
 								Follow
 							</button>
 						</div>
@@ -185,7 +185,7 @@ const Profile = () => {
 								>
 									<span>
 										{profile()?.followsCount.toLocaleString()}
-									</span>{" "}
+									</span>{' '}
 									following
 								</A>
 								<A
@@ -195,13 +195,13 @@ const Profile = () => {
 								>
 									<span>
 										{profile()?.followersCount.toLocaleString()}
-									</span>{" "}
+									</span>{' '}
 									followers
 								</A>
 								<A href={`/profile/${profile()?.handle}`}>
 									<span>
 										{profile()?.postsCount.toLocaleString()}
-									</span>{" "}
+									</span>{' '}
 									posts
 								</A>
 							</div>

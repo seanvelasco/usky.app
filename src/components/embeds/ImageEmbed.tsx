@@ -1,9 +1,9 @@
-import type { ImageEmbed as ImageEmbedType } from "../../types";
-import { createImageLink } from "../../utils";
+import type { ImageEmbed as ImageEmbedType } from '../../types'
+import { createImageLink } from '../../utils'
 
-import { For } from "solid-js/web";
+import { For } from 'solid-js/web'
 
-import styles from "./ImageEmbed.module.css";
+import styles from './ImageEmbed.module.css'
 
 const ImageEmbed = (props: { images: ImageEmbedType[]; did?: string }) => {
 	return (
@@ -13,27 +13,28 @@ const ImageEmbed = (props: { images: ImageEmbedType[]; did?: string }) => {
 					return (
 						<div class={styles.image}>
 							<img
-								loading="lazy"
+								loading='lazy'
 								style={{
-									"aspect-ratio": image?.aspectRatio
-										? image.aspectRatio.width / image.aspectRatio.height
-										: 1,
+									'aspect-ratio': image?.aspectRatio
+										? image.aspectRatio.width /
+											image.aspectRatio.height
+										: 1
 								}}
 								src={
 									image?.thumb ??
 									createImageLink({
 										image: image?.image,
-										did: props?.did,
+										did: props?.did
 									})
 								}
 								alt={image.alt}
 							/>
 						</div>
-					);
+					)
 				}}
 			</For>
 		</div>
-	);
-};
+	)
+}
 
-export default ImageEmbed;
+export default ImageEmbed

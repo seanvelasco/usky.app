@@ -1,20 +1,20 @@
-import type { Actor } from "./../../types";
+import type { Actor } from './../../types'
 
 const getFollowers = async (
-	actor: string,
+	actor: string
 ): Promise<{
-	followers: Omit<Actor, "viewer">[];
-	subject: Omit<Actor, "viewer">;
-	cursor?: string;
+	followers: Omit<Actor, 'viewer'>[]
+	subject: Omit<Actor, 'viewer'>
+	cursor?: string
 }> => {
 	const response = await fetch(
-		`https://api.bsky.app/xrpc/app.bsky.graph.getFollowers?actor=${actor}`,
-	);
+		`https://api.bsky.app/xrpc/app.bsky.graph.getFollowers?actor=${actor}`
+	)
 
-	const body = await response.json();
-	return body;
-};
+	const body = await response.json()
+	return body
+}
 
-export { getFollowers };
+export { getFollowers }
 
-export default getFollowers;
+export default getFollowers

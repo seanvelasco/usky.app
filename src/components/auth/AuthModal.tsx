@@ -1,11 +1,11 @@
-import { createResource, createSignal, onCleanup, onMount } from "solid-js"
-import createSession from "../../api/identity/createSession"
-import { PlusIcon } from "../../assets/PlusIcon"
-import styles from "./AuthModal.module.css"
+import { createResource, createSignal, onCleanup, onMount } from 'solid-js'
+import createSession from '../../api/identity/createSession'
+import { PlusIcon } from '../../assets/PlusIcon'
+import styles from './AuthModal.module.css'
 // import { cookieStorage, makePersisted } from "@solid-primitives/storage"
 
-const [identifier, setIdentifier] = createSignal("")
-const [password, setPassword] = createSignal("")
+const [identifier, setIdentifier] = createSignal('')
+const [password, setPassword] = createSignal('')
 
 const credentials = () => {
 	return { identifier: identifier(), password: password() }
@@ -35,13 +35,13 @@ const AuthModal = () => {
 
 	const handleOpen = () => {
 		dialog?.showModal()
-		document.body.style.scrollBehavior = "none"
-		document.body.style.overflow = "hidden"
+		document.body.style.scrollBehavior = 'none'
+		document.body.style.overflow = 'hidden'
 	}
 
 	const handleClose = () => {
-		document.body.style.scrollBehavior = "initial"
-		document.body.style.overflow = "initial"
+		document.body.style.scrollBehavior = 'initial'
+		document.body.style.overflow = 'initial'
 	}
 
 	const handleOutsideClick = (event: MouseEvent) => {
@@ -51,18 +51,18 @@ const AuthModal = () => {
 	}
 
 	onMount(() => {
-		window.addEventListener("click", handleOutsideClick)
-		dialog!.addEventListener("close", handleClose)
+		window.addEventListener('click', handleOutsideClick)
+		dialog!.addEventListener('close', handleClose)
 	})
 
 	onCleanup(() => {
-		document.removeEventListener("click", handleOutsideClick)
-		dialog!.removeEventListener("close", handleClose)
+		document.removeEventListener('click', handleOutsideClick)
+		dialog!.removeEventListener('close', handleClose)
 	})
 
 	return (
 		<>
-			<button type="button" onClick={handleOpen}>
+			<button type='button' onClick={handleOpen}>
 				<PlusIcon />
 			</button>
 			<dialog ref={dialog} class={styles.dialog}>
@@ -70,24 +70,24 @@ const AuthModal = () => {
 					<p>Login to your account 👋</p>
 					<input
 						class={styles.input}
-						type="text"
-						name="handle"
-						placeholder="Handle or DID"
+						type='text'
+						name='handle'
+						placeholder='Handle or DID'
 						required
 						onInput={(event) => setIdentifier(event.target.value)}
 					/>
 					<input
 						class={styles.input}
-						type="passport"
-						name="password"
-						placeholder="App passowrd"
+						type='passport'
+						name='password'
+						placeholder='App passowrd'
 						required
 						onInput={(event) => setPassword(event.target.value)}
 					/>
-					<button class={styles.input} type="submit">
+					<button class={styles.input} type='submit'>
 						Submit
 					</button>
-					<button type="button">Create an account</button>
+					<button type='button'>Create an account</button>
 				</form>
 			</dialog>
 		</>

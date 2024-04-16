@@ -1,25 +1,24 @@
-import type { Profile } from "./../../types";
+import type { Profile } from './../../types'
 
-const getSuggestions = async (
-	// actor?: string,
-	// accessJwt?: string
-): Promise<
+const getSuggestions = async () // actor?: string,
+// accessJwt?: string
+: Promise<
 	| {
 			actors: Pick<
 				Profile,
-				| "displayName"
-				| "handle"
-				| "avatar"
-				| "banner"
-				| "followsCount"
-				| "followersCount"
-				| "postsCount"
-			>[];
-			cursor: string;
+				| 'displayName'
+				| 'handle'
+				| 'avatar'
+				| 'banner'
+				| 'followsCount'
+				| 'followersCount'
+				| 'postsCount'
+			>[]
+			cursor: string
 	  }
 	| undefined
 > => {
-	let request;
+	let request
 
 	// if (accessJwt) {
 	// 	request = new Request(
@@ -35,22 +34,22 @@ const getSuggestions = async (
 	request = new Request(
 		`https://api.bsky.app/xrpc/app.bsky.actor.getSuggestions`,
 		{
-			method: "GET",
-		},
-	);
+			method: 'GET'
+		}
+	)
 	// }
 
-	const response = await fetch(request);
+	const response = await fetch(request)
 
 	if (response.status !== 200) {
-		return;
+		return
 	}
 
-	const body = await response.json();
+	const body = await response.json()
 
-	return body;
-};
+	return body
+}
 
-export { getSuggestions };
+export { getSuggestions }
 
-export default getSuggestions;
+export default getSuggestions

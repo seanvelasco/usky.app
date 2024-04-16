@@ -6,7 +6,7 @@ import {
 	createResource,
 	createSignal,
 	onMount
-} from "solid-js"
+} from 'solid-js'
 
 import {
 	A,
@@ -14,25 +14,24 @@ import {
 	useParams,
 	useRouteData,
 	type RouteDataFuncArgs
-} from "@solidjs/router"
+} from '@solidjs/router'
 
-import { Link, Meta, Title } from "@solidjs/meta"
+import { Link, Meta, Title } from '@solidjs/meta'
 
-import Avatar from "../../../../../components/Avatar"
-import { PostExpandedChildPost } from "../../../../../components/Post"
-import PostFooter from "../../../../../components/PostFooter"
-import Embed from "../../../../../components/embeds/Embed"
+import Avatar from '../../../../../components/Avatar'
+import { PostExpandedChildPost } from '../../../../../components/Post'
+import PostFooter from '../../../../../components/PostFooter'
+import Embed from '../../../../../components/embeds/Embed'
 
-import getPostThread from "../../../../../api/feed/getPostThread"
-import resolveHandle from "../../../../../api/identity/resolveHandle"
+import getPostThread from '../../../../../api/feed/getPostThread'
+import resolveHandle from '../../../../../api/identity/resolveHandle'
 
-import { did, isDID } from "../../../../../utils"
+import { did, isDID } from '../../../../../utils'
 
-import postStyles from "../../../../../components/Post.module.css"
-import styles from "./styles.module.css"
+import postStyles from '../../../../../components/Post.module.css'
+import styles from './styles.module.css'
 
-import type { ThreadParentOrReply, ThreadPost } from "../../../../../types"
-
+import type { ThreadParentOrReply, ThreadPost } from '../../../../../types'
 
 const Timestamp = (props: { date: Date }) => {
 	// const date = createMemo(() => new Date(props.date))
@@ -40,18 +39,18 @@ const Timestamp = (props: { date: Date }) => {
 	return (
 		<time
 			style={{
-				color: "var(--text-secondary)"
+				color: 'var(--text-secondary)'
 			}}
 		>
-			{props.date.toLocaleDateString("en-us", {
-				year: "numeric",
-				month: "short",
-				day: "numeric"
-			})}{" "}
-			at{" "}
+			{props.date.toLocaleDateString('en-us', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric'
+			})}{' '}
+			at{' '}
 			{props.date.toLocaleTimeString([], {
-				hour: "numeric",
-				minute: "numeric"
+				hour: 'numeric',
+				minute: 'numeric'
 			})}
 		</time>
 	)
@@ -111,38 +110,38 @@ const PostExpanded = (props: ThreadPost) => {
 	return (
 		<>
 			<Title>{title()}</Title>
-			<Meta name="description" content={props.post?.record?.text} />
+			<Meta name='description' content={props.post?.record?.text} />
 
-			<Meta property="og:title" content={title()} />
+			<Meta property='og:title' content={title()} />
 			<Meta
-				property="og:description"
+				property='og:description'
 				content={props?.post?.record?.text}
 			/>
-			<Meta property="og:url" content={url()} />
-			<Meta property="og:image" content={props?.post?.author?.avatar} />
-			<Meta property="og:image:type" content="image/jpeg" />
-			<Meta property="og:type" content="article" />
+			<Meta property='og:url' content={url()} />
+			<Meta property='og:image' content={props?.post?.author?.avatar} />
+			<Meta property='og:image:type' content='image/jpeg' />
+			<Meta property='og:type' content='article' />
 			<Meta
-				property="article:published_time"
+				property='article:published_time'
 				content={props?.post?.record?.createdAt}
 			/>
 			<Meta
-				property="article:author"
+				property='article:author'
 				content={
 					props?.post?.author?.displayName ??
 					props?.post?.author?.handle
 				}
 			/>
-			<Meta name="twitter:title" content={title()} />
+			<Meta name='twitter:title' content={title()} />
 			<Meta
-				name="twitter:description"
+				name='twitter:description'
 				content={props?.post?.record?.text}
 			/>
-			<Meta property="twitter:url" content={url()} />
-			<Meta name="twitter:image" content={props?.post?.author?.avatar} />
-			<Meta name="twitter:card" content="summary" />
+			<Meta property='twitter:url' content={url()} />
+			<Meta name='twitter:image' content={props?.post?.author?.avatar} />
+			<Meta name='twitter:card' content='summary' />
 
-			<Link rel="canonical" href={url()} />
+			<Link rel='canonical' href={url()} />
 			<ErrorBoundary
 				fallback={(error) => (
 					<div class={styles.error}>
@@ -175,20 +174,20 @@ const PostExpanded = (props: ThreadPost) => {
 					<div class={postStyles.inner}>
 						<div
 							style={{
-								position: "relative",
-								display: "flex",
-								"flex-direction": "column",
-								"align-items": "center"
+								position: 'relative',
+								display: 'flex',
+								'flex-direction': 'column',
+								'align-items': 'center'
 							}}
 						>
 							<Show when={props?.parent}>
 								<div
 									style={{
-										position: "absolute",
-										width: "2px",
-										"background-color": "var(--border)",
-										top: "-1.5rem",
-										height: "1.5rem"
+										position: 'absolute',
+										width: '2px',
+										'background-color': 'var(--border)',
+										top: '-1.5rem',
+										height: '1.5rem'
 									}}
 								/>
 							</Show>
@@ -202,7 +201,7 @@ const PostExpanded = (props: ThreadPost) => {
 						</div>
 						<div class={styles.header}>
 							<A
-								rel="author"
+								rel='author'
 								href={`/profile/${props.post?.author?.handle}`}
 								class={postStyles.name}
 							>
@@ -210,7 +209,7 @@ const PostExpanded = (props: ThreadPost) => {
 									props.post?.author?.handle}
 							</A>
 							<A
-								rel="author"
+								rel='author'
 								href={`/profile/${props.post?.author?.handle}`}
 								class={postStyles.handle}
 							>
@@ -236,9 +235,9 @@ const PostExpanded = (props: ThreadPost) => {
 					</div>
 					<PostFooter
 						styles={{
-							"padding-top": "1rem",
-							"border-top": "1px solid var(--border)",
-							"justify-content": "center"
+							'padding-top': '1rem',
+							'border-top': '1px solid var(--border)',
+							'justify-content': 'center'
 						}}
 						replyCount={props.post?.replyCount}
 						repostCount={props.post?.repostCount}
@@ -277,10 +276,10 @@ const getThread = async ({
 	postId: string
 }) => {
 	const did = isDID(profileId) ? profileId : await resolveHandle(profileId)
-	
+
 	const post = await getPostThread(`at://${did}/app.bsky.feed.post/${postId}`)
 
-	const actors: ThreadPost["post"]["author"][] = []
+	const actors: ThreadPost['post']['author'][] = []
 
 	const pushAuthors = (thread: ThreadPost | ThreadParentOrReply) => {
 		if (

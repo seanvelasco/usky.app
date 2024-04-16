@@ -2,39 +2,39 @@ const listRecords = async (
 	repo: string,
 	collection: string,
 	limit = 100,
-	timeout = 20000,
+	timeout = 20000
 ) => {
-	const controller = new AbortController();
+	const controller = new AbortController()
 
 	const abortTimeout = setTimeout(() => {
-		controller.abort();
-	}, timeout);
+		controller.abort()
+	}, timeout)
 
 	try {
 		const response = await fetch(
 			`https://bsky.social/xrpc/com.atproto.repo.listRecords?repo=${repo}&collection=${collection}&limit=${limit}`,
 			{
-				signal: controller.signal,
-			},
-		);
+				signal: controller.signal
+			}
+		)
 
 		if (response.status !== 200) {
-			return;
+			return
 		}
 
-		const body = await response.json();
+		const body = await response.json()
 
-		return body;
+		return body
 	} catch (error) {
 		console.error(
 			`Cancelled getRecord(${repo}, ${collection}, ${limit})`,
-			error,
-		);
+			error
+		)
 	} finally {
-		clearTimeout(abortTimeout);
+		clearTimeout(abortTimeout)
 	}
-};
+}
 
-export { listRecords };
+export { listRecords }
 
-export default listRecords;
+export default listRecords

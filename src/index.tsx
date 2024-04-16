@@ -1,10 +1,10 @@
-import { MetaProvider } from "@solidjs/meta";
-import { Router } from "@solidjs/router";
-import { ErrorBoundary, render } from "solid-js/web";
+import { MetaProvider } from '@solidjs/meta'
+import { Router } from '@solidjs/router'
+import { ErrorBoundary, render } from 'solid-js/web'
 /* @refresh reload */
-import App from "./App";
+import App from './App'
 
-const root = document.getElementById("root");
+const root = document.getElementById('root')
 
 render(
 	() => (
@@ -22,5 +22,5 @@ render(
 			</MetaProvider>
 		</Router>
 	),
-	root!,
-);
+	root!
+)

@@ -1,27 +1,27 @@
-import type { Profile } from "./../../types";
+import type { Profile } from './../../types'
 
 const getSuggestedFollowsByActor = async (
 	actor?: string,
-	accessJwt?: string,
+	accessJwt?: string
 ): Promise<{
-	suggestions: Profile[];
+	suggestions: Profile[]
 }> => {
 	const request = new Request(
 		`https://bsky.social/xrpc/app.bsky.graph.getSuggestedFollowsByActor?actor=${actor}`,
 		{
-			method: "GET",
+			method: 'GET',
 			headers: {
-				Authorization: "Bearer " + accessJwt,
-			},
-		},
-	);
+				Authorization: 'Bearer ' + accessJwt
+			}
+		}
+	)
 
-	const response = await fetch(request);
+	const response = await fetch(request)
 
-	const body = await response.json();
-	return body;
-};
+	const body = await response.json()
+	return body
+}
 
-export { getSuggestedFollowsByActor };
+export { getSuggestedFollowsByActor }
 
-export default getSuggestedFollowsByActor;
+export default getSuggestedFollowsByActor
