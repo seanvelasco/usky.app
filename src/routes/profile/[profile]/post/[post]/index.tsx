@@ -55,7 +55,7 @@ const Timestamp = (props: { date: Date }) => {
 	)
 }
 
-const PostExapnded = (props: ThreadPost) => {
+const PostExpanded = (props: ThreadPost) => {
 	const params = useParams()
 
 	const [postRef, setPostRef] = createSignal<HTMLElement>()
@@ -324,7 +324,7 @@ const PostPage = () => {
 
 	return (
 		<Show when={data()?.post?.thread}>
-			{(thread) => <PostExapnded {...thread()} />}
+			{(thread) => <PostExpanded {...thread()} />}
 		</Show>
 	)
 }
