@@ -8,7 +8,7 @@ import {
 import { For, Show, Suspense, createResource } from 'solid-js'
 
 import Post from '../../../components/Post'
-import Spinner from '../../../components/Spinner'
+// import Spinner from '../../../components/Spinner'
 
 import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
@@ -210,9 +210,10 @@ const Profile = () => {
 					</div>
 				</Suspense>
 			</div>
-			<Suspense fallback={<Spinner />}>
-				<Outlet />
-			</Suspense>
+			<Outlet />
+			{/*<Suspense fallback={<Spinner />}>*/}
+			{/*	<Outlet />*/}
+			{/*</Suspense>*/}
 		</>
 	)
 }
