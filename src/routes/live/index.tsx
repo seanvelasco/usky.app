@@ -1,11 +1,11 @@
 import { onMount, onCleanup, For, createSignal } from 'solid-js'
-
-import Post from '../../components/Post'
-import Spinner from '../../components/Spinner'
-
+import { Link, Meta, Title } from '@solidjs/meta'
 import { CarReader } from '@ipld/car'
 import { decode } from '@ipld/dag-cbor'
 import { decodeMultiple } from 'cbor-x'
+
+import Post from '../../components/Post'
+import Spinner from '../../components/Spinner'
 
 import type {
 	FirehosePost,
@@ -41,21 +41,19 @@ const shape = (post: FirehosePayload): FeedPost => ({
 const handleRepo = async (message: Payload) => {
 	const { ops, repo, blocks } = message
 
-	if (blocks) {
-		const reader = await CarReader.fromBytes(blocks)
-		for (const op of ops) {
-			const { cid, path, action } = op
-			if (action === 'create' && cid) {
-				for await (const { cid: cid2 } of reader.blocks()) {
-					const block = await reader.get(cid2)
-					if (block) {
-						const decoded = decode(block.bytes) as FirehosePost
-						if (decoded.$type === 'app.bsky.feed.post') {
-							return {
-								did: repo,
-								path: path,
-								...decoded
-							}
+	const reader = await CarReader.fromBytes(blocks)
+	for (const op of ops) {
+		const { cid, path, action } = op
+		if (action === 'create' && cid) {
+			for await (const { cid: cid2 } of reader.blocks()) {
+				const block = await reader.get(cid2)
+				if (block) {
+					const decoded = decode(block.bytes) as FirehosePost
+					if (decoded.$type === 'app.bsky.feed.post') {
+						return {
+							did: repo,
+							path,
+							...decoded
 						}
 					}
 				}
@@ -74,11 +72,11 @@ const handleCBOR = async (message: ArrayBuffer) => {
 }
 
 const Firehose = () => {
-	const [posts] = createSignal<FeedPost[]>([])
+	const [posts, setPosts] = createSignal<FeedPost[]>([])
 
 	const onMessage = async ({ data }: MessageEvent<ArrayBuffer>) => {
 		const decoded = await handleCBOR(data)
-		if (decoded) posts().push(shape(decoded))
+		if (decoded) setPosts((prev) => [shape(decoded), ...prev])
 	}
 
 	onMount(() => {
@@ -88,10 +86,22 @@ const Firehose = () => {
 		onCleanup(() => ws.close())
 	})
 
+	const title = 'Live- Bluesky (usky.app)'
+	const description = 'View real-time Bluesky posts'
+	const url = 'https://usky.app/live'
+
 	return (
-		<For each={posts().reverse()} fallback={<Spinner />}>
-			{(post) => <Post post={post} />}
-		</For>
+		<>
+			<Title>{title}</Title>
+			<Meta name='description' content={description} />
+			<Meta property='og:description' content={description} />
+			<Meta property='og:url' content={url} />
+			<Meta property='twitter:url' content={url} />
+			<Link rel='canonical' href={url} />
+			<For each={posts()} fallback={<Spinner />}>
+				{(post) => <Post post={post} />}
+			</For>
+		</>
 	)
 }
 
