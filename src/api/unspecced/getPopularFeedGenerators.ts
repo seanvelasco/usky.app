@@ -1,4 +1,4 @@
-import type { Feed } from './../../types'
+import type { Feed } from '../../types'
 
 const getPopularFeedGenerators = async (): Promise<{
 	feeds: Feed[]

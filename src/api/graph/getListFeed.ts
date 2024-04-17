@@ -1,4 +1,4 @@
-import type { Thread } from './../../types'
+import type { Thread } from '../../types'
 
 const getListFeed = async (
 	list: string

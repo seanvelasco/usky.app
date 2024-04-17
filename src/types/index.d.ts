@@ -28,9 +28,11 @@ export interface Profile {
 
 export interface ImageBlob {
 	$type: 'blob'
-	ref: {
-		$link: string
-	}
+	ref:
+		| {
+				$link: string
+		  }
+		| any
 	mimeType: string
 	size: number
 }
@@ -171,6 +173,8 @@ export interface Reason {
 
 export interface FirehosePost {
 	text: string
+	embed: Embed
+	faces: unknown
 	$type: 'app.bsky.feed.post'
 	langs: string[]
 	reply: {

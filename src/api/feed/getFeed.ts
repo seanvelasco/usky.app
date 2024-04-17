@@ -1,4 +1,4 @@
-import type { FeedPost } from './../../types'
+import type { FeedPost } from '../../types'
 
 const getFeed = async (
 	feed: string

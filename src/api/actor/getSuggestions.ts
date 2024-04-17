@@ -1,4 +1,4 @@
-import type { Profile } from './../../types'
+import type { Profile } from '../../types'
 
 const getSuggestions = async () // actor?: string,
 // accessJwt?: string

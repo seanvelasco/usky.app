@@ -1,4 +1,4 @@
-import type { Actor } from './../../types'
+import type { Actor } from '../../types'
 
 const getFollows = async (
 	actor: string

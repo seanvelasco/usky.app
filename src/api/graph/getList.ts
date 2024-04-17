@@ -1,4 +1,4 @@
-import type { Actor, FeedGenerator } from './../../types'
+import type { Actor, FeedGenerator } from '../../types'
 
 const getList = async (
 	list: string

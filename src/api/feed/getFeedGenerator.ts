@@ -1,4 +1,4 @@
-import type { FeedGenerator } from './../../types'
+import type { FeedGenerator } from '../../types'
 
 const getFeedGenerator = async (feed: string): Promise<FeedGenerator> => {
 	const request = new Request(

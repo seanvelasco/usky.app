@@ -1,4 +1,4 @@
-import type { Profile } from './../../types'
+import type { Profile } from '../../types'
 
 const getSuggestedFollowsByActor = async (
 	actor?: string,
