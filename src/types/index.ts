@@ -254,3 +254,34 @@ export interface List {
 	creator: Actor
 	description: string
 }
+
+export interface FirehosePayload extends FirehosePost {
+	did: string
+	path: string
+}
+
+export interface Header {
+	op: number
+	t: string
+}
+
+export interface Payload {
+	blobs: unknown
+	blocks: Uint8Array
+	commit: {
+		value: Uint8Array
+		tag: number
+	}
+	ops: {
+		action: 'create' | string
+		cid: {
+			value: Uint8Array
+			tag: number
+		}
+		path: string
+	}[]
+	prev: unknown
+	rebase: boolean
+	repo: string
+	rev: string
+}
