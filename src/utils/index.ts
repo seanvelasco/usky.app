@@ -34,13 +34,14 @@ export const isDID = (did: string) => {
 export const createImageLink = (
 	props: { image?: ImageBlob | string; did?: string } | { image: string }
 ) => {
-	if (
+	if (typeof props.image === 'string') {
+		return props.image
+	} else if (
 		typeof props.image === 'object' &&
 		'did' in props &&
 		'ref' in props.image
 	) {
-		return `https://cdn.bsky.app/img/feed_thumbnail/plain/${props.did}/${props.image.ref?.$link}@jpeg`
-	} else if (typeof props.image === 'string') {
-		return props.image
+		const link = props.image.ref?.$link ?? props.image.ref.toString()
+		return `https://cdn.bsky.app/img/feed_thumbnail/plain/${props.did}/${link}@jpeg`
 	}
 }
