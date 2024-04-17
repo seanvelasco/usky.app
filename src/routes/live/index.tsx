@@ -7,32 +7,36 @@ import { CarReader } from '@ipld/car'
 import { decode } from '@ipld/dag-cbor'
 import { decodeMultiple } from 'cbor-x'
 
-import type { FirehosePost, FeedPost, FirehosePayload, Header, Payload } from '../../types'
+import type {
+	FirehosePost,
+	FeedPost,
+	FirehosePayload,
+	Header,
+	Payload
+} from '../../types'
 
-const FIREHOSE_BASE_URL = 'wss://bsky.network/xrpc/com.atproto.sync.subscribeRepos'
+const FIREHOSE_BASE_URL =
+	'wss://bsky.network/xrpc/com.atproto.sync.subscribeRepos'
 
-const shape = (post: FirehosePayload): FeedPost => (
-	{
-		uri: post.path,
-		cid: post.path,
-		author: {
-			did: post.did,
-			handle: post.did,
-			labels: []
-		},
-		record: {
-			text: post.text,
-			createdAt: post.createdAt,
-			langs: post.langs
-		},
-		replyCount: 0,
-		repostCount: 0,
-		likeCount: 0,
-		indexedAt: post.createdAt,
+const shape = (post: FirehosePayload): FeedPost => ({
+	uri: post.path,
+	cid: post.path,
+	author: {
+		did: post.did,
+		handle: post.did,
 		labels: []
-	}
-)
-
+	},
+	record: {
+		text: post.text,
+		createdAt: post.createdAt,
+		langs: post.langs
+	},
+	replyCount: 0,
+	repostCount: 0,
+	likeCount: 0,
+	indexedAt: post.createdAt,
+	labels: []
+})
 
 const handleRepo = async (message: Payload) => {
 	const { ops, repo, blocks } = message
@@ -86,7 +90,7 @@ const Firehose = () => {
 
 	return (
 		<For each={posts().reverse()} fallback={<Spinner />}>
-			{post => <Post post={post} />}
+			{(post) => <Post post={post} />}
 		</For>
 	)
 }
