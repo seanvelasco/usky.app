@@ -1,3 +1,5 @@
+import { For, Show, Suspense, lazy } from 'solid-js'
+
 import {
 	A,
 	Route,
@@ -6,7 +8,6 @@ import {
 	useNavigate,
 	useRouteData
 } from '@solidjs/router'
-import { For, Show, Suspense } from 'solid-js'
 
 import Discover, { DiscoverData } from './routes'
 import About from './routes/about'
@@ -26,7 +27,7 @@ import Media from './routes/profile/[profile]/media'
 import Post, { PostData } from './routes/profile/[profile]/post/[post]'
 import Replies from './routes/profile/[profile]/replies'
 import SearchPage from './routes/search'
-import Firehose from './routes/live'
+const Firehose = lazy(() => import('./routes/live'))
 
 import Search from './components/Search'
 import AuthModal from './components/auth/AuthModal'
