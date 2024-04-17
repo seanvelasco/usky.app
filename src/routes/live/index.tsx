@@ -26,6 +26,7 @@ const shape = (post: FirehosePayload): FeedPost => ({
 		handle: post.did,
 		labels: []
 	},
+	embed: post.embed,
 	record: {
 		text: post.text,
 		createdAt: post.createdAt,
@@ -76,7 +77,8 @@ const Firehose = () => {
 
 	const onMessage = async ({ data }: MessageEvent<ArrayBuffer>) => {
 		const decoded = await handleCBOR(data)
-		if (decoded) setPosts((prev) => [shape(decoded), ...prev])
+		if (decoded && decoded.embed)
+			setPosts((prev) => [shape(decoded), ...prev])
 	}
 
 	onMount(() => {
