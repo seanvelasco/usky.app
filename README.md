@@ -2,12 +2,12 @@
 
 # usky.app
 
-[![usky.app Home](https://img.sean.app/usky-home.png)](https://img.sean.app/usky-home.png)
-[![usky.app profile](https://img.sean.app/usky-profile.png)](https://img.sean.app/usky-profile.png)
-
 usky.app is a lightweight (29.91 kB gzipped) and minimalist web client for the decentralized social network, Bluesky.
 
 usky.app allows you to see what's happening in Bluesky, join the conversation, discover new things, and look up people you know.
+
+[![usky.app Home](https://img.sean.app/usky-home.png)](https://img.sean.app/usky-home.png)
+[![usky.app profile](https://img.sean.app/usky-profile.png)](https://img.sean.app/usky-profile.png)
 
 ## Development
 
