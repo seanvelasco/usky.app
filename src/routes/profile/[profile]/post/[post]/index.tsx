@@ -224,7 +224,7 @@ const PostExpanded = (props: ThreadPost) => {
 						<Show when={props.post.embed}>
 							{(embed) => (
 								<Embed
-									embed={{ ...embed() }}
+									embed={embed()}
 									did={did(props.post?.uri)}
 								/>
 							)}

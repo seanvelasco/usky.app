@@ -99,7 +99,7 @@ const Profile = () => {
 	]
 
 	return (
-		<>
+		<div>
 			<Title>
 				{profile()?.displayName ?? profile()?.handle} (@
 				{profile()?.handle}) - Bluesky (usky.app)
@@ -214,7 +214,7 @@ const Profile = () => {
 			{/*<Suspense fallback={<Spinner />}>*/}
 			{/*	<Outlet />*/}
 			{/*</Suspense>*/}
-		</>
+		</div>
 	)
 }
 

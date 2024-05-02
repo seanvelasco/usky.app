@@ -97,7 +97,7 @@ const FeedView = () => {
 					path='/'
 					component={Discover}
 					data={DiscoverData}
-				></Route>
+				/>
 				<Route path='/hot' component={Hot} data={DiscoverData} />
 				<Route path='/live' component={Firehose} />
 				<Route path='/search' component={SearchPage} />
