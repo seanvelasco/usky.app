@@ -1,45 +1,54 @@
-import { A, useLocation, useParams } from '@solidjs/router'
-// import { Route, Routes } from '@solidjs/router'
-import { Show, Suspense, createResource } from 'solid-js'
-import getSuggestions from '../../api/actor/getSuggestions'
+import { Show, Suspense } from 'solid-js'
+
+import { A, createAsync, useLocation, useParams } from '@solidjs/router'
+// import getSuggestions from '../../api/actor/getSuggestions'
 import getPopularFeedGenerators from '../../api/unspecced/getPopularFeedGenerators'
-// import { PostData } from '../../routes/profile/[profile]/post/[post]'
 import Search from '../Search'
 import Section, { ActorsSection } from '../Section'
+import { getPostData } from '../../routes/profile/[profile]/post/[post]'
 import styles from './Sidebar.module.css'
+
+const RelevantSection = () => {
+	const params = useParams()
+	const post = createAsync(() =>
+		getPostData({ profile: params.profile, post: params.post })
+	)
+
+	return (
+		<Show when={post && post()?.actors}>
+			{(actors) => (
+				<ActorsSection title='Relevant people' actors={actors()} />
+			)}
+		</Show>
+	)
+}
 
 const Sidebar = () => {
 	const location = useLocation()
 	const params = useParams()
-
-	const [users] = createResource(() => params.profile ?? '', getSuggestions)
-	const [feeds] = createResource(getPopularFeedGenerators)
+	// this should be dynamic with :profile, wrap this with auth
+	// const users = createAsync(getSuggestions)
+	const feeds = createAsync(getPopularFeedGenerators)
 
 	return (
 		<Suspense>
 			<Show when={location.pathname !== '/search'}>
 				<Search />
 			</Show>
-			{/*<Routes>*/}
-			{/*	<Route path='' component={RelevantSection} />*/}
-			{/*	<Route*/}
-			{/*		path='/profile/:profile/post/:post'*/}
-			{/*		component={RelevantSection}*/}
-			{/*		data={PostData}*/}
-			{/*	/>*/}
-			{/*</Routes>*/}
-			<Show
-				when={
-					location.pathname !== '/search' &&
-					// !params.profile &&
-					users()
-				}
-			>
-				{(actors) => (
-					<ActorsSection title='People' actors={actors().actors} />
-				)}
-			</Show>
+			{/*<Show*/}
+			{/*	when={*/}
+			{/*		location.pathname !== '/search' &&*/}
+			{/*		users()*/}
+			{/*	}*/}
+			{/*>*/}
+			{/*	{(actors) => (*/}
+			{/*		<ActorsSection title='People' actors={actors().actors} />*/}
+			{/*	)}*/}
+			{/*</Show>*/}
 
+			<Show when={params.post}>
+				<RelevantSection />
+			</Show>
 			<Show when={location.pathname !== '/feeds' && feeds()?.feeds}>
 				{(feeds) => <Section title='Feeds' list={feeds()} />}
 			</Show>
@@ -52,17 +61,5 @@ const Sidebar = () => {
 		</Suspense>
 	)
 }
-
-// const RelevantSection = () => {
-// 	const post = useRouteData<typeof PostData>()
-//
-// 	return (
-// 		<Show when={post && post()?.actors}>
-// 			{(actors) => (
-// 				<ActorsSection title='Relevant people' actors={actors()} />
-// 			)}
-// 		</Show>
-// 	)
-// }
 
 export default Sidebar

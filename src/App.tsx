@@ -1,6 +1,7 @@
 import { For } from 'solid-js'
 import { A, type RouteSectionProps } from '@solidjs/router'
 import Header from './components/layout/Header'
+import Sidebar from './components/layout/Sidebar'
 import AuthModal from './components/auth/AuthModal'
 import { FeedsIcon } from './assets/FeedsIcon'
 import { HomeIcon } from './assets/HomeIcon'
@@ -81,7 +82,7 @@ const App = (props: RouteSectionProps) => {
 				</div>
 			</main>
 			<aside class={`${styles.sidebar} ${styles.right}`}>
-				{/*<Sidebar />*/}
+				<Sidebar />
 			</aside>
 		</div>
 	)
