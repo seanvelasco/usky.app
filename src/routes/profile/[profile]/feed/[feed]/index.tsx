@@ -1,20 +1,37 @@
-import { createAsync, cache, RouteSectionProps } from '@solidjs/router'
-import { Suspense } from 'solid-js'
+import { Suspense, For } from 'solid-js'
+import { createAsync, cache, type RouteSectionProps } from '@solidjs/router'
 import getFeedGenerator from '../../../../../api/feed/getFeedGenerator'
 import Avatar from '../../../../../components/Avatar'
+import { getDiscoveryFeed } from '../../../..'
+import Post from '../../../../../components/Post'
 import styles from './styles.module.css'
 
-export const getFeed = cache(
+export const feedGeneratorData = cache(
 	async ({ profile, feed }: { profile: string; feed: string }) =>
 		await getFeedGenerator(
 			`at://${profile}/app.bsky.feed.generator/${feed}`
 		),
-	'feed'
+	'feed_generator'
+)
+
+export const feedsData = cache(
+	async ({ profile, feed }: { profile: string; feed: string }) =>
+		await getDiscoveryFeed(
+			`at://${profile}/app.bsky.feed.generator/${feed}`
+		),
+	'profile_feed'
 )
 
 const Feed = (props: RouteSectionProps) => {
 	const feedGenerator = createAsync(() =>
-		getFeed({ profile: props.params.profile, feed: props.params.feed })
+		feedGeneratorData({
+			profile: props.params.profile,
+			feed: props.params.feed
+		})
+	)
+
+	const feeds = createAsync(() =>
+		feedsData({ profile: props.params.profile, feed: props.params.feed })
 	)
 
 	return (
@@ -33,6 +50,7 @@ const Feed = (props: RouteSectionProps) => {
 					<p>{feedGenerator()?.view?.likeCount}</p>
 				</div>
 			</div>
+			<For each={feeds()?.feed}>{(post) => <Post {...post} />}</For>
 		</Suspense>
 	)
 }

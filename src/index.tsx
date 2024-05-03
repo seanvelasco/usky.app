@@ -13,7 +13,7 @@ import Post, { getPostData } from './routes/profile/[profile]/post/[post]'
 import Firehose from './routes/live'
 import SearchPage from './routes/search'
 import About from './routes/about'
-import Feed, { getFeed } from './routes/profile/[profile]/feed/[feed]'
+import Feed, { feedGeneratorData } from './routes/profile/[profile]/feed/[feed]'
 import Followers, {
 	getFollowersData
 } from './routes/profile/[profile]/followers'
@@ -102,7 +102,10 @@ render(
 					path='/profile/:profile/feed/:feed'
 					component={Feed}
 					load={({ params }) =>
-						getFeed({ profile: params.profile, feed: params.feed })
+						feedGeneratorData({
+							profile: params.profile,
+							feed: params.feed
+						})
 					}
 				/>
 				{/*<Route*/}

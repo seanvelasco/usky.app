@@ -9,7 +9,7 @@ import {
 import Search from '../Search'
 import { getProfileData } from '../../routes/profile/[profile]'
 import { getPostData } from '../../routes/profile/[profile]/post/[post]'
-import { getFeed } from '../../routes/profile/[profile]/feed/[feed]'
+import { feedGeneratorData } from '../../routes/profile/[profile]/feed/[feed]'
 import { ChevronLeft } from '../../assets/ChevronLeft'
 import styles from './Header.module.css'
 
@@ -27,7 +27,12 @@ export const PostPageHeader = () => {
 	const profile = () => post()?.post?.thread.post.author
 	return (
 		<Suspense>
-			<p>Post by <A href={`/profile/${profile()?.handle}`}>{profile()?.displayName ?? profile()?.handle}</A></p>
+			<p>
+				Post by{' '}
+				<A href={`/profile/${profile()?.handle}`}>
+					{profile()?.displayName ?? profile()?.handle}
+				</A>
+			</p>
 		</Suspense>
 	)
 }
@@ -49,7 +54,7 @@ export const TimelineHeader = () => (
 const FeedHeader = () => {
 	const params = useParams()
 	const feedGenerator = createAsync(() =>
-		getFeed({ profile: params.profile, feed: params.feed })
+		feedGeneratorData({ profile: params.profile, feed: params.feed })
 	)
 	return (
 		<Suspense>
