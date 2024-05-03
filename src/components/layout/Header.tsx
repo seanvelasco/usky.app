@@ -27,7 +27,7 @@ export const PostPageHeader = () => {
 	const profile = () => post()?.post?.thread.post.author
 	return (
 		<Suspense>
-			<p>Post by {profile()?.displayName ?? profile()?.handle}</p>
+			<p>Post by <A href={`/profile/${profile()?.handle}`}>{profile()?.displayName ?? profile()?.handle}</A></p>
 		</Suspense>
 	)
 }
@@ -62,7 +62,7 @@ const FeedHeader = () => {
 							feedGenerator()?.view?.creator?.handle
 						}`}
 					>
-						@{feedGenerator()?.view?.creator?.handle}
+						{feedGenerator()?.view?.creator?.displayName}
 					</a>
 				</span>
 			</p>
@@ -84,6 +84,7 @@ const Header = () => {
 	return (
 		<header class={styles.header}>
 			<div class={styles.inner}>
+				{/* to-do: history always exists regardless of history, check other things */}
 				<Show when={history && !isHome()}>
 					<button class={styles.back} onClick={back}>
 						<ChevronLeft />

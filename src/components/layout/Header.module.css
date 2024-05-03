@@ -2,10 +2,13 @@
 	position: sticky;
 	top: 0;
 	background-color: var(--background-primary);
-	color: var(--text-secondary);
 	border-bottom: 1px solid var(--border);
 	z-index: 2;
 	padding: 0 1.5rem;
+}
+
+.header a:hover {
+    text-decoration: underline;
 }
 
 .header span,
@@ -32,6 +35,7 @@ a {
 	gap: 1rem;
 	font-weight: 500;
 	padding: 0 1rem;
+    color: var(--text-secondary);
 }
 
 .timeline a {
