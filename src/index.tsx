@@ -1,5 +1,5 @@
 import { MetaProvider } from '@solidjs/meta'
-import { Router, Route } from '@solidjs/router' // RouteLoadFuncArgs,
+import { Router, Route } from '@solidjs/router'
 import { render } from 'solid-js/web'
 /* @refresh reload */
 import App from './App'
@@ -21,15 +21,27 @@ import Following, { getFollowsData } from './routes/profile/[profile]/following'
 import Feeds, { getFeedsData } from './routes/profile/[profile]/feed'
 import Lists, { getListsData } from './routes/profile/[profile]/lists'
 
-const root = document.getElementById('root')
-
 render(
 	() => (
 		<MetaProvider>
 			<Router root={App}>
 				<Route component={Discover}>
-					<Route path='/' load={() => getDiscoveryFeed()} />
-					<Route path='/hot' load={() => getDiscoveryFeed()} />
+					<Route
+						path='/'
+						load={() =>
+							getDiscoveryFeed(
+								'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'
+							)
+						}
+					/>
+					<Route
+						path='/hot'
+						load={() =>
+							getDiscoveryFeed(
+								'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
+							)
+						}
+					/>
 				</Route>
 				<Route path='/live' component={Firehose} />
 				<Route path={['/search', '/feeds']} component={SearchPage} />
@@ -103,5 +115,5 @@ render(
 			</Router>
 		</MetaProvider>
 	),
-	root!
+	document.getElementById('root')!
 )
