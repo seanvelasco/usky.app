@@ -1,159 +1,114 @@
-import { Show } from 'solid-js'
+import { Show, Switch, Match, Suspense } from 'solid-js'
 import {
 	A,
 	useNavigate,
 	useLocation,
-	type RouteSectionProps
+	useParams,
+	createAsync
 } from '@solidjs/router'
+import Search from '../Search'
+import { getProfileData } from '../../routes/profile/[profile]'
+import { getPostData } from '../../routes/profile/[profile]/post/[post]'
+import { getFeed } from '../../routes/profile/[profile]/feed/[feed]'
 import { ChevronLeft } from '../../assets/ChevronLeft'
+import styles from './Header.module.css'
 
 export const ProfilePageHeader = () => {
-	// const profile = useRouteData<typeof ProfileData>()
-	// return <p>{profile()?.displayName ?? profile()?.handle} </p>
-	return <p></p>
+	const params = useParams()
+	const profile = createAsync(() => getProfileData(params.profile))
+	return <p>{profile()?.displayName ?? profile()?.handle}</p>
 }
 
-export const TimelineHeader = () => {
+export const PostPageHeader = () => {
+	const params = useParams()
+	const post = createAsync(() =>
+		getPostData({ profile: params.profile, post: params.post })
+	)
+	const profile = () => post()?.post?.thread.post.author
 	return (
-		<div
-			style={{
-				display: 'flex',
-				width: '100%',
-				gap: '1rem',
-				'font-weight': 500,
-				padding: '0 1rem'
-			}}
-		>
-			<A
-				activeClass='highlight'
-				end
-				style={{
-					color: 'var(--text-secondary)',
-					flex: 1,
-					'text-align': 'center'
-				}}
-				href='/'
-			>
-				Discover
-			</A>
-			<A
-				activeClass='highlight'
-				end
-				style={{
-					color: 'var(--text-secondary)',
-					flex: 1,
-					'text-align': 'center'
-				}}
-				href='/hot'
-			>
-				What's Hot
-			</A>
-			<A
-				activeClass='highlight'
-				style={{
-					color: 'var(--text-secondary)',
-					flex: 1,
-					'text-align': 'center'
-				}}
-				end
-				href='/live'
-			>
-				Live
-			</A>
-		</div>
+		<Suspense>
+			<p>Post by {profile()?.displayName ?? profile()?.handle}</p>
+		</Suspense>
 	)
 }
 
-// const FeedHeader = () => {
-// 	const feedGenerator = useRouteData<typeof FeedData>()
-// 	return (
-// 		<Suspense>
-// 			<p>
-// 				{feedGenerator()?.view.displayName}{' '}
-// 				<span
-// 					style={{
-// 						color: 'var(--text-secondary)'
-// 					}}
-// 				>
-// 					by{' '}
-// 					<a
-// 						style={{
-// 							color: 'inherit'
-// 						}}
-// 						href={`/profile/${
-// 							feedGenerator()?.view?.creator?.handle
-// 						}`}
-// 					>
-// 						@{feedGenerator()?.view?.creator?.handle}
-// 					</a>
-// 				</span>
-// 			</p>
-// 		</Suspense>
-// 	)
-// }
+export const TimelineHeader = () => (
+	<div class={styles.timeline}>
+		<A activeClass='highlight' end href='/'>
+			Discover
+		</A>
+		<A activeClass='highlight' end href='/hot'>
+			What's Hot
+		</A>
+		<A activeClass='highlight' end href='/live'>
+			Live
+		</A>
+	</div>
+)
 
-const Header = (props: RouteSectionProps) => {
+const FeedHeader = () => {
+	const params = useParams()
+	const feedGenerator = createAsync(() =>
+		getFeed({ profile: params.profile, feed: params.feed })
+	)
+	return (
+		<Suspense>
+			<p>
+				{feedGenerator()?.view.displayName}{' '}
+				<span>
+					feed by{' '}
+					<a
+						href={`/profile/${
+							feedGenerator()?.view?.creator?.handle
+						}`}
+					>
+						@{feedGenerator()?.view?.creator?.handle}
+					</a>
+				</span>
+			</p>
+		</Suspense>
+	)
+}
+
+const Header = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
+	const params = useParams()
 
 	const isHome = () => ['/', '/hot', '/live'].includes(location.pathname)
 
-	return (
-		<header
-			style={{
-				position: 'sticky',
-				top: 0,
-				'background-color': 'var(--background-primary)',
-				'border-bottom': ' 1px solid var(--border)',
+	const isSearch = () => ['/search'].includes(location.pathname)
 
-				'z-index': 2,
-				padding: ' 0 1.5rem'
-			}}
-		>
-			<div
-				style={{
-					display: 'flex',
-					'align-items': 'center',
-					height: '3.25rem',
-					gap: '1rem'
-				}}
-			>
+	const back = () => navigate(-1)
+
+	return (
+		<header class={styles.header}>
+			<div class={styles.inner}>
 				<Show when={history && !isHome()}>
-					<button
-						style={{
-							all: 'unset',
-							display: 'flex'
-						}}
-						onClick={() => navigate(-1)}
-					>
+					<button class={styles.back} onClick={back}>
 						<ChevronLeft />
 					</button>
 				</Show>
-				{props.children}
-				{/*<Router>*/}
-				{/*	<Route*/}
-				{/*		path={['/', 'hot', '/live']}*/}
-				{/*		component={TimelineHeader}*/}
-				{/*	/>*/}
-				{/*	<Route path='/search' component={Search} />*/}
-				{/*	<Route*/}
-				{/*		path='/profile/:profile/*'*/}
-				{/*		component={ProfilePageHeader}*/}
-				{/*		load={ProfileData}*/}
-				{/*	/>*/}
-				{/*	<Route*/}
-				{/*		path='/profile/:profile/feed/:feed'*/}
-				{/*		component={FeedHeader}*/}
-				{/*		load={FeedData}*/}
-				{/*	/>*/}
-				{/*	<Route path='/profile/:profile/list/:list' />*/}
-				{/*	<Route*/}
-				{/*		path='/profile/:profile/post/:post'*/}
-				{/*		load={ProfileData}*/}
-				{/*	>*/}
-				{/*		<p>Post</p>*/}
-				{/*	</Route>*/}
-				{/*</Router>*/}
+				<Switch>
+					<Match when={isHome()}>
+						<TimelineHeader />
+					</Match>
+					<Match when={isSearch()}>
+						<Search />
+					</Match>
+					<Match when={params.post}>
+						<PostPageHeader />
+					</Match>
+					<Match when={params.feed}>
+						<FeedHeader />
+					</Match>
+					{/*<Match when={params.list}>*/}
+					{/*	<ProfilePageHeader />*/}
+					{/*</Match>*/}
+					<Match when={params.profile}>
+						<ProfilePageHeader />
+					</Match>
+				</Switch>
 			</div>
 		</header>
 	)

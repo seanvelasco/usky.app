@@ -13,24 +13,17 @@ import {
 	cache,
 	type RouteSectionProps
 } from '@solidjs/router'
-
-// import { Link, Meta, Title } from '@solidjs/meta'
-
 import Avatar from '../../../../../components/Avatar'
 import { PostExpandedChildPost } from '../../../../../components/Post'
 import PostFooter from '../../../../../components/PostFooter'
 import Embed from '../../../../../components/embeds/Embed'
-
 import getPostThread from '../../../../../api/feed/getPostThread'
 import resolveHandle from '../../../../../api/identity/resolveHandle'
-
 import { did, isDID } from '../../../../../utils'
-
+import Spinner from '../../../../../components/Spinner.tsx'
 import postStyles from '../../../../../components/Post.module.css'
 import styles from './styles.module.css'
-
 import type { ThreadParentOrReply, ThreadPost } from '../../../../../types'
-import Spinner from '../../../../../components/Spinner.tsx'
 
 const Timestamp = (props: { date: Date }) => {
 	return (
