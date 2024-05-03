@@ -1,9 +1,9 @@
-import { A, useLocation, useParams, useRouteData } from '@solidjs/router'
-import { Route, Routes } from '@solidjs/router'
+import { A, useLocation, useParams } from '@solidjs/router'
+// import { Route, Routes } from '@solidjs/router'
 import { Show, Suspense, createResource } from 'solid-js'
 import getSuggestions from '../../api/actor/getSuggestions'
 import getPopularFeedGenerators from '../../api/unspecced/getPopularFeedGenerators'
-import { PostData } from '../../routes/profile/[profile]/post/[post]'
+// import { PostData } from '../../routes/profile/[profile]/post/[post]'
 import Search from '../Search'
 import Section, { ActorsSection } from '../Section'
 import styles from './Sidebar.module.css'
@@ -20,15 +20,14 @@ const Sidebar = () => {
 			<Show when={location.pathname !== '/search'}>
 				<Search />
 			</Show>
-
-			<Routes>
-				<Route path='' component={RelevantSection} />
-				<Route
-					path='/profile/:profile/post/:post'
-					component={RelevantSection}
-					data={PostData}
-				/>
-			</Routes>
+			{/*<Routes>*/}
+			{/*	<Route path='' component={RelevantSection} />*/}
+			{/*	<Route*/}
+			{/*		path='/profile/:profile/post/:post'*/}
+			{/*		component={RelevantSection}*/}
+			{/*		data={PostData}*/}
+			{/*	/>*/}
+			{/*</Routes>*/}
 			<Show
 				when={
 					location.pathname !== '/search' &&
@@ -54,16 +53,16 @@ const Sidebar = () => {
 	)
 }
 
-const RelevantSection = () => {
-	const post = useRouteData<typeof PostData>()
-
-	return (
-		<Show when={post && post()?.actors}>
-			{(actors) => (
-				<ActorsSection title='Relevant people' actors={actors()} />
-			)}
-		</Show>
-	)
-}
+// const RelevantSection = () => {
+// 	const post = useRouteData<typeof PostData>()
+//
+// 	return (
+// 		<Show when={post && post()?.actors}>
+// 			{(actors) => (
+// 				<ActorsSection title='Relevant people' actors={actors()} />
+// 			)}
+// 		</Show>
+// 	)
+// }
 
 export default Sidebar

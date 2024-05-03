@@ -1,14 +1,10 @@
-import { useRouteData } from '@solidjs/router'
+import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import { For, Show } from 'solid-js'
-import type { PostsData } from '..'
+import { getPostsData } from '..'
 import carouselStyles from '../../../../components/MediaCarousel.module.css'
 
-export const Media = () => {
-	const posts = useRouteData<typeof PostsData>()
-
-	if (posts.error) {
-		return <p>Unable to retrieve media</p>
-	}
+export const Media = (props: RouteSectionProps) => {
+	const posts = createAsync(() => getPostsData(props.params.profile))
 
 	return (
 		<div class={carouselStyles.carousel}>

@@ -1,14 +1,10 @@
-import { useRouteData } from '@solidjs/router'
 import { For, Show } from 'solid-js'
-import type { PostsData } from '..'
+import { getPostsData } from '..'
 import Post from '../../../../components/Post'
+import { createAsync, type RouteSectionProps } from '@solidjs/router'
 
-export const Replies = () => {
-	const posts = useRouteData<typeof PostsData>()
-
-	if (posts.error) {
-		return <p>Unable to retrieve posts</p>
-	}
+export const Replies = (props: RouteSectionProps) => {
+	const posts = createAsync(() => getPostsData(props.params.profile))
 
 	return (
 		<For each={posts()?.feed}>

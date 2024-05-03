@@ -1,6 +1,7 @@
 import { ImageBlob } from '../types'
 
 export const id = (uri: string) => {
+	if (!uri) return null
 	// const regex = /\/(\w+)$/
 	// const match = regex.exec(uri);
 

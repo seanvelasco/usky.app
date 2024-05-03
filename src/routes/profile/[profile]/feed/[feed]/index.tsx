@@ -1,19 +1,21 @@
-import { type RouteDataFuncArgs, useRouteData } from '@solidjs/router'
-import { Suspense, createResource } from 'solid-js'
+import { createAsync, cache, RouteSectionProps } from '@solidjs/router'
+import { Suspense } from 'solid-js'
 import getFeedGenerator from '../../../../../api/feed/getFeedGenerator'
 import Avatar from '../../../../../components/Avatar'
 import styles from './styles.module.css'
 
-export const FeedData = ({ params }: RouteDataFuncArgs) => {
-	const uri = () =>
-		`at://${params.profile}/app.bsky.feed.generator/${params.feed}`
+export const getFeed = cache(
+	async ({ profile, feed }: { profile: string; feed: string }) =>
+		await getFeedGenerator(
+			`at://${profile}/app.bsky.feed.generator/${feed}`
+		),
+	'feed'
+)
 
-	const [feedGenerator] = createResource(() => uri(), getFeedGenerator)
-	return feedGenerator
-}
-
-const Feed = () => {
-	const feedGenerator = useRouteData<typeof FeedData>()
+const Feed = (props: RouteSectionProps) => {
+	const feedGenerator = createAsync(() =>
+		getFeed({ profile: props.params.profile, feed: props.params.feed })
+	)
 
 	return (
 		<Suspense>

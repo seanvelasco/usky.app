@@ -1,5 +1,5 @@
-import { type RouteDataFuncArgs, useRouteData } from '@solidjs/router'
-import { For, Suspense, createResource } from 'solid-js'
+import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
+import { For, Suspense } from 'solid-js'
 import getPosts from '../../../../api/getPostsOld'
 import listRecords from '../../../../api/repo/listRecords'
 import Post from '../../../../components/Post'
@@ -20,13 +20,13 @@ const getLikes = async (profile: string): Promise<{ posts: FeedPost[] }> => {
 	return await getPosts(likedUris)
 }
 
-export const LikesData = ({ params }: RouteDataFuncArgs) => {
-	const [posts] = createResource(() => params.profile, getLikes)
-	return posts
-}
+export const getLikesData = cache(
+	async (profile: string) => await getLikes(profile),
+	'profile_likes'
+)
 
-export const Likes = () => {
-	const posts = useRouteData<typeof LikesData>()
+export const Likes = (props: RouteSectionProps) => {
+	const posts = createAsync(() => getLikesData(props.params.profile))
 
 	return (
 		<Suspense fallback={<Spinner />}>

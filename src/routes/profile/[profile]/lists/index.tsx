@@ -1,20 +1,16 @@
-import { type RouteDataFuncArgs, useRouteData } from '@solidjs/router'
-import { For, createResource } from 'solid-js'
+import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
+import { For } from 'solid-js'
 import getLists from '../../../../api/graph/getLists'
 import Entry from '../../../../components/Entry'
 import { id } from '../../../../utils'
 
-export const ListsData = ({ params }: RouteDataFuncArgs) => {
-	const [lists] = createResource(() => params.profile, getLists)
-	return lists
-}
+export const getListsData = cache(
+	async (profile: string) => await getLists(profile),
+	'profile_lists'
+)
 
-export const Lists = () => {
-	const lists = useRouteData<typeof ListsData>()
-
-	if (lists.error) {
-		return <p>Unable to retrieve lists</p>
-	}
+export const Lists = (props: RouteSectionProps) => {
+	const lists = createAsync(() => getListsData(props.params.profile))
 
 	return (
 		<For each={lists()?.lists}>

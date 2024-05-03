@@ -1,19 +1,15 @@
-import { type RouteDataFuncArgs, useRouteData } from '@solidjs/router'
-import { For, createResource } from 'solid-js'
+import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
+import { For } from 'solid-js'
 import getFollowers from '../../../../api/graph/getFollowers'
 import Entry from '../../../../components/Entry'
 
-export const FollowersData = ({ params }: RouteDataFuncArgs) => {
-	const [followers] = createResource(() => params.profile, getFollowers)
-	return followers
-}
+export const getFollowersData = cache(
+	async (profile: string) => await getFollowers(profile),
+	'profile_followers'
+)
 
-export const Followers = () => {
-	const followers = useRouteData<typeof FollowersData>()
-
-	if (followers.error) {
-		return <p>Unable to retrieve posts</p>
-	}
+export const Followers = (props: RouteSectionProps) => {
+	const followers = createAsync(() => getFollowersData(props.params.profile))
 
 	return (
 		<For each={followers()?.followers}>

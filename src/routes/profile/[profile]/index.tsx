@@ -1,36 +1,26 @@
-import { Link, Meta, Title } from '@solidjs/meta'
-import {
-	A,
-	Outlet,
-	type RouteDataFuncArgs,
-	useRouteData
-} from '@solidjs/router'
-import { For, Show, Suspense, createResource } from 'solid-js'
+// import { Link, Meta, Title } from '@solidjs/meta'
+import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
+import { For, Show, Suspense } from 'solid-js'
 
 import Post from '../../../components/Post'
-// import Spinner from '../../../components/Spinner'
 
 import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
 
 import styles from './styles.module.css'
 
-export const ProfileData = ({ params }: RouteDataFuncArgs) => {
-	const [profile] = createResource(() => params.profile, getProfile)
-	return profile
-}
+export const getProfileData = cache(
+	async (profile: string) => await getProfile(profile),
+	'profile'
+)
 
-export const PostsData = ({ params }: RouteDataFuncArgs) => {
-	const [posts] = createResource(() => params.profile, getAuthorFeed)
-	return posts
-}
+export const getPostsData = cache(
+	async (profile: string) => await getAuthorFeed(profile),
+	'profile_posts'
+)
 
-export const Posts = () => {
-	const posts = useRouteData<typeof PostsData>()
-
-	if (posts.error) {
-		return <p>Unable to retrieve posts</p>
-	}
+export const Posts = (props: RouteSectionProps) => {
+	const posts = createAsync(() => getPostsData(props.params.profile))
 
 	return (
 		<For each={posts()?.feed}>
@@ -43,7 +33,7 @@ export const Posts = () => {
 	)
 }
 
-const ProfileNav = (
+export const ProfileNav = (
 	routes: { title: string; href: string; hidden?: boolean }[]
 ) => {
 	return (
@@ -66,8 +56,8 @@ const ProfileNav = (
 	)
 }
 
-const Profile = () => {
-	const profile = useRouteData<typeof ProfileData>()
+const Profile = (props: RouteSectionProps) => {
+	const profile = createAsync(() => getProfileData(props.params.profile))
 
 	const routes = [
 		{
@@ -100,44 +90,44 @@ const Profile = () => {
 
 	return (
 		<div>
-			<Title>
-				{profile()?.displayName ?? profile()?.handle} (@
-				{profile()?.handle}) - Bluesky (usky.app)
-			</Title>
-			<Meta name='description' content={profile()?.description} />
-			<Meta property='og:description' content={profile()?.description} />
-			<Meta
-				property='og:url'
-				content={`https://usky.app/profile/${profile()?.handle}`}
-			/>
-			<Meta
-				property='og:image'
-				content={profile()?.avatar ?? '/avatar.svg'}
-			/>
-			<Meta
-				property='og:image:type'
-				content={profile()?.avatar ? 'image/jpeg' : 'image/svg'}
-			/>
-			<Meta property='og:type' content='profile' />
-			<Meta
-				property='profile:first_name'
-				content={profile()?.displayName}
-			/>
-			<Meta property='profile:username' content={profile()?.handle} />
-			<Meta name='twitter:description' content={profile()?.description} />
-			<Meta
-				property='twitter:url'
-				content={`https://usky.app/profile/${profile()?.handle}`}
-			/>
-			<Meta
-				name='twitter:image'
-				content={profile()?.avatar ?? '/avatar.svg'}
-			/>
-			<Meta name='twitter:card' content='summary' />
-			<Link
-				rel='canonical'
-				href={`https://usky.app/profile/${profile()?.handle}`}
-			/>
+			{/*<Title>*/}
+			{/*	{profile()?.displayName ?? profile()?.handle} (@*/}
+			{/*	{profile()?.handle}) - Bluesky (usky.app)*/}
+			{/*</Title>*/}
+			{/*<Meta name='description' content={profile()?.description} />*/}
+			{/*<Meta property='og:description' content={profile()?.description} />*/}
+			{/*<Meta*/}
+			{/*	property='og:url'*/}
+			{/*	content={`https://usky.app/profile/${profile()?.handle}`}*/}
+			{/*/>*/}
+			{/*<Meta*/}
+			{/*	property='og:image'*/}
+			{/*	content={profile()?.avatar ?? '/avatar.svg'}*/}
+			{/*/>*/}
+			{/*<Meta*/}
+			{/*	property='og:image:type'*/}
+			{/*	content={profile()?.avatar ? 'image/jpeg' : 'image/svg'}*/}
+			{/*/>*/}
+			{/*<Meta property='og:type' content='profile' />*/}
+			{/*<Meta*/}
+			{/*	property='profile:first_name'*/}
+			{/*	content={profile()?.displayName}*/}
+			{/*/>*/}
+			{/*<Meta property='profile:username' content={profile()?.handle} />*/}
+			{/*<Meta name='twitter:description' content={profile()?.description} />*/}
+			{/*<Meta*/}
+			{/*	property='twitter:url'*/}
+			{/*	content={`https://usky.app/profile/${profile()?.handle}`}*/}
+			{/*/>*/}
+			{/*<Meta*/}
+			{/*	name='twitter:image'*/}
+			{/*	content={profile()?.avatar ?? '/avatar.svg'}*/}
+			{/*/>*/}
+			{/*<Meta name='twitter:card' content='summary' />*/}
+			{/*<Link*/}
+			{/*	rel='canonical'*/}
+			{/*	href={`https://usky.app/profile/${profile()?.handle}`}*/}
+			{/*/>*/}
 			<div class={styles.profile}>
 				<Suspense>
 					<div>
@@ -210,10 +200,7 @@ const Profile = () => {
 					</div>
 				</Suspense>
 			</div>
-			<Outlet />
-			{/*<Suspense fallback={<Spinner />}>*/}
-			{/*	<Outlet />*/}
-			{/*</Suspense>*/}
+			{props.children}
 		</div>
 	)
 }
