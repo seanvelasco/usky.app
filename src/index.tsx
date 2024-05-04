@@ -18,8 +18,9 @@ import Followers, {
 	getFollowersData
 } from './routes/profile/[profile]/followers'
 import Following, { getFollowsData } from './routes/profile/[profile]/following'
-import Feeds, { getFeedsData } from './routes/profile/[profile]/feed'
+import UserFeeds, { getFeedsData } from './routes/profile/[profile]/feed'
 import Lists, { getListsData } from './routes/profile/[profile]/lists'
+import PopularFeeds from './routes/feeds'
 
 render(
 	() => (
@@ -44,7 +45,8 @@ render(
 					/>
 				</Route>
 				<Route path='/live' component={Firehose} />
-				<Route path={['/search', '/feeds']} component={SearchPage} />
+				<Route path={['/search', '/hashtag']} component={SearchPage} />
+				<Route path='/feeds' component={PopularFeeds} />
 				<Route path='/about' component={About} />
 				<Route
 					path='/profile/:profile'
@@ -63,7 +65,7 @@ render(
 					/>
 					<Route
 						path='/feed'
-						component={Feeds}
+						component={UserFeeds}
 						load={({ params }) => getFeedsData(params.profile)}
 					/>
 					<Route

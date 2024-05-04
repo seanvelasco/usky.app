@@ -13,7 +13,7 @@ export const Feeds = (props: RouteSectionProps) => {
 
 	return (
 		<For each={feeds()?.feeds}>
-			{(feed) => (
+			{(feed) =>
 				<Entry
 					type='creator'
 					displayName={feed.displayName}
@@ -21,7 +21,7 @@ export const Feeds = (props: RouteSectionProps) => {
 					avatar={feed.avatar ?? '/feed.svg'}
 					href={`/profile/${feed.creator.handle}/feed/${feed.did}`}
 				/>
-			)}
+			}
 		</For>
 	)
 }
