@@ -10,6 +10,7 @@ import Search from '../Search'
 import { getProfileData } from '../../routes/profile/[profile]'
 import { getPostData } from '../../routes/profile/[profile]/post/[post]'
 import { feedGeneratorData } from '../../routes/profile/[profile]/feed/[feed]'
+import { getListData } from '../../routes/profile/[profile]/lists/[list]'
 import { ChevronLeft } from '../../assets/ChevronLeft'
 import styles from './Header.module.css'
 
@@ -62,13 +63,34 @@ const FeedHeader = () => {
 				{feedGenerator()?.view.displayName}{' '}
 				<span>
 					feed by{' '}
-					<a
+					<A
 						href={`/profile/${
 							feedGenerator()?.view?.creator?.handle
 						}`}
 					>
 						{feedGenerator()?.view?.creator?.displayName}
-					</a>
+					</A>
+				</span>
+			</p>
+		</Suspense>
+	)
+}
+
+const ListHeader = () => {
+	const params = useParams()
+	const list = createAsync(() =>
+		getListData({ profile: params.profile, list: params.list })
+	)
+	return (
+		<Suspense>
+			<p>
+				{list()?.list.name}{' '}
+				<span>
+					list by{' '}
+					<A href={`/profile/${list()?.list.creator.handle}`}>
+						{list()?.list.creator?.displayName ??
+							list()?.list.creator.handle}
+					</A>
 				</span>
 			</p>
 		</Suspense>
@@ -108,9 +130,9 @@ const Header = () => {
 					<Match when={params.feed}>
 						<FeedHeader />
 					</Match>
-					{/*<Match when={params.list}>*/}
-					{/*	<ProfilePageHeader />*/}
-					{/*</Match>*/}
+					<Match when={params.list}>
+						<ListHeader />
+					</Match>
 					<Match when={params.profile}>
 						<ProfilePageHeader />
 					</Match>

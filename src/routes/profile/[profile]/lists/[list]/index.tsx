@@ -53,7 +53,6 @@ const List = (props: RouteSectionProps) => {
 				<Meta name='twitter:image' content={avatar} />
 				<Link rel='canonical' href={url()} />
 			</ErrorBoundary>
-			<p>{JSON.stringify(list()?.list)}</p>
 			<div class={styles.card}>
 				<Avatar
 					size='3.5rem'

@@ -70,12 +70,14 @@ const Feed = (props: RouteSectionProps) => {
 				<div class={styles.text}>
 					<h3>{feedGenerator()?.view?.displayName}</h3>
 					<p>{feedGenerator()?.view?.description}</p>
-					<div style={{
-						display: 'flex',
-						'flex-direction': 'row',
-						gap: '0.5rem',
-						color: 'var(--text-secondary)'
-					}}>
+					<div
+						style={{
+							display: 'flex',
+							'flex-direction': 'row',
+							gap: '0.5rem',
+							color: 'var(--text-secondary)'
+						}}
+					>
 						<LikesIcon />
 						<p>{feedGenerator()?.view?.likeCount}</p>
 					</div>
