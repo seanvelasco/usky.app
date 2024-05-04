@@ -7,11 +7,17 @@ const searchActors = async (
 	actors: Actor[]
 	cursor: string
 }> => {
-	const response = await fetch(
-		`https://api.bskyw.app/xrpc/app.bsky.actor.searchActors?q=${query}&limit=${limit}`
-	)
+	if (query) {
+		const response = await fetch(
+			`https://api.bsky.app/xrpc/app.bsky.actor.searchActors?q=${query}&limit=${limit}`
+		)
 
-	return await response.json()
+		return await response.json()
+	}
+	return {
+		actors: [],
+		cursor: ''
+	}
 }
 
 export default searchActors

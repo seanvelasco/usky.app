@@ -1,7 +1,6 @@
 import { createSignal, Show, For, Suspense } from 'solid-js'
 import {
 	createAsync,
-	useLocation,
 	useSearchParams,
 	cache,
 	A,
@@ -16,17 +15,18 @@ const typeaheadSearch = cache(
 )
 
 export const Search = () => {
+	const isSearchPage = useMatch(() => '/search')
+
 	const [searchParams, setSearchParams] = useSearchParams()
 	const [query, setQuery] = createSignal(searchParams.q || '')
 	const typeaheadResults = createAsync(() => typeaheadSearch(query()))
-	const location = useLocation()
-	const isSearchPage = useMatch(() => '/search')
 
 	const onSearch = (event: Event) => {
 		const { value } = event.target as HTMLInputElement
-		setQuery(value)
-		if (location.pathname === '/search') {
+		if (isSearchPage()) {
 			setSearchParams({ q: value })
+		} else {
+			setQuery(value)
 		}
 	}
 
@@ -39,7 +39,7 @@ export const Search = () => {
 				type='search'
 				placeholder='Search'
 			/>
-			<Show when={query()}>
+			<Show when={query() && !isSearchPage()}>
 				<A href={`/search?q=${query()}`}>Search for "{query()}"</A>
 				<Suspense>
 					<For each={typeaheadResults()?.actors}>
