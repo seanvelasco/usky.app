@@ -1,4 +1,4 @@
-import { onMount, onCleanup, For, createSignal } from 'solid-js'
+import { onMount, onCleanup, For, createSignal, ErrorBoundary } from 'solid-js'
 import { Link, Meta, Title } from '@solidjs/meta'
 import { CarReader } from '@ipld/car'
 import { decode } from '@ipld/dag-cbor'
@@ -94,12 +94,17 @@ const Firehose = () => {
 
 	return (
 		<>
-			<Title>{title}</Title>
-			<Meta name='description' content={description} />
-			<Meta property='og:description' content={description} />
-			<Meta property='og:url' content={url} />
-			<Meta property='twitter:url' content={url} />
-			<Link rel='canonical' href={url} />
+			<ErrorBoundary fallback={<Title>{title}</Title>}>
+				<Title>{title}</Title>
+				<Meta name='description' content={description} />
+				<Meta property='og:title' content={title} />
+				<Meta property='og:description' content={description} />
+				<Meta property='og:url' content={url} />
+				<Meta name='twitter:title' content={title} />
+				<Meta name='twitter:description' content={description} />
+				<Meta property='twitter:url' content={url} />
+				<Link rel='canonical' href={url} />
+			</ErrorBoundary>
 			<For each={posts()} fallback={<Spinner />}>
 				{(post) => <Post post={post} />}
 			</For>

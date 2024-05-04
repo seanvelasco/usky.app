@@ -6,11 +6,13 @@ import {
 	createSignal,
 	onMount
 } from 'solid-js'
+import { Title, Meta, Link } from '@solidjs/meta'
 import {
 	A,
 	useLocation,
 	createAsync,
 	cache,
+	useParams,
 	type RouteSectionProps
 } from '@solidjs/router'
 import Avatar from '../../../../../components/Avatar'
@@ -47,6 +49,7 @@ const Timestamp = (props: { date: Date }) => {
 }
 
 const PostExpanded = (props: { thread: ThreadPost }) => {
+	const params = useParams()
 	const [postRef, setPostRef] = createSignal<HTMLElement>()
 	const [repliesRef, setRepliesRef] = createSignal<HTMLElement>()
 
@@ -79,52 +82,61 @@ const PostExpanded = (props: { thread: ThreadPost }) => {
 		postRef()?.scrollIntoView()
 	})
 
-	// $: url =
-
-	// const [title] = createSignal(
-	// 	`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
-	// 		props.thread?.post?.author?.handle
-	// 	}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`
-	// )
-	// const [url] = createSignal(
-	// 	`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`
-	// )
+	const [title] = createSignal(
+		`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
+			props.thread?.post?.author?.handle
+		}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`
+	)
+	const [url] = createSignal(
+		`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`
+	)
 
 	return (
 		<>
-			{/*<Title>{title()}</Title>*/}
-			{/*<Meta name='description' content={props.thread.post?.record?.text} />*/}
+			<ErrorBoundary fallback={<Title>{title()}</Title>}>
+				<Title>{title()}</Title>
+				<Meta
+					name='description'
+					content={props.thread.post?.record?.text}
+				/>
 
-			{/*<Meta property='og:title' content={title()} />*/}
-			{/*<Meta*/}
-			{/*	property='og:description'*/}
-			{/*	content={props.thread?.post?.record?.text}*/}
-			{/*/>*/}
-			{/*<Meta property='og:url' content={url()} />*/}
-			{/*<Meta property='og:image' content={props.thread?.post?.author?.avatar} />*/}
-			{/*<Meta property='og:image:type' content='image/jpeg' />*/}
-			{/*<Meta property='og:type' content='article' />*/}
-			{/*<Meta*/}
-			{/*	property='article:published_time'*/}
-			{/*	content={props.thread?.post?.record?.createdAt}*/}
-			{/*/>*/}
-			{/*<Meta*/}
-			{/*	property='article:author'*/}
-			{/*	content={*/}
-			{/*		props.thread?.post?.author?.displayName ??*/}
-			{/*		props.thread?.post?.author?.handle*/}
-			{/*	}*/}
-			{/*/>*/}
-			{/*<Meta name='twitter:title' content={title()} />*/}
-			{/*<Meta*/}
-			{/*	name='twitter:description'*/}
-			{/*	content={props.thread?.post?.record?.text}*/}
-			{/*/>*/}
-			{/*<Meta property='twitter:url' content={url()} />*/}
-			{/*<Meta name='twitter:image' content={props.thread?.post?.author?.avatar} />*/}
-			{/*<Meta name='twitter:card' content='summary' />*/}
+				<Meta property='og:title' content={title()} />
+				<Meta
+					property='og:description'
+					content={props.thread?.post?.record?.text}
+				/>
+				<Meta property='og:url' content={url()} />
+				<Meta
+					property='og:image'
+					content={props.thread?.post?.author?.avatar}
+				/>
+				<Meta property='og:image:type' content='image/jpeg' />
+				<Meta property='og:type' content='article' />
+				<Meta
+					property='article:published_time'
+					content={props.thread?.post?.record?.createdAt}
+				/>
+				<Meta
+					property='article:author'
+					content={
+						props.thread?.post?.author?.displayName ??
+						props.thread?.post?.author?.handle
+					}
+				/>
+				<Meta name='twitter:title' content={title()} />
+				<Meta
+					name='twitter:description'
+					content={props.thread?.post?.record?.text}
+				/>
+				<Meta property='twitter:url' content={url()} />
+				<Meta
+					name='twitter:image'
+					content={props.thread?.post?.author?.avatar}
+				/>
+				<Meta name='twitter:card' content='summary' />
 
-			{/*<Link rel='canonical' href={url()} />*/}
+				<Link rel='canonical' href={url()} />
+			</ErrorBoundary>
 			<ErrorBoundary
 				fallback={(error) => (
 					<div class={styles.error}>

@@ -1,6 +1,6 @@
-// import { Link, Meta, Title } from '@solidjs/meta'
+import { Link, Meta, Title } from '@solidjs/meta'
 import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
-import { For, Show, Suspense } from 'solid-js'
+import { Accessor, ErrorBoundary, For, Show, Suspense } from 'solid-js'
 
 import Post from '../../../components/Post'
 
@@ -8,6 +8,7 @@ import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
 
 import styles from './styles.module.css'
+import type { Profile } from '../../../types'
 
 export const getProfileData = cache(
 	async (profile: string) => await getProfile(profile),
@@ -56,6 +57,40 @@ export const ProfileNav = (
 	)
 }
 
+const ProfileMeta = (props: { profile: Accessor<Profile | undefined> }) => {
+	const title = () =>
+		`${props.profile()?.displayName ?? props.profile()?.handle} (@${props.profile()?.handle}) - Bluesky (usky.app)`
+	const description = () => props.profile()?.description
+	const url = () => `https://usky.app/profile/${props.profile()?.handle}`
+	const avatar = () => props.profile()?.avatar ?? '/avatar.svg'
+
+	return (
+		<ErrorBoundary fallback={<Title>{title()}</Title>}>
+			<Title>{title()}</Title>
+			<Meta name='og:title' content={title()} />
+			<Meta name='description' content={description()} />
+			<Meta property='og:description' content={description()} />
+			<Meta property='og:url' content={url()} />
+			<Meta property='og:image' content={avatar()} />
+			<Meta
+				property='og:image:type'
+				content={props.profile()?.avatar ? 'image/jpeg' : 'image/svg'}
+			/>
+			<Meta property='og:type' content='profile' />
+			<Meta
+				property='profile:username'
+				content={props.profile()?.handle}
+			/>
+			<Meta name='twitter:title' content={title()} />
+			<Meta name='twitter:description' content={description()} />
+			<Meta property='twitter:url' content={url()} />
+			<Meta name='twitter:image' content={avatar()} />
+			<Meta name='twitter:card' content='summary' />
+			<Link rel='canonical' href={url()} />
+		</ErrorBoundary>
+	)
+}
+
 const Profile = (props: RouteSectionProps) => {
 	const profile = createAsync(() => getProfileData(props.params.profile))
 
@@ -89,45 +124,8 @@ const Profile = (props: RouteSectionProps) => {
 	]
 
 	return (
-		<div>
-			{/*<Title>*/}
-			{/*	{profile()?.displayName ?? profile()?.handle} (@*/}
-			{/*	{profile()?.handle}) - Bluesky (usky.app)*/}
-			{/*</Title>*/}
-			{/*<Meta name='description' content={profile()?.description} />*/}
-			{/*<Meta property='og:description' content={profile()?.description} />*/}
-			{/*<Meta*/}
-			{/*	property='og:url'*/}
-			{/*	content={`https://usky.app/profile/${profile()?.handle}`}*/}
-			{/*/>*/}
-			{/*<Meta*/}
-			{/*	property='og:image'*/}
-			{/*	content={profile()?.avatar ?? '/avatar.svg'}*/}
-			{/*/>*/}
-			{/*<Meta*/}
-			{/*	property='og:image:type'*/}
-			{/*	content={profile()?.avatar ? 'image/jpeg' : 'image/svg'}*/}
-			{/*/>*/}
-			{/*<Meta property='og:type' content='profile' />*/}
-			{/*<Meta*/}
-			{/*	property='profile:first_name'*/}
-			{/*	content={profile()?.displayName}*/}
-			{/*/>*/}
-			{/*<Meta property='profile:username' content={profile()?.handle} />*/}
-			{/*<Meta name='twitter:description' content={profile()?.description} />*/}
-			{/*<Meta*/}
-			{/*	property='twitter:url'*/}
-			{/*	content={`https://usky.app/profile/${profile()?.handle}`}*/}
-			{/*/>*/}
-			{/*<Meta*/}
-			{/*	name='twitter:image'*/}
-			{/*	content={profile()?.avatar ?? '/avatar.svg'}*/}
-			{/*/>*/}
-			{/*<Meta name='twitter:card' content='summary' />*/}
-			{/*<Link*/}
-			{/*	rel='canonical'*/}
-			{/*	href={`https://usky.app/profile/${profile()?.handle}`}*/}
-			{/*/>*/}
+		<>
+			<ProfileMeta profile={profile} />
 			<div class={styles.profile}>
 				<Suspense>
 					<div>
@@ -201,7 +199,7 @@ const Profile = (props: RouteSectionProps) => {
 				</Suspense>
 			</div>
 			{props.children}
-		</div>
+		</>
 	)
 }
 
