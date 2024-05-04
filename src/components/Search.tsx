@@ -17,8 +17,8 @@ const typeaheadSearch = cache(
 export const Search = () => {
 	const isSearchPage = useMatch(() => '/search')
 
-	const [searchParams, setSearchParams] = useSearchParams()
-	const [query, setQuery] = createSignal(searchParams.q || '')
+	const [_, setSearchParams] = useSearchParams()
+	const [query, setQuery] = createSignal('')
 	const typeaheadResults = createAsync(() => typeaheadSearch(query()))
 
 	const onSearch = (event: Event) => {
