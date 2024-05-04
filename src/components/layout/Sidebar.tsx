@@ -54,7 +54,10 @@ const Sidebar = () => {
 			</Show>
 			<footer class={styles.footer}>
 				<A href='/about'>About</A>
-				<A target='_blank' href='https://github.com/seanvelasco/usky.app'>
+				<A
+					target='_blank'
+					href='https://github.com/seanvelasco/usky.app'
+				>
 					Source
 				</A>
 			</footer>

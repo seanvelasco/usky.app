@@ -48,7 +48,7 @@ const Timestamp = (props: { date: Date }) => {
 	)
 }
 
-const PostExpanded = (props: { thread: ThreadPost }) => {
+export const PostExpanded = (props: { thread: ThreadPost }) => {
 	const params = useParams()
 	const [postRef, setPostRef] = createSignal<HTMLElement>()
 	const [repliesRef, setRepliesRef] = createSignal<HTMLElement>()

@@ -20,6 +20,7 @@ import Followers, {
 import Following, { getFollowsData } from './routes/profile/[profile]/following'
 import UserFeeds, { getFeedsData } from './routes/profile/[profile]/feed'
 import Lists, { getListsData } from './routes/profile/[profile]/lists'
+import List, { getListData } from './routes/profile/[profile]/lists/[list]'
 import PopularFeeds from './routes/feeds'
 
 render(
@@ -110,13 +111,16 @@ render(
 						})
 					}
 				/>
-				{/*<Route*/}
-				{/*	path='/profile/:profile/lists/:list'*/}
-				{/*	component={Feed}*/}
-				{/*	load={({ params }) =>*/}
-				{/*		getFeed({ profile: params.profile, feed: params.feed })*/}
-				{/*	}*/}
-				{/*/>*/}
+				<Route
+					path='/profile/:profile/lists/:list'
+					component={List}
+					load={({ params }) =>
+						getListData({
+							profile: params.profile,
+							list: params.list
+						})
+					}
+				/>
 			</Router>
 		</MetaProvider>
 	),

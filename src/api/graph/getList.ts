@@ -1,9 +1,9 @@
-import type { Actor, FeedGenerator } from '../../types'
+import type { Actor, List } from '../../types'
 
 const getList = async (
 	list: string
 ): Promise<{
-	list: FeedGenerator
+	list: List
 	items: {
 		subject: Omit<Actor, 'viewer'>
 	}[]
@@ -15,9 +15,7 @@ const getList = async (
 
 	const response = await fetch(request)
 
-	const body = await response.json()
-	return body
+	return await response.json()
 }
-export { getList }
 
 export default getList

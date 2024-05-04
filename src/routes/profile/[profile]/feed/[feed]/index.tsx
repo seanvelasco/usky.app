@@ -7,6 +7,7 @@ import Post from '../../../../../components/Post'
 import styles from './styles.module.css'
 import { Link, Meta, Title } from '@solidjs/meta'
 import Spinner from '../../../../../components/Spinner'
+import { LikesIcon } from '../../../../../assets/likes'
 
 export const feedGeneratorData = cache(
 	async ({ profile, feed }: { profile: string; feed: string }) =>
@@ -69,7 +70,15 @@ const Feed = (props: RouteSectionProps) => {
 				<div class={styles.text}>
 					<h3>{feedGenerator()?.view?.displayName}</h3>
 					<p>{feedGenerator()?.view?.description}</p>
-					<p>{feedGenerator()?.view?.likeCount}</p>
+					<div style={{
+						display: 'flex',
+						'flex-direction': 'row',
+						gap: '0.5rem',
+						color: 'var(--text-secondary)'
+					}}>
+						<LikesIcon />
+						<p>{feedGenerator()?.view?.likeCount}</p>
+					</div>
 				</div>
 			</div>
 			<For each={feeds()?.feed} fallback={<Spinner />}>

@@ -6,13 +6,12 @@ const getLists = async (
 	lists: List[]
 	cursor: string
 }> => {
+	// actor should be DID not handle
 	const response = await fetch(
 		`https://api.bsky.app/xrpc/app.bsky.graph.getLists?actor=${actor}`
 	)
 
-	const body = await response.json()
-
-	return body
+	return await response.json()
 }
 
 export { getLists }
