@@ -1,19 +1,15 @@
-import { type RouteDataFuncArgs, useRouteData } from '@solidjs/router'
-import { For, createResource } from 'solid-js'
+import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
+import { For } from 'solid-js'
 import getActorFeeds from '../../../../api/feed/getActorFeeds'
 import Entry from '../../../../components/Entry'
 
-export const FeedsData = ({ params }: RouteDataFuncArgs) => {
-	const [posts] = createResource(() => params.profile, getActorFeeds)
-	return posts
-}
+export const getFeedsData = cache(
+	async (profile: string) => await getActorFeeds(profile),
+	'profile_feeds'
+)
 
-export const Feeds = () => {
-	const feeds = useRouteData<typeof FeedsData>()
-
-	if (feeds.error) {
-		return <p>Unable to retrieve feeds</p>
-	}
+export const Feeds = (props: RouteSectionProps) => {
+	const feeds = createAsync(() => getFeedsData(props.params.profile))
 
 	return (
 		<For each={feeds()?.feeds}>

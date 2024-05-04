@@ -3,39 +3,31 @@ import {
 	For,
 	Show,
 	createEffect,
-	createResource,
 	createSignal,
 	onMount
 } from 'solid-js'
-
+import { Title, Meta, Link } from '@solidjs/meta'
 import {
 	A,
 	useLocation,
+	createAsync,
+	cache,
 	useParams,
-	useRouteData,
-	type RouteDataFuncArgs
+	type RouteSectionProps
 } from '@solidjs/router'
-
-import { Link, Meta, Title } from '@solidjs/meta'
-
 import Avatar from '../../../../../components/Avatar'
 import { PostExpandedChildPost } from '../../../../../components/Post'
 import PostFooter from '../../../../../components/PostFooter'
 import Embed from '../../../../../components/embeds/Embed'
-
 import getPostThread from '../../../../../api/feed/getPostThread'
 import resolveHandle from '../../../../../api/identity/resolveHandle'
-
 import { did, isDID } from '../../../../../utils'
-
+import Spinner from '../../../../../components/Spinner.tsx'
 import postStyles from '../../../../../components/Post.module.css'
 import styles from './styles.module.css'
-
 import type { ThreadParentOrReply, ThreadPost } from '../../../../../types'
 
 const Timestamp = (props: { date: Date }) => {
-	// const date = createMemo(() => new Date(props.date))
-
 	return (
 		<time
 			style={{
@@ -56,9 +48,8 @@ const Timestamp = (props: { date: Date }) => {
 	)
 }
 
-const PostExpanded = (props: ThreadPost) => {
+const PostExpanded = (props: { thread: ThreadPost }) => {
 	const params = useParams()
-
 	const [postRef, setPostRef] = createSignal<HTMLElement>()
 	const [repliesRef, setRepliesRef] = createSignal<HTMLElement>()
 
@@ -69,11 +60,6 @@ const PostExpanded = (props: ThreadPost) => {
 	const [repliesHeight, setRepliesHeight] = createSignal<number>(
 		repliesRef()?.clientHeight!
 	)
-
-	createEffect(() => {
-		console.log(postRef()?.clientHeight!)
-		console.log(repliesRef()?.clientHeight!)
-	})
 
 	// const scrollToPost = () => postRef()?.scrollIntoView()
 
@@ -96,60 +82,71 @@ const PostExpanded = (props: ThreadPost) => {
 		postRef()?.scrollIntoView()
 	})
 
-	// $: url =
-
 	const [title] = createSignal(
-		`${props?.post?.author?.displayName ?? props?.post?.author?.handle} (@${
-			props?.post?.author?.handle
-		}) on Bluesky: "${props?.post?.record?.text}" - Bluesky (usky.app)`
+		`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
+			props.thread?.post?.author?.handle
+		}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`
 	)
 	const [url] = createSignal(
-		`https://usky.app/profile/${props?.post?.author?.handle}/post/${params.post}`
+		`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`
 	)
 
 	return (
 		<>
-			<Title>{title()}</Title>
-			<Meta name='description' content={props.post?.record?.text} />
+			<ErrorBoundary fallback={<Title>{title()}</Title>}>
+				<Title>{title()}</Title>
+				<Meta
+					name='description'
+					content={props.thread.post?.record?.text}
+				/>
 
-			<Meta property='og:title' content={title()} />
-			<Meta
-				property='og:description'
-				content={props?.post?.record?.text}
-			/>
-			<Meta property='og:url' content={url()} />
-			<Meta property='og:image' content={props?.post?.author?.avatar} />
-			<Meta property='og:image:type' content='image/jpeg' />
-			<Meta property='og:type' content='article' />
-			<Meta
-				property='article:published_time'
-				content={props?.post?.record?.createdAt}
-			/>
-			<Meta
-				property='article:author'
-				content={
-					props?.post?.author?.displayName ??
-					props?.post?.author?.handle
-				}
-			/>
-			<Meta name='twitter:title' content={title()} />
-			<Meta
-				name='twitter:description'
-				content={props?.post?.record?.text}
-			/>
-			<Meta property='twitter:url' content={url()} />
-			<Meta name='twitter:image' content={props?.post?.author?.avatar} />
-			<Meta name='twitter:card' content='summary' />
+				<Meta property='og:title' content={title()} />
+				<Meta
+					property='og:description'
+					content={props.thread?.post?.record?.text}
+				/>
+				<Meta property='og:url' content={url()} />
+				<Meta
+					property='og:image'
+					content={props.thread?.post?.author?.avatar}
+				/>
+				<Meta property='og:image:type' content='image/jpeg' />
+				<Meta property='og:type' content='article' />
+				<Meta
+					property='article:published_time'
+					content={props.thread?.post?.record?.createdAt}
+				/>
+				<Meta
+					property='article:author'
+					content={
+						props.thread?.post?.author?.displayName ??
+						props.thread?.post?.author?.handle
+					}
+				/>
+				<Meta name='twitter:title' content={title()} />
+				<Meta
+					name='twitter:description'
+					content={props.thread?.post?.record?.text}
+				/>
+				<Meta property='twitter:url' content={url()} />
+				<Meta
+					name='twitter:image'
+					content={props.thread?.post?.author?.avatar}
+				/>
+				<Meta name='twitter:card' content='summary' />
 
-			<Link rel='canonical' href={url()} />
+				<Link rel='canonical' href={url()} />
+			</ErrorBoundary>
 			<ErrorBoundary
 				fallback={(error) => (
 					<div class={styles.error}>
-						<code>Error occured: {error?.message}</code>
+						<code>
+							Unable to load parent thread: {error?.message}
+						</code>
 					</div>
 				)}
 			>
-				<Show when={props.parent}>
+				<Show when={props.thread.parent}>
 					{(parent) => (
 						<PostExpandedChildPost
 							{...parent()}
@@ -162,13 +159,15 @@ const PostExpanded = (props: ThreadPost) => {
 			<ErrorBoundary
 				fallback={(error) => (
 					<div class={styles.error}>
-						<code>Error occured: {error?.message}</code>
+						<code>
+							Unable to load main thread: {error?.message}
+						</code>
 					</div>
 				)}
 			>
 				<article
 					ref={setPostRef}
-					id={props?.post?.uri}
+					id={props.thread?.post?.uri}
 					class={styles.article}
 				>
 					<div class={postStyles.inner}>
@@ -180,7 +179,7 @@ const PostExpanded = (props: ThreadPost) => {
 								'align-items': 'center'
 							}}
 						>
-							<Show when={props?.parent}>
+							<Show when={props.thread?.parent}>
 								<div
 									style={{
 										position: 'absolute',
@@ -192,45 +191,45 @@ const PostExpanded = (props: ThreadPost) => {
 								/>
 							</Show>
 							<Avatar
-								src={props.post?.author?.avatar}
+								src={props.thread.post?.author?.avatar}
 								alt={`${
-									props.post?.author?.displayName ??
-									`@${props.post?.author.handle}`
+									props.thread.post?.author?.displayName ??
+									`@${props.thread.post?.author.handle}`
 								} avatar`}
 							/>
 						</div>
 						<div class={styles.header}>
 							<A
 								rel='author'
-								href={`/profile/${props.post?.author?.handle}`}
+								href={`/profile/${props.thread.post?.author?.handle}`}
 								class={postStyles.name}
 							>
-								{props.post?.author?.displayName ??
-									props.post?.author?.handle}
+								{props.thread.post?.author?.displayName ??
+									props.thread.post?.author?.handle}
 							</A>
 							<A
 								rel='author'
-								href={`/profile/${props.post?.author?.handle}`}
+								href={`/profile/${props.thread.post?.author?.handle}`}
 								class={postStyles.handle}
 							>
-								@{props.post?.author?.handle}
+								@{props.thread.post?.author?.handle}
 							</A>
 						</div>
 					</div>
 					<div class={postStyles.content}>
-						<Show when={props.post?.record?.text}>
+						<Show when={props.thread.post?.record?.text}>
 							{(text) => <p class={styles.text}>{text()}</p>}
 						</Show>
-						<Show when={props.post.embed}>
+						<Show when={props.thread.post.embed}>
 							{(embed) => (
 								<Embed
-									embed={{ ...embed() }}
-									did={did(props.post?.uri)}
+									embed={embed()}
+									did={did(props.thread.post?.uri)}
 								/>
 							)}
 						</Show>
 						<Timestamp
-							date={new Date(props.post.record.createdAt)}
+							date={new Date(props.thread.post.record.createdAt)}
 						/>
 					</div>
 					<PostFooter
@@ -239,20 +238,22 @@ const PostExpanded = (props: ThreadPost) => {
 							'border-top': '1px solid var(--border)',
 							'justify-content': 'center'
 						}}
-						replyCount={props.post?.replyCount}
-						repostCount={props.post?.repostCount}
-						likeCount={props.post?.likeCount}
+						replyCount={props.thread.post?.replyCount}
+						repostCount={props.thread.post?.repostCount}
+						likeCount={props.thread.post?.likeCount}
 					/>
 				</article>
 			</ErrorBoundary>
 			<ErrorBoundary
 				fallback={(error) => (
 					<div class={styles.error}>
-						<code>Error occured: {error?.message}</code>
+						<code>
+							Unable to load child thread: {error?.message}
+						</code>
 					</div>
 				)}
 			>
-				<Show when={props.replies}>
+				<Show when={props.thread.replies}>
 					{(replies) => (
 						<div ref={setRepliesRef}>
 							<For each={replies()}>
@@ -269,15 +270,17 @@ const PostExpanded = (props: ThreadPost) => {
 }
 
 const getThread = async ({
-	profileId,
-	postId
+	profile,
+	post
 }: {
-	profileId: string
-	postId: string
+	profile: string
+	post: string
 }) => {
-	const did = isDID(profileId) ? profileId : await resolveHandle(profileId)
+	const did = isDID(profile) ? profile : await resolveHandle(profile)
 
-	const post = await getPostThread(`at://${did}/app.bsky.feed.post/${postId}`)
+	const postThread = await getPostThread(
+		`at://${did}/app.bsky.feed.post/${post}`
+	)
 
 	const actors: ThreadPost['post']['author'][] = []
 
@@ -293,39 +296,31 @@ const getThread = async ({
 		}
 	}
 
-	if (post.thread) {
-		pushAuthors(post.thread)
+	if (postThread.thread) {
+		pushAuthors(postThread.thread)
 		actors.reverse()
 	}
 
 	return {
-		post,
+		post: postThread,
 		actors
 	}
 }
 
-export const PostData = ({ params }: RouteDataFuncArgs) => {
-	const [postData] = createResource(
-		() => ({
-			profileId: params.profile,
-			postId: params.post
-		}),
-		getThread
+export const getPostData = cache(
+	async ({ profile, post }: { profile: string; post: string }) =>
+		await getThread({ profile, post }),
+	'post'
+)
+
+const PostPage = (props: RouteSectionProps) => {
+	const data = createAsync(() =>
+		getPostData({ profile: props.params.profile, post: props.params.post })
 	)
 
-	return postData
-}
-
-const PostPage = () => {
-	const data = useRouteData<typeof PostData>()
-
-	if (data.error) {
-		return <p>Unable to retrieve posts</p>
-	}
-
 	return (
-		<Show when={data()?.post?.thread}>
-			{(thread) => <PostExpanded {...thread()} />}
+		<Show when={data()?.post?.thread} fallback={<Spinner />}>
+			{(thread) => <PostExpanded thread={thread()} />}
 		</Show>
 	)
 }

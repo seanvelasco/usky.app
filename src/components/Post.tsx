@@ -1,5 +1,5 @@
 import { A } from '@solidjs/router'
-import { For, Show } from 'solid-js'
+import { For, Show, Suspense } from 'solid-js'
 import type { Thread, ThreadParentOrReply } from '../types'
 import { did, id } from '../utils'
 import Avatar from './Avatar'
@@ -7,12 +7,23 @@ import styles from './Post.module.css'
 import PostFooter from './PostFooter'
 import TimeAgo from './TimeAgo'
 import Embed from './embeds/Embed'
+import DeletedEmbed from './embeds/DeletedEmbed'
+
+const FallbackPost = () => (
+	<div
+		style={{
+			padding: '1rem'
+		}}
+	>
+		<DeletedEmbed />
+	</div>
+)
 
 export const PostExpandedChildPost = (
 	props: { hasChild?: boolean; hasParent?: boolean } & ThreadParentOrReply
 ) => {
 	return (
-		<>
+		<Show when={props.post} fallback={<FallbackPost />}>
 			<Show when={props?.parent}>
 				{(parent) => (
 					<>
@@ -133,7 +144,7 @@ export const PostExpandedChildPost = (
 					</For>
 				)}
 			</Show>
-		</>
+		</Show>
 	)
 }
 
@@ -141,7 +152,7 @@ export const Post = (
 	props: { hasChild?: boolean; hasParent?: boolean } & Thread
 ) => {
 	return (
-		<>
+		<Suspense>
 			<Show
 				when={
 					props?.reply?.parent?.cid === props?.reply?.root?.cid &&
@@ -275,7 +286,7 @@ export const Post = (
 					)}`}
 				/>
 			</article>
-		</>
+		</Suspense>
 	)
 }
 

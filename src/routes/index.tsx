@@ -1,39 +1,53 @@
+import { ErrorBoundary, For } from 'solid-js'
+import { cache, createAsync, RouteSectionProps } from '@solidjs/router'
 import { Meta, Title } from '@solidjs/meta'
-import { useRouteData } from '@solidjs/router'
-import { For, Suspense, createResource } from 'solid-js'
 import getFeed from '../api/feed/getFeed'
 import FeedPost from '../components/Post'
 import Spinner from '../components/Spinner'
 
-export const DiscoverData = () => {
-	const [feed] = createResource(
-		() =>
-			'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
-		getFeed
-	)
-	return feed
-}
+export const getDiscoveryFeed = cache(
+	async (feed: string) => await getFeed(feed),
+	'home'
+)
 
-const Discover = () => {
-	const feed = useRouteData<typeof DiscoverData>()
-	const title = 'Bluesky (usky.app)'
-	const description =
-		"Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+const HomeMeta = () => (
+	<ErrorBoundary fallback={<Title>Bluesky (usky.app)</Title>}>
+		<Title>Bluesky (usky.app)</Title>
+		<Meta
+			name='description'
+			content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+		/>
+		<Meta property='og:title' content='Bluesky (usky.app)' />
+		<Meta
+			property='og:description'
+			content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+		/>
+		<Meta name='twitter:title' content='Bluesky (usky.app)' />
+		<Meta
+			name='twitter:description'
+			content={
+				"Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+			}
+		/>
+	</ErrorBoundary>
+)
+
+const Discover = (props: RouteSectionProps) => {
+	const feeds: Record<string, string> = {
+		'/': 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
+		'/hot': 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
+	}
+
+	const feed = createAsync(() =>
+		getDiscoveryFeed(feeds[props.location.pathname])
+	)
 
 	return (
 		<>
-			<Title>{title}</Title>
-			<Meta name='description' content={description} />
-			<Meta property='og:title' content={title} />
-			<Meta property='og:description' content={description} />
-			<Meta name='twitter:title' content={title} />
-			<Meta name='twitter:description' content={description} />
-
-			<Suspense fallback={<Spinner />}>
-				<For each={feed()?.feed}>
-					{(post) => <FeedPost {...post} />}
-				</For>
-			</Suspense>
+			<HomeMeta />
+			<For each={feed()?.feed} fallback={<Spinner />}>
+				{(post) => <FeedPost {...post} />}
+			</For>
 		</>
 	)
 }

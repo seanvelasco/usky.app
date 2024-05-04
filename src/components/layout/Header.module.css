@@ -1,0 +1,44 @@
+.header {
+	position: sticky;
+	top: 0;
+	background-color: var(--background-primary);
+	border-bottom: 1px solid var(--border);
+	z-index: 2;
+	padding: 0 1.5rem;
+}
+
+.header a:hover {
+	text-decoration: underline;
+}
+
+.header span,
+p,
+a {
+	color: inherit;
+}
+
+.inner {
+	display: flex;
+	align-items: center;
+	height: 3.25rem;
+	gap: 1rem;
+}
+
+.back {
+	all: unset;
+	display: flex;
+}
+
+.timeline {
+	display: flex;
+	width: 100%;
+	gap: 1rem;
+	font-weight: 500;
+	padding: 0 1rem;
+	color: var(--text-secondary);
+}
+
+.timeline a {
+	flex: 1;
+	text-align: center;
+}
