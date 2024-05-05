@@ -4,7 +4,7 @@ import type { ExternalEmbed as ExternalEmbedType } from '../../types'
 import { createImageLink, did } from '../../utils'
 import styles from './Embed.module.css'
 
-const ExternalEmbed = (props: { external: ExternalEmbedType }) => {
+const ExternalEmbed = (props: { external: ExternalEmbedType; did: string }) => {
 	const baseUrl = new URL(props.external.uri)
 	return (
 		<div
@@ -20,7 +20,7 @@ const ExternalEmbed = (props: { external: ExternalEmbedType }) => {
 						class={styles.image}
 						src={createImageLink({
 							image: image(),
-							did: did(props.external.uri)
+							did: did(props.did ?? props.external.uri)
 						})}
 						alt={props.external.title}
 					/>
