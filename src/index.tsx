@@ -55,11 +55,15 @@ render(
 				</Route>
 				<Route path='/live' component={Firehose} />
 				<Route path='/search' component={SearchPage}>
-					<Route path="/" />
-					<Route path="/latest" />
-					<Route path="/people" />
+					<Route path='/' />
+					<Route path='/latest' />
+					<Route path='/people' />
 				</Route>
-				<Route path='/hashtag/:hashtag' component={HashtagPage} load={({ params }) => postSearch(params.hashtag)} />
+				<Route
+					path='/hashtag/:hashtag'
+					component={HashtagPage}
+					load={({ params }) => postSearch(params.hashtag)}
+				/>
 				<Route path='/feeds' component={PopularFeeds} />
 				<Route path='/about' component={About} />
 				<Route

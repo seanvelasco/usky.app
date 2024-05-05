@@ -1,5 +1,10 @@
 import { ErrorBoundary, For } from 'solid-js'
-import { createAsync, cache, useSearchParams, RouteSectionProps } from '@solidjs/router'
+import {
+	createAsync,
+	cache,
+	useSearchParams,
+	RouteSectionProps
+} from '@solidjs/router'
 import searchActors from '../../api/actor/searchActors'
 import searchPosts from '../../api/feed/searchPosts'
 import Entry from '../../components/Entry'
@@ -23,7 +28,7 @@ export const Search = () => {
 	const [searchParams] = useSearchParams()
 	const actors = createAsync(() => actorSearch(searchParams.q || ''))
 	const posts = createAsync(() => postSearch(searchParams.q || ''))
-	
+
 	// const routes = [
 	// 	{
 	// 		title: 'Top',
@@ -42,10 +47,13 @@ export const Search = () => {
 	// 		href: 'media'
 	// 	}
 	// ]
-	
+
 	const title = () => `${searchParams.q ?? 'Search'} - Bluesky (usky.app)`
-	const description = () => searchParams.q ? `Search results for ${searchParams.q} on Bluesky` : 'Search for people and posts on Bluesky'
-	
+	const description = () =>
+		searchParams.q
+			? `Search results for ${searchParams.q} on Bluesky`
+			: 'Search for people and posts on Bluesky'
+
 	return (
 		<>
 			<ErrorBoundary fallback={<Title>{title()}</Title>}>
@@ -85,20 +93,22 @@ export const HashtagPage = (props: RouteSectionProps) => {
 	const title = () => `#${props.params} - Bluesky (usky.app)`
 	const description = () => `Posts about ${props.params} on Bluesky`
 	const url = () => `https://usky.app/hashtag/${props.params}`
-	return <>
-		<ErrorBoundary fallback={<Title>{title()}</Title>}>
-			<Title>{title()}</Title>
-			<Meta name='description' content={description()} />
-			<Meta property='og:title' content={title()} />
-			<Meta property='og:description' content={description()} />
-			<Meta property='og:url' content={url()} />
-			<Meta name='twitter:title' content={title()} />
-			<Meta name='twitter:description' content={description()} />
-			<Meta property='twitter:url' content={url()} />
-			<Link rel='canonical' href={url()} />
-		</ErrorBoundary>
-		<For each={posts()?.posts}>{(post) => <Post post={post} />}</For></>
-	
+	return (
+		<>
+			<ErrorBoundary fallback={<Title>{title()}</Title>}>
+				<Title>{title()}</Title>
+				<Meta name='description' content={description()} />
+				<Meta property='og:title' content={title()} />
+				<Meta property='og:description' content={description()} />
+				<Meta property='og:url' content={url()} />
+				<Meta name='twitter:title' content={title()} />
+				<Meta name='twitter:description' content={description()} />
+				<Meta property='twitter:url' content={url()} />
+				<Link rel='canonical' href={url()} />
+			</ErrorBoundary>
+			<For each={posts()?.posts}>{(post) => <Post post={post} />}</For>
+		</>
+	)
 }
 
 export default Search

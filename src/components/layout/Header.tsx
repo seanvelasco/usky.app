@@ -104,8 +104,11 @@ const Header = () => {
 
 	const isHome = () => ['/', '/hot', '/live'].includes(location.pathname)
 
-	const isSearch = () => ['/search', '/hashtag'].some(path => location.pathname.startsWith(path))
-	
+	const isSearch = () =>
+		['/search', '/hashtag'].some((path) =>
+			location.pathname.startsWith(path)
+		)
+
 	const back = () => navigate(-1)
 
 	return (

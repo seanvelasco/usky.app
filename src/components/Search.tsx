@@ -7,7 +7,9 @@ import {
 	useMatch,
 	action,
 	redirect,
-	useAction, useParams, useLocation,
+	useAction,
+	useParams,
+	useLocation,
 	useNavigate
 } from '@solidjs/router'
 import searchActorsTypeahead from '../api/actor/searchActorsTypeahead'
@@ -25,32 +27,36 @@ const goToSearch = action(async (query: string) => {
 export const Search = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
-	const isSearch = () => ['/search', '/hashtag'].some(path => location.pathname.startsWith(path))
+	const isSearch = () =>
+		['/search', '/hashtag'].some((path) =>
+			location.pathname.startsWith(path)
+		)
 	const isSearchPage = useMatch(() => '/search')
 	const isHashtagPage = useMatch(() => '/hashtag/:hashtag')
 	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams()
-	const [query, setQuery] = createSignal(searchParams.q || (isHashtagPage() ? `#${params.hashtag}` : ''))
+	const [query, setQuery] = createSignal(
+		searchParams.q || (isHashtagPage() ? `#${params.hashtag}` : '')
+	)
 	const typeaheadResults = createAsync(() => typeaheadSearch(query()))
-	
 
 	const onSearch = async (event: Event) => {
 		const { value } = event.target as HTMLInputElement
-		
+
 		if (isHashtagPage()) {
 			await navigate('/search')
 		}
-	
+
 		if (isSearch()) {
 			setSearchParams({ q: value.trim() })
 		} else {
 			setQuery(value.trim())
 		}
 	}
-	
+
 	const search = useAction(goToSearch)
-	
-	const onSubmit = async  (event: Event) => {
+
+	const onSubmit = async (event: Event) => {
 		event.preventDefault()
 		if (isSearch()) return
 		await search(query())
@@ -58,17 +64,19 @@ export const Search = () => {
 
 	return (
 		<>
-			<form style={{
-				display: 'contents'
-			}} onSubmit={onSubmit}
+			<form
+				style={{
+					display: 'contents'
+				}}
+				onSubmit={onSubmit}
 			>
 				<input
 					value={query()}
 					autofocus={Boolean(isSearchPage())}
 					onInput={onSearch}
 					class={styles.search}
-					type="search"
-					placeholder="Search"
+					type='search'
+					placeholder='Search'
 				/>
 			</form>
 			<Show when={query() && !isSearch()}>
