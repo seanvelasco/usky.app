@@ -4,7 +4,9 @@ import {
 	Show,
 	createEffect,
 	createSignal,
-	onMount
+	onMount,
+	lazy,
+	Suspense
 } from 'solid-js'
 import { Title, Meta, Link } from '@solidjs/meta'
 import {
@@ -23,6 +25,7 @@ import getPostThread from '../../../../../api/feed/getPostThread'
 import resolveHandle from '../../../../../api/identity/resolveHandle'
 import { did, isDID } from '../../../../../utils'
 import Spinner from '../../../../../components/Spinner.tsx'
+const RichText = lazy(() => import('../../../../../components/RichText.tsx'))
 import postStyles from '../../../../../components/Post.module.css'
 import styles from './styles.module.css'
 import type { ThreadParentOrReply, ThreadPost } from '../../../../../types'
@@ -92,7 +95,7 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 	)
 
 	return (
-		<>
+		<Suspense>
 			<ErrorBoundary fallback={<Title>{title()}</Title>}>
 				<Title>{title()}</Title>
 				<Meta
@@ -218,7 +221,16 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 					</div>
 					<div class={postStyles.content}>
 						<Show when={props.thread.post?.record?.text}>
-							{(text) => <p class={styles.text}>{text()}</p>}
+							{(text) => (
+								<p class={styles.text}>
+									<RichText
+										text={text()}
+										facets={
+											props?.thread?.post?.record?.facets
+										}
+									/>
+								</p>
+							)}
 						</Show>
 						<Show when={props.thread.post.embed}>
 							{(embed) => (
@@ -265,7 +277,7 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 					)}
 				</Show>
 			</ErrorBoundary>
-		</>
+		</Suspense>
 	)
 }
 

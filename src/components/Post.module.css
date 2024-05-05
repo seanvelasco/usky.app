@@ -82,6 +82,16 @@
 	color: var(--text-primary);
 }
 
+.text a {
+	color: #247bed;
+	z-index: 1;
+	position: relative;
+}
+
+.text a:hover {
+	text-decoration: underline;
+}
+
 @media only screen and (max-width: 540px) {
 	.article {
 		padding-top: 1rem;
