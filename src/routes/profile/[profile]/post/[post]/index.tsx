@@ -11,7 +11,7 @@ import {
 import { Title, Meta, Link } from '@solidjs/meta'
 import {
 	A,
-	useLocation,
+	// useLocation,
 	createAsync,
 	cache,
 	useParams,
@@ -56,11 +56,9 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 	const [postRef, setPostRef] = createSignal<HTMLElement>()
 	const [repliesRef, setRepliesRef] = createSignal<HTMLElement>()
 
-	const [postHeight, setPostHeight] = createSignal<number>(
-		postRef()?.clientHeight!
-	)
+	const [_, setPostHeight] = createSignal<number>(postRef()?.clientHeight!)
 
-	const [repliesHeight, setRepliesHeight] = createSignal<number>(
+	const [__, setRepliesHeight] = createSignal<number>(
 		repliesRef()?.clientHeight!
 	)
 
@@ -69,13 +67,13 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 	createEffect(() => {
 		postRef() && setPostHeight(postRef()?.clientHeight!)
 		repliesRef() && setRepliesHeight(repliesRef()?.clientHeight!)
-		console.log(
-			postRef()?.clientHeight,
-			postHeight(),
-			postRef()?.id,
-			postHeight() + repliesHeight() + 61,
-			useLocation().pathname
-		)
+		// console.log(
+		// 	postRef()?.clientHeight,
+		// 	postHeight(),
+		// 	postRef()?.id,
+		// 	postHeight() + repliesHeight() + 61,
+		// 	useLocation().pathname
+		// )
 		postRef()?.scrollIntoView()
 	})
 
