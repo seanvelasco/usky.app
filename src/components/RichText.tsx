@@ -26,8 +26,7 @@ const RichTextComponent = (props: {
 
 	for (const segment of rt.segments()) {
 		if (segment.link) {
-			console.log(segment.text)
-			text += `<A href="${segment.link.uri}">${segment.text}</A>`
+			text += `<A target='_blank' rel='nofollow' href="${segment.link.uri}">${segment.text}</A>`
 		} else if (segment.mention) {
 			text += `<A href="/profile/${segment.mention.did}">${segment.text}</A>`
 		} else if (segment.tag) {
@@ -37,7 +36,7 @@ const RichTextComponent = (props: {
 		}
 	}
 
-	return <p style={{ display: 'contents ' }} innerHTML={text} />
+	return <p style={{ display: 'contents' }} innerHTML={text} />
 }
 
 export default RichTextComponent
