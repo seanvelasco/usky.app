@@ -4,7 +4,10 @@ import {
 	useSearchParams,
 	cache,
 	A,
-	useMatch
+	useMatch,
+	action,
+	redirect,
+	useAction
 } from '@solidjs/router'
 import searchActorsTypeahead from '../api/actor/searchActorsTypeahead'
 import styles from './Search.module.css'
@@ -14,11 +17,15 @@ const typeaheadSearch = cache(
 	'typeahead_search'
 )
 
+const goToSearch = action(async (query: string) => {
+	throw redirect(`/search?q=${query}`)
+})
+
 export const Search = () => {
 	const isSearchPage = useMatch(() => '/search')
 
-	const [_, setSearchParams] = useSearchParams()
-	const [query, setQuery] = createSignal('')
+	const [searchParams, setSearchParams] = useSearchParams()
+	const [query, setQuery] = createSignal(searchParams.q || '')
 	const typeaheadResults = createAsync(() => typeaheadSearch(query()))
 
 	const onSearch = (event: Event) => {
@@ -29,16 +36,24 @@ export const Search = () => {
 			setQuery(value)
 		}
 	}
+	
+	const search = useAction(goToSearch)
 
 	return (
 		<>
-			<input
-				autofocus={Boolean(isSearchPage())}
-				onInput={onSearch}
-				class={styles.search}
-				type='search'
-				placeholder='Search'
-			/>
+			<form style={{
+				display: 'contents'
+			}} onSubmit={() => search(query())}
+			>
+				<input
+					value={query()}
+					autofocus={Boolean(isSearchPage())}
+					onInput={onSearch}
+					class={styles.search}
+					type="search"
+					placeholder="Search"
+				/>
+			</form>
 			<Show when={query() && !isSearchPage()}>
 				<A href={`/search?q=${query()}`}>Search for "{query()}"</A>
 				<Suspense>
