@@ -3,25 +3,33 @@ import { Router, Route } from '@solidjs/router'
 import { render } from 'solid-js/web'
 /* @refresh reload */
 import App from './App'
+import { lazy } from 'solid-js'
+// HOME
 import Discover, { getDiscoveryFeed } from './routes'
+import PopularFeeds from './routes/feeds'
+import SearchPage, { HashtagPage, postSearch } from './routes/search'
+import About from './routes/about'
+// LIVE
+const Firehose = lazy(() => import('./routes/live'))
+// PROFILE
 import Profile, { getProfileData } from './routes/profile/[profile]'
 import { Posts, getPostsData } from './routes/profile/[profile]'
 import Replies from './routes/profile/[profile]/replies'
 import Likes, { getLikesData } from './routes/profile/[profile]/likes'
 import Media from './routes/profile/[profile]/media'
-import Post, { getPostData } from './routes/profile/[profile]/post/[post]'
-import Firehose from './routes/live'
-import SearchPage from './routes/search'
-import About from './routes/about'
-import Feed, { feedGeneratorData } from './routes/profile/[profile]/feed/[feed]'
+import UserFeeds, { getFeedsData } from './routes/profile/[profile]/feed'
+import Lists, { getListsData } from './routes/profile/[profile]/lists'
+import Following, { getFollowsData } from './routes/profile/[profile]/following'
 import Followers, {
 	getFollowersData
 } from './routes/profile/[profile]/followers'
-import Following, { getFollowsData } from './routes/profile/[profile]/following'
-import UserFeeds, { getFeedsData } from './routes/profile/[profile]/feed'
-import Lists, { getListsData } from './routes/profile/[profile]/lists'
+// POST
+import Post, { getPostData } from './routes/profile/[profile]/post/[post]'
+// FEED
+import Feed, { feedGeneratorData } from './routes/profile/[profile]/feed/[feed]'
+// LIST
 import List, { getListData } from './routes/profile/[profile]/lists/[list]'
-import PopularFeeds from './routes/feeds'
+// to-do: loaders should be in a separate file
 
 render(
 	() => (
@@ -46,7 +54,16 @@ render(
 					/>
 				</Route>
 				<Route path='/live' component={Firehose} />
-				<Route path={['/search', '/hashtag']} component={SearchPage} />
+				<Route path='/search' component={SearchPage}>
+					<Route path='/' />
+					<Route path='/latest' />
+					<Route path='/people' />
+				</Route>
+				<Route
+					path='/hashtag/:hashtag'
+					component={HashtagPage}
+					load={({ params }) => postSearch(params.hashtag)}
+				/>
 				<Route path='/feeds' component={PopularFeeds} />
 				<Route path='/about' component={About} />
 				<Route
