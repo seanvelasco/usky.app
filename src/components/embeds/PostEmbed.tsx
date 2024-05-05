@@ -1,5 +1,5 @@
 import { A } from '@solidjs/router'
-import { For, Match, Show, Switch } from 'solid-js'
+import { For, Match, Show, Switch, lazy } from 'solid-js'
 import type { PostEmbed as PostEmbedType } from '../../types'
 import { id } from '../../utils'
 import Avatar from '../Avatar'
@@ -8,6 +8,7 @@ import TimeAgo from '../TimeAgo'
 import Embed from './Embed'
 import commonStyles from './Embed.module.css'
 import LazyLoadEmbed from './LazyLoadEmbed'
+const RichText = lazy(() => import('../RichText'))
 
 const PostEmbed = (props: PostEmbedType) => {
 	return (
@@ -44,7 +45,14 @@ const PostEmbed = (props: PostEmbedType) => {
 					</div>
 					<div class={postStyles.content}>
 						<Show when={props?.value?.text}>
-							<p class={postStyles.text}>{props.value.text}</p>
+							<p class={postStyles.text}>
+								{props.value.text}
+
+								<RichText
+									text={props.value.text}
+									facets={props.value.facets}
+								/>
+							</p>
 						</Show>
 						<Show when={props?.embeds}>
 							<For each={props.embeds}>

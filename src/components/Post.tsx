@@ -1,13 +1,14 @@
 import { A } from '@solidjs/router'
-import { For, Show, Suspense } from 'solid-js'
+import { For, Show, Suspense, lazy } from 'solid-js'
 import type { Thread, ThreadParentOrReply } from '../types'
 import { did, id } from '../utils'
 import Avatar from './Avatar'
-import styles from './Post.module.css'
 import PostFooter from './PostFooter'
 import TimeAgo from './TimeAgo'
 import Embed from './embeds/Embed'
 import DeletedEmbed from './embeds/DeletedEmbed'
+const RichText = lazy(() => import('./RichText'))
+import styles from './Post.module.css'
 
 const FallbackPost = () => (
 	<div
@@ -102,7 +103,14 @@ export const PostExpandedChildPost = (
 						</div>
 						<div class={styles.content}>
 							<Show when={props?.post?.record?.text}>
-								{(text) => <p class={styles.text}>{text()}</p>}
+								{(text) => (
+									<p class={styles.text}>
+										<RichText
+											text={text()}
+											facets={props?.post?.record?.facets}
+										/>
+									</p>
+								)}
 							</Show>
 							<Show when={props?.post.embed}>
 								{(embed) => (
@@ -254,7 +262,14 @@ export const Post = (
 						</div>
 						<div class={styles.content}>
 							<Show when={props?.post?.record?.text}>
-								{(text) => <p class={styles.text}>{text()}</p>}
+								{(text) => (
+									<p class={styles.text}>
+										<RichText
+											text={text()}
+											facets={props?.post?.record?.facets}
+										/>
+									</p>
+								)}
 							</Show>
 							<Show when={props?.post.embed}>
 								{(embed) => (

@@ -12,7 +12,6 @@ export const getListsData = cache(async (profile: string) => {
 
 export const Lists = (props: RouteSectionProps) => {
 	const lists = createAsync(() => getListsData(props.params.profile))
-	console.log(lists())
 
 	return (
 		<For each={lists()?.lists}>

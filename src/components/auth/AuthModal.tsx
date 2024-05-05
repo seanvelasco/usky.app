@@ -12,8 +12,7 @@ const credentials = () => {
 }
 
 const handleLogin = (event: Event) => {
-	console.log(event.preventDefault())
-	console.log(credentials())
+	event.preventDefault()
 	const [session] = createResource(credentials(), createSession)
 
 	// const session = await createSession(credentials())

@@ -41,9 +41,11 @@ export interface Record {
 	text: string
 	embed?: Embed
 	langs: string[]
-	facets?: unknown
+	facets?: Facet[]
 	createdAt: string
 }
+
+export interface Facet {}
 
 export interface ExternalEmbed {
 	$type: 'app.bsky.embed.external#view' | 'app.bsky.embed.external'

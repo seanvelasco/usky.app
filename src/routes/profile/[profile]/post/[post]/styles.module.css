@@ -32,6 +32,16 @@
 	color: var(--text-primary);
 }
 
+.text a {
+	color: #247bed;
+	z-index: 1;
+	position: relative;
+}
+
+.text a:hover {
+	text-decoration: underline;
+}
+
 .header {
 	display: flex;
 	flex-direction: column;
