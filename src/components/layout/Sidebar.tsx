@@ -29,10 +29,10 @@ const Sidebar = () => {
 	// this should be dynamic with :profile, wrap this with auth
 	// const users = createAsync(getSuggestions)
 	const feeds = createAsync(getPopularFeedGenerators)
-
+	const isSearch = () => ['/search', '/hashtag'].some(path => location.pathname.startsWith(path))
 	return (
 		<Suspense>
-			<Show when={location.pathname !== '/search'}>
+			<Show when={!isSearch()}>
 				<Search />
 			</Show>
 			{/*<Show*/}

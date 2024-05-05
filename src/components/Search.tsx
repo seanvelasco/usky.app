@@ -7,7 +7,8 @@ import {
 	useMatch,
 	action,
 	redirect,
-	useAction
+	useAction, useParams, useLocation,
+	useNavigate
 } from '@solidjs/router'
 import searchActorsTypeahead from '../api/actor/searchActorsTypeahead'
 import styles from './Search.module.css'
@@ -22,28 +23,44 @@ const goToSearch = action(async (query: string) => {
 })
 
 export const Search = () => {
+	const navigate = useNavigate()
+	const location = useLocation()
+	const isSearch = () => ['/search', '/hashtag'].some(path => location.pathname.startsWith(path))
 	const isSearchPage = useMatch(() => '/search')
-
+	const isHashtagPage = useMatch(() => '/hashtag/:hashtag')
+	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams()
-	const [query, setQuery] = createSignal(searchParams.q || '')
+	const [query, setQuery] = createSignal(searchParams.q || (isHashtagPage() ? `#${params.hashtag}` : ''))
 	const typeaheadResults = createAsync(() => typeaheadSearch(query()))
+	
 
-	const onSearch = (event: Event) => {
+	const onSearch = async (event: Event) => {
 		const { value } = event.target as HTMLInputElement
-		if (isSearchPage()) {
-			setSearchParams({ q: value })
+		
+		if (isHashtagPage()) {
+			await navigate('/search')
+		}
+	
+		if (isSearch()) {
+			setSearchParams({ q: value.trim() })
 		} else {
-			setQuery(value)
+			setQuery(value.trim())
 		}
 	}
 	
 	const search = useAction(goToSearch)
+	
+	const onSubmit = async  (event: Event) => {
+		event.preventDefault()
+		if (isSearch()) return
+		await search(query())
+	}
 
 	return (
 		<>
 			<form style={{
 				display: 'contents'
-			}} onSubmit={() => search(query())}
+			}} onSubmit={onSubmit}
 			>
 				<input
 					value={query()}
@@ -54,7 +71,7 @@ export const Search = () => {
 					placeholder="Search"
 				/>
 			</form>
-			<Show when={query() && !isSearchPage()}>
+			<Show when={query() && !isSearch()}>
 				<A href={`/search?q=${query()}`}>Search for "{query()}"</A>
 				<Suspense>
 					<For each={typeaheadResults()?.actors}>
