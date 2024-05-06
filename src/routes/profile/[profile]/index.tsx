@@ -1,6 +1,6 @@
 import { Link, Meta, Title } from '@solidjs/meta'
 import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
-import { Accessor, ErrorBoundary, For, Show, Suspense } from 'solid-js'
+import { createSignal, ErrorBoundary, For, Show, Suspense } from 'solid-js'
 
 import Post from '../../../components/Post'
 
@@ -57,12 +57,15 @@ export const ProfileNav = (
 	)
 }
 
-const ProfileMeta = (props: { profile: Accessor<Profile | undefined> }) => {
-	const title = () =>
-		`${props.profile()?.displayName ?? props.profile()?.handle} (@${props.profile()?.handle}) - Bluesky (usky.app)`
-	const description = () => props.profile()?.description
-	const url = () => `https://usky.app/profile/${props.profile()?.handle}`
-	const avatar = () => props.profile()?.avatar ?? '/avatar.svg'
+const ProfileMeta = (props: { profile: Profile | undefined }) => {
+	const [title] = createSignal(
+		`${props.profile?.displayName ?? props.profile?.handle} (@${props.profile?.handle}) - Bluesky (usky.app)`
+	)
+	const [description] = createSignal(props.profile?.description)
+	const [url] = createSignal(
+		`https://usky.app/profile/${props.profile?.handle}`
+	)
+	const [avatar] = createSignal(props.profile?.avatar ?? '/avatar.svg')
 
 	return (
 		<ErrorBoundary fallback={<Title>{title()}</Title>}>
@@ -74,13 +77,10 @@ const ProfileMeta = (props: { profile: Accessor<Profile | undefined> }) => {
 			<Meta property='og:image' content={avatar()} />
 			<Meta
 				property='og:image:type'
-				content={props.profile()?.avatar ? 'image/jpeg' : 'image/svg'}
+				content={props.profile?.avatar ? 'image/jpeg' : 'image/svg'}
 			/>
 			<Meta property='og:type' content='profile' />
-			<Meta
-				property='profile:username'
-				content={props.profile()?.handle}
-			/>
+			<Meta property='profile:username' content={props.profile?.handle} />
 			<Meta name='twitter:title' content={title()} />
 			<Meta name='twitter:description' content={description()} />
 			<Meta property='twitter:url' content={url()} />
@@ -124,10 +124,10 @@ const Profile = (props: RouteSectionProps) => {
 	]
 
 	return (
-		<>
-			<ProfileMeta profile={profile} />
-			<div class={styles.profile}>
-				<Suspense>
+		<Suspense>
+			<Show when={profile()}>
+				<ProfileMeta profile={profile()} />
+				<div class={styles.profile}>
 					<div>
 						<div class={styles.banner}>
 							<Show when={profile()?.banner}>
@@ -167,9 +167,7 @@ const Profile = (props: RouteSectionProps) => {
 							</Show>
 							<div class={styles.counters}>
 								<A
-									href={`/profile/${
-										profile()?.handle
-									}/following`}
+									href={`/profile/${profile()?.handle}/following`}
 								>
 									<span>
 										{profile()?.followsCount.toLocaleString()}
@@ -177,9 +175,7 @@ const Profile = (props: RouteSectionProps) => {
 									following
 								</A>
 								<A
-									href={`/profile/${
-										profile()?.handle
-									}/followers`}
+									href={`/profile/${profile()?.handle}/followers`}
 								>
 									<span>
 										{profile()?.followersCount.toLocaleString()}
@@ -196,10 +192,10 @@ const Profile = (props: RouteSectionProps) => {
 						</div>
 						<ProfileNav {...routes} />
 					</div>
-				</Suspense>
-			</div>
-			{props.children}
-		</>
+				</div>
+				{props.children}
+			</Show>
+		</Suspense>
 	)
 }
 

@@ -13,7 +13,7 @@ import { Link, Meta, Title } from '@solidjs/meta'
 // import styles from './styles.module.css'
 
 export const actorSearch = cache(
-	async (query: string) => await searchActors(query),
+	async (query: string) => await searchActors(encodeURIComponent(query)),
 	'actors_search'
 )
 
@@ -26,8 +26,12 @@ const Empty = () => <></>
 
 export const Search = () => {
 	const [searchParams] = useSearchParams()
-	const actors = createAsync(() => actorSearch(searchParams.q || ''))
-	const posts = createAsync(() => postSearch(searchParams.q || ''))
+	const actors = createAsync(() =>
+		actorSearch(decodeURIComponent(searchParams.q as string) || '')
+	)
+	const posts = createAsync(() =>
+		postSearch(decodeURIComponent(searchParams.q as string) || '')
+	)
 
 	// const routes = [
 	// 	{
@@ -89,10 +93,10 @@ export const Search = () => {
 }
 
 export const HashtagPage = (props: RouteSectionProps) => {
-	const posts = createAsync(() => postSearch(props.params.hashtag))
-	const title = () => `#${props.params} - Bluesky (usky.app)`
-	const description = () => `Posts about ${props.params} on Bluesky`
-	const url = () => `https://usky.app/hashtag/${props.params}`
+	const posts = createAsync(() => postSearch(`#${props.params.hashtag}`))
+	const title = () => `#${props.params.hashtag} - Bluesky (usky.app)`
+	const description = () => `Posts about #${props.params.hashtag} on Bluesky`
+	const url = () => `https://usky.app/hashtag/${props.params.hashtag}`
 	return (
 		<>
 			<ErrorBoundary fallback={<Title>{title()}</Title>}>

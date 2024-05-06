@@ -4,7 +4,6 @@
 	padding-top: 1.5rem;
 	padding-left: 1.5rem;
 	background-color: var(--background-primary);
-	width: 100%;
 	transition: background-color 0.2s ease;
 	animation: incomingMessageAnimation 0.15s linear;
 }
@@ -121,4 +120,28 @@
 	100% {
 		opacity: 1;
 	}
+}
+
+.fallback {
+	/*border-bottom: 1px solid var(--border);*/
+	/*padding: 1.5rem;*/
+	/*background-color: var(--background-primary);*/
+	/*transition: background-color 0.2s ease;*/
+	/*animation: incomingMessageAnimation 0.15s linear;*/
+	position: relative;
+	z-index: 1;
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	padding: 1rem;
+	margin: 0 1rem;
+	animation: incomingMessageAnimation 0.15s linear;
+	transition: background-color 0.2s ease;
+}
+
+.avatar {
+	position: relative;
+	z-index: 1;
 }

@@ -1,39 +1,61 @@
 import { A } from '@solidjs/router'
-import { For, Show, Suspense, lazy } from 'solid-js'
-import type { Thread, ThreadParentOrReply } from '../types'
+import {
+	For,
+	Show,
+	Suspense,
+	lazy,
+	ErrorBoundary,
+	Switch,
+	Match
+} from 'solid-js'
+import type { FeedPost, Thread, ThreadParentOrReply } from '../types'
 import { did, id } from '../utils'
 import Avatar from './Avatar'
 import PostFooter from './PostFooter'
 import TimeAgo from './TimeAgo'
 import Embed from './embeds/Embed'
-import DeletedEmbed from './embeds/DeletedEmbed'
 const RichText = lazy(() => import('./RichText'))
 import styles from './Post.module.css'
 
-const FallbackPost = () => (
-	<div
-		style={{
-			padding: '1rem'
-		}}
-	>
-		<DeletedEmbed />
-	</div>
+export const FallbackPost = (props: {
+	post: ThreadParentOrReply | FeedPost | undefined
+}) => (
+	<Show when={props.post}>
+		{(post) => (
+			<A
+				class={styles.fallback}
+				href={`/profile/${did(post().uri)}/post/${id(post().uri)}`}
+			>
+				<p>
+					<Switch fallback='Unable to display post'>
+						<Match when={props.post?.notFound}>
+							This post is deleted
+						</Match>
+						<Match when={props.post?.blocked}>
+							Post hidden because one of the users involved
+							blocked the other
+						</Match>
+					</Switch>
+				</p>
+			</A>
+		)}
+	</Show>
 )
 
-export const PostExpandedChildPost = (
-	props: { hasChild?: boolean; hasParent?: boolean } & ThreadParentOrReply
-) => {
+export const PostExpandedChildPost = (props: {
+	hasChild?: boolean
+	hasParent?: boolean
+	thread: ThreadParentOrReply
+}) => {
 	return (
-		<Show when={props.post} fallback={<FallbackPost />}>
-			<Show when={props?.parent}>
+		<ErrorBoundary fallback={<FallbackPost post={props.thread} />}>
+			<Show when={props?.thread.parent}>
 				{(parent) => (
-					<>
-						<PostExpandedChildPost
-							{...parent()}
-							hasParent={false}
-							hasChild={true}
-						/>
-					</>
+					<PostExpandedChildPost
+						thread={parent()}
+						hasParent={false}
+						hasChild={true}
+					/>
 				)}
 			</Show>
 			<article
@@ -41,14 +63,19 @@ export const PostExpandedChildPost = (
 				style={{
 					'border-bottom':
 						props.hasChild ||
-						(props?.replies && props.replies.length !== 0)
+						(props?.thread.replies &&
+							props.thread.replies.length !== 0)
 							? 'none'
 							: '1px solid var(--border)'
 				}}
 			>
 				<div class={styles.inner}>
 					<div class={styles.left}>
-						<Show when={props.hasParent || Boolean(props?.parent)}>
+						<Show
+							when={
+								props.hasParent || Boolean(props?.thread.parent)
+							}
+						>
 							<div
 								style={{
 									position: 'absolute',
@@ -59,17 +86,24 @@ export const PostExpandedChildPost = (
 								}}
 							></div>
 						</Show>
-						<Avatar
-							src={props?.post?.author?.avatar}
-							alt={`${
-								props?.post?.author?.displayName ??
-								`@${props?.post?.author?.handle}`
-							} avatar`}
-						/>
+						<A
+							rel='author'
+							href={`/profile/${props.thread.post?.author?.handle}`}
+							class={styles.avatar}
+						>
+							<Avatar
+								src={props?.thread.post?.author?.avatar}
+								alt={`${
+									props?.thread.post?.author?.displayName ??
+									`@${props?.thread.post?.author?.handle}`
+								} avatar`}
+							/>
+						</A>
 						<Show
 							when={
 								props.hasChild ||
-								(props?.replies && props.replies.length !== 0)
+								(props?.thread.replies &&
+									props.thread.replies.length !== 0)
 							}
 						>
 							<div
@@ -86,48 +120,56 @@ export const PostExpandedChildPost = (
 						<div class={styles.header}>
 							<A
 								class={styles.name}
-								href={`/profile/${props?.post?.author?.handle}`}
+								href={`/profile/${props?.thread.post?.author?.handle}`}
 							>
-								{props?.post?.author?.displayName ??
-									props?.post?.author?.handle}
+								{props?.thread.post?.author?.displayName ??
+									props?.thread.post?.author?.handle}
 							</A>{' '}
 							<A
 								class={styles.handle}
-								href={`/profile/${props?.post?.author?.handle}`}
+								href={`/profile/${props?.thread.post?.author?.handle}`}
 							>
-								@{props?.post?.author?.handle}
+								@{props?.thread.post?.author?.handle}
 							</A>{' '}
 							<TimeAgo
-								time={new Date(props?.post?.record?.createdAt)}
+								time={
+									new Date(
+										props?.thread.post?.record?.createdAt
+									)
+								}
 							/>
 						</div>
 						<div class={styles.content}>
-							<Show when={props?.post?.record?.text}>
+							<Show when={props?.thread.post?.record?.text}>
 								{(text) => (
 									<p class={styles.text}>
 										<RichText
 											text={text()}
-											facets={props?.post?.record?.facets}
+											facets={
+												props?.thread.post?.record
+													?.facets
+											}
 										/>
 									</p>
 								)}
 							</Show>
-							<Show when={props?.post.embed}>
+							<Show when={props?.thread.post.embed}>
 								{(embed) => (
 									<Embed
 										embed={{ ...embed() }}
-										did={did(props?.post?.uri)}
+										did={did(props?.thread.post?.uri)}
 									/>
 								)}
 							</Show>
 						</div>
+
 						<PostFooter
 							styles={{
 								'margin-top': '1rem'
 							}}
-							replyCount={props?.post?.replyCount}
-							repostCount={props?.post?.repostCount}
-							likeCount={props?.post?.likeCount}
+							replyCount={props?.thread.post?.replyCount}
+							repostCount={props?.thread.post?.repostCount}
+							likeCount={props?.thread.post?.likeCount}
 						/>
 					</div>
 				</div>
@@ -135,24 +177,24 @@ export const PostExpandedChildPost = (
 					noScroll
 					aria-label='Post'
 					class={styles.wrapper}
-					href={`/profile/${props?.post?.author?.handle}/post/${id(
-						props.post?.uri
+					href={`/profile/${props?.thread.post?.author?.handle}/post/${id(
+						props.thread.post?.uri
 					)}`}
 				/>
 			</article>
-			<Show when={props?.replies}>
+			<Show when={props?.thread.replies}>
 				{(replies) => (
 					<For each={replies()}>
 						{(reply) => (
 							<PostExpandedChildPost
-								{...reply}
+								thread={reply}
 								hasParent={true}
 							/>
 						)}
 					</For>
 				)}
 			</Show>
-		</Show>
+		</ErrorBoundary>
 	)
 }
 
@@ -196,7 +238,6 @@ export const Post = (
 					</>
 				)}
 			</Show>
-
 			<article
 				class={styles.article}
 				style={{
@@ -223,13 +264,19 @@ export const Post = (
 								}}
 							></div>
 						</Show>
-						<Avatar
-							src={props?.post?.author?.avatar}
-							alt={`${
-								props?.post?.author?.displayName ??
-								`@${props?.post?.author.handle}`
-							} avatar`}
-						/>
+						<A
+							rel='author'
+							href={`/profile/${props.post?.author?.handle}`}
+							class={styles.avatar}
+						>
+							<Avatar
+								src={props?.post?.author?.avatar}
+								alt={`${
+									props?.post?.author?.displayName ??
+									`@${props?.post?.author.handle}`
+								} avatar`}
+							/>
+						</A>
 						<Show when={props.hasChild}>
 							<div
 								style={{

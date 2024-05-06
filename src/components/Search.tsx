@@ -1,6 +1,5 @@
-import { createSignal, Show, For, Suspense } from 'solid-js'
+import { createSignal, Show, For, Suspense, createEffect } from 'solid-js'
 import {
-	createAsync,
 	useSearchParams,
 	cache,
 	A,
@@ -21,13 +20,15 @@ const typeaheadSearch = cache(
 )
 
 const goToSearch = action(async (query: string) => {
-	throw redirect(`/search?q=${query}`)
+	throw redirect(`/search?q=${encodeURIComponent(query)}`)
 })
 
 export const Search = () => {
+	const [results, setSearchResults] =
+		createSignal<Awaited<ReturnType<typeof searchActorsTypeahead>>>()
 	const navigate = useNavigate()
 	const location = useLocation()
-	const isSearch = () =>
+	const isSearchOrHashtagPage = () =>
 		['/search', '/hashtag'].some((path) =>
 			location.pathname.startsWith(path)
 		)
@@ -35,10 +36,12 @@ export const Search = () => {
 	const isHashtagPage = useMatch(() => '/hashtag/:hashtag')
 	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams()
-	const [query, setQuery] = createSignal(
-		searchParams.q || (isHashtagPage() ? `#${params.hashtag}` : '')
-	)
-	const typeaheadResults = createAsync(() => typeaheadSearch(query()))
+	const [query, setQuery] = createSignal('')
+
+	createEffect(() => {
+		if (searchParams.q) setQuery(searchParams.q)
+		if (params.hashtag) setQuery(`#${params.hashtag}`)
+	})
 
 	const onSearch = async (event: Event) => {
 		const { value } = event.target as HTMLInputElement
@@ -47,10 +50,11 @@ export const Search = () => {
 			await navigate('/search')
 		}
 
-		if (isSearch()) {
+		if (isSearchOrHashtagPage()) {
 			setSearchParams({ q: value.trim() })
 		} else {
-			setQuery(value.trim())
+			setQuery(decodeURIComponent(value.trim()))
+			setSearchResults(await typeaheadSearch(encodeURIComponent(query())))
 		}
 	}
 
@@ -58,7 +62,7 @@ export const Search = () => {
 
 	const onSubmit = async (event: Event) => {
 		event.preventDefault()
-		if (isSearch()) return
+		if (isSearchOrHashtagPage()) return
 		await search(query())
 	}
 
@@ -79,10 +83,12 @@ export const Search = () => {
 					placeholder='Search'
 				/>
 			</form>
-			<Show when={query() && !isSearch()}>
-				<A href={`/search?q=${query()}`}>Search for "{query()}"</A>
+			<Show when={query() && !isSearchOrHashtagPage()}>
+				<A href={`/search?q=${encodeURIComponent(query())}`}>
+					Search for "{query()}"
+				</A>
 				<Suspense>
-					<For each={typeaheadResults()?.actors}>
+					<For each={results()?.actors}>
 						{(actors) => <p>{actors.did}</p>}
 					</For>
 				</Suspense>
