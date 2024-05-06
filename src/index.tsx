@@ -7,7 +7,11 @@ import { lazy } from 'solid-js'
 // HOME
 import Discover, { getDiscoveryFeed } from './routes'
 import PopularFeeds from './routes/feeds'
-import SearchPage, { HashtagPage, postSearch } from './routes/search'
+import SearchPage, {
+	actorSearch,
+	HashtagPage,
+	postSearch
+} from './routes/search'
 import About from './routes/about'
 // LIVE
 const Firehose = lazy(() => import('./routes/live'))
@@ -55,14 +59,41 @@ render(
 				</Route>
 				<Route path='/live' component={Firehose} />
 				<Route path='/search' component={SearchPage}>
-					<Route path='/' />
-					<Route path='/latest' />
-					<Route path='/people' />
+					<Route
+						path='/'
+						load={({ location }) => {
+							const query = new URLSearchParams(
+								location.query
+							).get('q') as string
+							actorSearch(query)
+							postSearch(query)
+						}}
+					/>
+					<Route
+						path='/latest'
+						load={({ location }) =>
+							postSearch(
+								new URLSearchParams(location.query).get(
+									'q'
+								) as string
+							)
+						}
+					/>
+					<Route
+						path='/people'
+						load={({ location }) =>
+							actorSearch(
+								new URLSearchParams(location.query).get(
+									'q'
+								) as string
+							)
+						}
+					/>
 				</Route>
 				<Route
 					path='/hashtag/:hashtag'
 					component={HashtagPage}
-					load={({ params }) => postSearch(params.hashtag)}
+					load={({ params }) => postSearch(`#${params.hashtag}`)}
 				/>
 				<Route path='/feeds' component={PopularFeeds} />
 				<Route path='/about' component={About} />

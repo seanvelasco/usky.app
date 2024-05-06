@@ -68,29 +68,26 @@ const ProfileMeta = (props: { profile: Profile | undefined }) => {
 	const [avatar] = createSignal(props.profile?.avatar ?? '/avatar.svg')
 
 	return (
-			<ErrorBoundary fallback={<Title>{title()}</Title>}>
-				<Title>{title()}</Title>
-				<Meta name='og:title' content={title()} />
-				<Meta name='description' content={description()} />
-				<Meta property='og:description' content={description()} />
-				<Meta property='og:url' content={url()} />
-				<Meta property='og:image' content={avatar()} />
-				<Meta
-					property='og:image:type'
-					content={props.profile?.avatar ? 'image/jpeg' : 'image/svg'}
-				/>
-				<Meta property='og:type' content='profile' />
-				<Meta
-					property='profile:username'
-					content={props.profile?.handle}
-				/>
-				<Meta name='twitter:title' content={title()} />
-				<Meta name='twitter:description' content={description()} />
-				<Meta property='twitter:url' content={url()} />
-				<Meta name='twitter:image' content={avatar()} />
-				<Meta name='twitter:card' content='summary' />
-				<Link rel='canonical' href={url()} />
-			</ErrorBoundary>
+		<ErrorBoundary fallback={<Title>{title()}</Title>}>
+			<Title>{title()}</Title>
+			<Meta name='og:title' content={title()} />
+			<Meta name='description' content={description()} />
+			<Meta property='og:description' content={description()} />
+			<Meta property='og:url' content={url()} />
+			<Meta property='og:image' content={avatar()} />
+			<Meta
+				property='og:image:type'
+				content={props.profile?.avatar ? 'image/jpeg' : 'image/svg'}
+			/>
+			<Meta property='og:type' content='profile' />
+			<Meta property='profile:username' content={props.profile?.handle} />
+			<Meta name='twitter:title' content={title()} />
+			<Meta name='twitter:description' content={description()} />
+			<Meta property='twitter:url' content={url()} />
+			<Meta name='twitter:image' content={avatar()} />
+			<Meta name='twitter:card' content='summary' />
+			<Link rel='canonical' href={url()} />
+		</ErrorBoundary>
 	)
 }
 
@@ -137,7 +134,8 @@ const Profile = (props: RouteSectionProps) => {
 								<img
 									src={profile()?.banner}
 									alt={`${
-										profile()?.displayName ?? profile()?.handle
+										profile()?.displayName ??
+										profile()?.handle
 									} banner`}
 									draggable='false'
 								/>
@@ -168,22 +166,26 @@ const Profile = (props: RouteSectionProps) => {
 								</p>
 							</Show>
 							<div class={styles.counters}>
-								<A href={`/profile/${profile()?.handle}/following`}>
-								<span>
-									{profile()?.followsCount.toLocaleString()}
-								</span>{' '}
+								<A
+									href={`/profile/${profile()?.handle}/following`}
+								>
+									<span>
+										{profile()?.followsCount.toLocaleString()}
+									</span>{' '}
 									following
 								</A>
-								<A href={`/profile/${profile()?.handle}/followers`}>
-								<span>
-									{profile()?.followersCount.toLocaleString()}
-								</span>{' '}
+								<A
+									href={`/profile/${profile()?.handle}/followers`}
+								>
+									<span>
+										{profile()?.followersCount.toLocaleString()}
+									</span>{' '}
 									followers
 								</A>
 								<A href={`/profile/${profile()?.handle}`}>
-								<span>
-									{profile()?.postsCount.toLocaleString()}
-								</span>{' '}
+									<span>
+										{profile()?.postsCount.toLocaleString()}
+									</span>{' '}
 									posts
 								</A>
 							</div>
