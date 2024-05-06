@@ -16,14 +16,20 @@ const PostEmbed = (props: PostEmbedType) => {
 			<Match when={props?.author}>
 				<article class={`${commonStyles.embed} ${commonStyles.record}`}>
 					<div class={postStyles.authorembed}>
-						<Avatar
-							size='1.75rem'
-							src={props.author?.avatar ?? '/avatar.svg'}
-							alt={`${
-								props.author?.displayName ??
-								`@${props.author?.handle}`
-							} avatar`}
-						/>
+						<A
+							rel='author'
+							href={`/profile/${props.author?.handle}`}
+							class={postStyles.avatar}
+						>
+							<Avatar
+								size='1.75rem'
+								src={props.author?.avatar ?? '/avatar.svg'}
+								alt={`${
+									props.author?.displayName ??
+									`@${props.author?.handle}`
+								} avatar`}
+							/>
+						</A>
 						<div class={postStyles.header}>
 							<A
 								rel='author'
@@ -47,7 +53,6 @@ const PostEmbed = (props: PostEmbedType) => {
 						<Show when={props?.value?.text}>
 							<p class={postStyles.text}>
 								{props.value.text}
-
 								<RichText
 									text={props.value.text}
 									facets={props.value.facets}
@@ -82,7 +87,7 @@ const PostEmbed = (props: PostEmbedType) => {
 						aria-label='Post embed'
 						class={postStyles.wrapper}
 						href={`/profile/${props.author?.handle}/post/${id(props?.uri)}`}
-					></A>
+					/>
 				</article>
 			</Match>
 			<Match when={props?.uri}>

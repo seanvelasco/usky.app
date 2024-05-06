@@ -1,13 +1,14 @@
-import { For, ErrorBoundary } from 'solid-js'
+import { For, ErrorBoundary, Suspense } from 'solid-js'
 import { createAsync, cache, type RouteSectionProps } from '@solidjs/router'
+import { Link, Meta, Title } from '@solidjs/meta'
+import { getDiscoveryFeed } from '../../../..'
 import getFeedGenerator from '../../../../../api/feed/getFeedGenerator'
 import Avatar from '../../../../../components/Avatar'
-import { getDiscoveryFeed } from '../../../..'
 import Post from '../../../../../components/Post'
-import styles from './styles.module.css'
-import { Link, Meta, Title } from '@solidjs/meta'
 import Spinner from '../../../../../components/Spinner'
 import { LikesIcon } from '../../../../../assets/likes'
+import styles from './styles.module.css'
+import { FeedGenerator } from '../../../../../types'
 
 export const feedGeneratorData = cache(
 	async ({ profile, feed }: { profile: string; feed: string }) =>
@@ -23,6 +24,10 @@ export const feedsData = cache(
 			`at://${profile}/app.bsky.feed.generator/${feed}`
 		),
 	'profile_feed'
+)
+
+const Fallback = (props: { feed: FeedGenerator | undefined }) => (
+	<p>{JSON.stringify(props.feed)}</p>
 )
 
 const Feed = (props: RouteSectionProps) => {
@@ -45,7 +50,7 @@ const Feed = (props: RouteSectionProps) => {
 	const avatar = () => feedGenerator()?.view?.avatar ?? '/feed.svg'
 
 	return (
-		<>
+		<Suspense fallback={<Spinner />}>
 			<ErrorBoundary fallback={<Title>{title()}</Title>}>
 				<Title>{title()}</Title>
 				<Meta name='description' content={description()} />
@@ -83,10 +88,13 @@ const Feed = (props: RouteSectionProps) => {
 					</div>
 				</div>
 			</div>
-			<For each={feeds()?.feed} fallback={<Spinner />}>
+			<For
+				each={feeds()?.feed}
+				fallback={<Fallback feed={feedGenerator()} />}
+			>
 				{(post) => <Post {...post} />}
 			</For>
-		</>
+		</Suspense>
 	)
 }
 

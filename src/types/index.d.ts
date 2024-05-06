@@ -204,6 +204,8 @@ export interface FeedPost {
 	indexedAt: string
 	// viewer: Viewer
 	labels: unknown[]
+	notFound?: boolean
+	blocked?: boolean
 }
 
 export interface ThreadPost {
@@ -212,6 +214,7 @@ export interface ThreadPost {
 	parent?: ThreadParentOrReply
 	replies?: ThreadParentOrReply[]
 	notFound?: boolean
+	boolean?: boolean
 }
 
 export interface Thread {
@@ -225,11 +228,14 @@ export interface Thread {
 }
 
 export interface ThreadParentOrReply {
+	uri: string
+	author: Pick<Actor, 'did'>
 	$type?: 'app.bsky.feed.defs#threadViewPost'
 	post: FeedPost
 	parent?: ThreadParentOrReply
 	replies?: ThreadParentOrReply[]
 	notFound?: boolean
+	blocked?: boolean
 }
 
 export interface Feed {

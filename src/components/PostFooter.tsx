@@ -21,7 +21,7 @@ const PostFooter = (props: {
 				>
 					<RepliesIcon />
 				</button>
-				<Show when={props.replyCount !== 0}>
+				<Show when={!props.replyCount}>
 					{props.replyCount.toLocaleString()}
 				</Show>
 			</div>

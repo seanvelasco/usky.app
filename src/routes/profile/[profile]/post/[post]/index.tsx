@@ -4,14 +4,13 @@ import {
 	Show,
 	createEffect,
 	createSignal,
-	onMount,
 	lazy,
 	Suspense
 } from 'solid-js'
 import { Title, Meta, Link } from '@solidjs/meta'
 import {
+	useLocation,
 	A,
-	// useLocation,
 	createAsync,
 	cache,
 	useParams,
@@ -23,12 +22,56 @@ import PostFooter from '../../../../../components/PostFooter'
 import Embed from '../../../../../components/embeds/Embed'
 import getPostThread from '../../../../../api/feed/getPostThread'
 import resolveHandle from '../../../../../api/identity/resolveHandle'
+import Spinner from '../../../../../components/Spinner'
+const RichText = lazy(() => import('../../../../../components/RichText'))
 import { did, isDID } from '../../../../../utils'
-import Spinner from '../../../../../components/Spinner.tsx'
-const RichText = lazy(() => import('../../../../../components/RichText.tsx'))
 import postStyles from '../../../../../components/Post.module.css'
 import styles from './styles.module.css'
 import type { ThreadParentOrReply, ThreadPost } from '../../../../../types'
+
+const getThread = async ({
+	profile,
+	post
+}: {
+	profile: string
+	post: string
+}) => {
+	const did = isDID(profile) ? profile : await resolveHandle(profile)
+
+	const postThread = await getPostThread(
+		`at://${did}/app.bsky.feed.post/${post}`
+	)
+
+	const actors: ThreadPost['post']['author'][] = []
+
+	const pushAuthors = (thread: ThreadPost | ThreadParentOrReply) => {
+		if (
+			!actors.some((author) => author.did === thread?.post?.author?.did)
+		) {
+			actors.push(thread?.post?.author)
+		}
+
+		if (thread?.parent) {
+			pushAuthors(thread?.parent)
+		}
+	}
+
+	if (postThread.thread) {
+		pushAuthors(postThread.thread)
+		actors.reverse()
+	}
+
+	return {
+		post: postThread,
+		actors
+	}
+}
+
+export const getPostData = cache(
+	async ({ profile, post }: { profile: string; post: string }) =>
+		await getThread({ profile, post }),
+	'post'
+)
 
 const Timestamp = (props: { date: Date }) => {
 	return (
@@ -56,31 +99,29 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 	const [postRef, setPostRef] = createSignal<HTMLElement>()
 	const [repliesRef, setRepliesRef] = createSignal<HTMLElement>()
 
-	const [_, setPostHeight] = createSignal<number>(postRef()?.clientHeight!)
+	const [postHeight, setPostHeight] = createSignal<number>(
+		postRef()?.clientHeight!
+	)
 
-	const [__, setRepliesHeight] = createSignal<number>(
+	const [repliesHeight, setRepliesHeight] = createSignal<number>(
 		repliesRef()?.clientHeight!
 	)
 
-	// const scrollToPost = () => postRef()?.scrollIntoView()
+	const location = useLocation()
 
-	createEffect(() => {
-		postRef() && setPostHeight(postRef()?.clientHeight!)
-		repliesRef() && setRepliesHeight(repliesRef()?.clientHeight!)
-		// console.log(
-		// 	postRef()?.clientHeight,
-		// 	postHeight(),
-		// 	postRef()?.id,
-		// 	postHeight() + repliesHeight() + 61,
-		// 	useLocation().pathname
-		// )
-		postRef()?.scrollIntoView()
-	})
+	createEffect(async () => {
+		console.log('postHeight', postHeight)
+		console.log('repliesHeight', repliesHeight)
 
-	onMount(() => {
-		setPostHeight(postRef()?.clientHeight!)
-		setRepliesHeight(repliesRef()?.clientHeight!)
-		postRef()?.scrollIntoView()
+		if (location.pathname) {
+			postRef() && setPostHeight(postRef()?.clientHeight!)
+			repliesRef() && setRepliesHeight(repliesRef()?.clientHeight!)
+
+			repliesRef()!.style.maxHeight = `100%`
+			repliesRef()!.style.minHeight = `100%`
+
+			postRef()?.scrollIntoView()
+		}
 	})
 
 	const [title] = createSignal(
@@ -93,7 +134,7 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 	)
 
 	return (
-		<Suspense>
+		<>
 			<ErrorBoundary fallback={<Title>{title()}</Title>}>
 				<Title>{title()}</Title>
 				<Meta
@@ -138,25 +179,17 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 
 				<Link rel='canonical' href={url()} />
 			</ErrorBoundary>
-			<ErrorBoundary
-				fallback={(error) => (
-					<div class={styles.error}>
-						<code>
-							Unable to load parent thread: {error?.message}
-						</code>
-					</div>
+
+			<Show when={props.thread.parent}>
+				{(parent) => (
+					<PostExpandedChildPost
+						thread={parent()}
+						hasChild={true}
+						hasParent={false}
+					/>
 				)}
-			>
-				<Show when={props.thread.parent}>
-					{(parent) => (
-						<PostExpandedChildPost
-							{...parent()}
-							hasChild={true}
-							hasParent={false}
-						/>
-					)}
-				</Show>
-			</ErrorBoundary>
+			</Show>
+
 			<ErrorBoundary
 				fallback={(error) => (
 					<div class={styles.error}>
@@ -191,13 +224,19 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 									}}
 								/>
 							</Show>
-							<Avatar
-								src={props.thread.post?.author?.avatar}
-								alt={`${
-									props.thread.post?.author?.displayName ??
-									`@${props.thread.post?.author.handle}`
-								} avatar`}
-							/>
+							<A
+								rel='author'
+								href={`/profile/${props.thread.post?.author?.handle}`}
+							>
+								<Avatar
+									src={props.thread.post?.author?.avatar}
+									alt={`${
+										props.thread.post?.author
+											?.displayName ??
+										`@${props.thread.post?.author.handle}`
+									} avatar`}
+								/>
+							</A>
 						</div>
 						<div class={styles.header}>
 							<A
@@ -254,74 +293,21 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 					/>
 				</article>
 			</ErrorBoundary>
-			<ErrorBoundary
-				fallback={(error) => (
-					<div class={styles.error}>
-						<code>
-							Unable to load child thread: {error?.message}
-						</code>
-					</div>
-				)}
-			>
+
+			<div ref={setRepliesRef}>
 				<Show when={props.thread.replies}>
 					{(replies) => (
-						<div ref={setRepliesRef}>
-							<For each={replies()}>
-								{(reply) => (
-									<PostExpandedChildPost {...reply} />
-								)}
-							</For>
-						</div>
+						<For each={replies()}>
+							{(reply) => (
+								<PostExpandedChildPost thread={reply} />
+							)}
+						</For>
 					)}
 				</Show>
-			</ErrorBoundary>
-		</Suspense>
+			</div>
+		</>
 	)
 }
-
-const getThread = async ({
-	profile,
-	post
-}: {
-	profile: string
-	post: string
-}) => {
-	const did = isDID(profile) ? profile : await resolveHandle(profile)
-
-	const postThread = await getPostThread(
-		`at://${did}/app.bsky.feed.post/${post}`
-	)
-
-	const actors: ThreadPost['post']['author'][] = []
-
-	const pushAuthors = (thread: ThreadPost | ThreadParentOrReply) => {
-		if (
-			!actors.some((author) => author.did === thread?.post?.author?.did)
-		) {
-			actors.push(thread?.post?.author)
-		}
-
-		if (thread?.parent) {
-			pushAuthors(thread?.parent)
-		}
-	}
-
-	if (postThread.thread) {
-		pushAuthors(postThread.thread)
-		actors.reverse()
-	}
-
-	return {
-		post: postThread,
-		actors
-	}
-}
-
-export const getPostData = cache(
-	async ({ profile, post }: { profile: string; post: string }) =>
-		await getThread({ profile, post }),
-	'post'
-)
 
 const PostPage = (props: RouteSectionProps) => {
 	const data = createAsync(() =>
@@ -329,9 +315,14 @@ const PostPage = (props: RouteSectionProps) => {
 	)
 
 	return (
-		<Show when={data()?.post?.thread} fallback={<Spinner />}>
-			{(thread) => <PostExpanded thread={thread()} />}
-		</Show>
+		<Suspense fallback={<Spinner />}>
+			<Show
+				when={data()?.post?.thread}
+				fallback={<p>Post does not exist or may be deleted</p>}
+			>
+				{(thread) => <PostExpanded thread={thread()} />}
+			</Show>
+		</Suspense>
 	)
 }
 

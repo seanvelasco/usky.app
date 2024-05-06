@@ -27,7 +27,7 @@ a {
 .back {
 	all: unset;
 	display: flex;
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .timeline {
