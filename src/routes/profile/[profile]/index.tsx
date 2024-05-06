@@ -68,7 +68,6 @@ const ProfileMeta = (props: { profile: Profile | undefined }) => {
 	const [avatar] = createSignal(props.profile?.avatar ?? '/avatar.svg')
 
 	return (
-		<Show when={title()}>
 			<ErrorBoundary fallback={<Title>{title()}</Title>}>
 				<Title>{title()}</Title>
 				<Meta name='og:title' content={title()} />
@@ -92,7 +91,6 @@ const ProfileMeta = (props: { profile: Profile | undefined }) => {
 				<Meta name='twitter:card' content='summary' />
 				<Link rel='canonical' href={url()} />
 			</ErrorBoundary>
-		</Show>
 	)
 }
 
@@ -130,69 +128,71 @@ const Profile = (props: RouteSectionProps) => {
 
 	return (
 		<Suspense>
-			<ProfileMeta profile={profile()} />
-			<div class={styles.profile}>
-				<div>
-					<div class={styles.banner}>
-						<Show when={profile()?.banner}>
+			<Show when={profile()}>
+				<ProfileMeta profile={profile()} />
+				<div class={styles.profile}>
+					<div>
+						<div class={styles.banner}>
+							<Show when={profile()?.banner}>
+								<img
+									src={profile()?.banner}
+									alt={`${
+										profile()?.displayName ?? profile()?.handle
+									} banner`}
+									draggable='false'
+								/>
+							</Show>
+						</div>
+						<div class={styles.avatar}>
 							<img
-								src={profile()?.banner}
+								src={profile()?.avatar ?? '/avatar.svg'}
 								alt={`${
 									profile()?.displayName ?? profile()?.handle
-								} banner`}
+								} avatar`}
 								draggable='false'
 							/>
-						</Show>
-					</div>
-					<div class={styles.avatar}>
-						<img
-							src={profile()?.avatar ?? '/avatar.svg'}
-							alt={`${
-								profile()?.displayName ?? profile()?.handle
-							} avatar`}
-							draggable='false'
-						/>
-					</div>
-					<div class={styles.buttons}>
-						<button type='button' class={styles.button}>
-							Follow
-						</button>
-					</div>
-					<div class={styles.info}>
-						<p class={styles.name}>
-							{profile()?.displayName ?? profile()?.handle}
-						</p>
-						<p class={styles.handle}>@{profile()?.handle}</p>
-						<Show when={profile()?.description}>
-							<p class={styles.description}>
-								{profile()?.description}
+						</div>
+						<div class={styles.buttons}>
+							<button type='button' class={styles.button}>
+								Follow
+							</button>
+						</div>
+						<div class={styles.info}>
+							<p class={styles.name}>
+								{profile()?.displayName ?? profile()?.handle}
 							</p>
-						</Show>
-						<div class={styles.counters}>
-							<A href={`/profile/${profile()?.handle}/following`}>
+							<p class={styles.handle}>@{profile()?.handle}</p>
+							<Show when={profile()?.description}>
+								<p class={styles.description}>
+									{profile()?.description}
+								</p>
+							</Show>
+							<div class={styles.counters}>
+								<A href={`/profile/${profile()?.handle}/following`}>
 								<span>
 									{profile()?.followsCount.toLocaleString()}
 								</span>{' '}
-								following
-							</A>
-							<A href={`/profile/${profile()?.handle}/followers`}>
+									following
+								</A>
+								<A href={`/profile/${profile()?.handle}/followers`}>
 								<span>
 									{profile()?.followersCount.toLocaleString()}
 								</span>{' '}
-								followers
-							</A>
-							<A href={`/profile/${profile()?.handle}`}>
+									followers
+								</A>
+								<A href={`/profile/${profile()?.handle}`}>
 								<span>
 									{profile()?.postsCount.toLocaleString()}
 								</span>{' '}
-								posts
-							</A>
+									posts
+								</A>
+							</div>
 						</div>
+						<ProfileNav {...routes} />
 					</div>
-					<ProfileNav {...routes} />
 				</div>
-			</div>
-			{props.children}
+				{props.children}
+			</Show>
 		</Suspense>
 	)
 }

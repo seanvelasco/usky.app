@@ -314,6 +314,7 @@ const PostPage = (props: RouteSectionProps) => {
 		getPostData({ profile: props.params.profile, post: props.params.post })
 	)
 
+
 	return (
 		<Suspense fallback={<Spinner />}>
 			<Show
