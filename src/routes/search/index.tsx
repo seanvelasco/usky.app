@@ -26,11 +26,12 @@ const Empty = () => <></>
 
 export const Search = () => {
 	const [searchParams] = useSearchParams()
+
 	const actors = createAsync(() =>
-		actorSearch(decodeURIComponent(searchParams.q as string) || '')
+		actorSearch(decodeURIComponent(searchParams.q || ''))
 	)
 	const posts = createAsync(() =>
-		postSearch(decodeURIComponent(searchParams.q as string) || '')
+		postSearch(decodeURIComponent(searchParams.q || ''))
 	)
 
 	// const routes = [

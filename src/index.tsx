@@ -62,9 +62,10 @@ render(
 					<Route
 						path='/'
 						load={({ location }) => {
-							const query = new URLSearchParams(
-								location.query
-							).get('q') as string
+							const query =
+								new URLSearchParams(location.query).get('q') ??
+								''
+							console.log('query', query)
 							actorSearch(query)
 							postSearch(query)
 						}}
@@ -73,9 +74,8 @@ render(
 						path='/latest'
 						load={({ location }) =>
 							postSearch(
-								new URLSearchParams(location.query).get(
-									'q'
-								) as string
+								new URLSearchParams(location.query).get('q') ??
+									''
 							)
 						}
 					/>
@@ -83,9 +83,8 @@ render(
 						path='/people'
 						load={({ location }) =>
 							actorSearch(
-								new URLSearchParams(location.query).get(
-									'q'
-								) as string
+								new URLSearchParams(location.query).get('q') ??
+									''
 							)
 						}
 					/>
