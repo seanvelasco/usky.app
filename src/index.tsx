@@ -34,6 +34,7 @@ import Feed, { feedGeneratorData } from './routes/profile/[profile]/feed/[feed]'
 // LIST
 import List, { getListData } from './routes/profile/[profile]/lists/[list]'
 // to-do: loaders should be in a separate file
+import { Top, People, Latest, Media as MediaSearch } from './routes/search'
 
 render(
 	() => (
@@ -61,26 +62,29 @@ render(
 				<Route path='/search' component={SearchPage}>
 					<Route
 						path='/'
+						component={Top}
 						load={({ location }) => {
 							const query =
 								new URLSearchParams(location.query).get('q') ??
 								''
-							console.log('query', query)
 							actorSearch(query)
-							postSearch(query)
+							postSearch(query, 'top')
 						}}
 					/>
 					<Route
 						path='/latest'
+						component={Latest}
 						load={({ location }) =>
 							postSearch(
 								new URLSearchParams(location.query).get('q') ??
-									''
+									'',
+								'latest'
 							)
 						}
 					/>
 					<Route
 						path='/people'
+						component={People}
 						load={({ location }) =>
 							actorSearch(
 								new URLSearchParams(location.query).get('q') ??
@@ -88,11 +92,25 @@ render(
 							)
 						}
 					/>
+					<Route
+						path='/media'
+						component={MediaSearch}
+						load={({ location }) =>
+							postSearch(
+								new URLSearchParams(location.query).get('q') ??
+									'',
+								'top'
+							)
+						}
+					/>
 				</Route>
+
 				<Route
 					path='/hashtag/:hashtag'
 					component={HashtagPage}
-					load={({ params }) => postSearch(`#${params.hashtag}`)}
+					load={({ params }) =>
+						postSearch(`#${params.hashtag}`, 'top')
+					}
 				/>
 				<Route path='/feeds' component={PopularFeeds} />
 				<Route path='/about' component={About} />

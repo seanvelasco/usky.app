@@ -139,7 +139,7 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 				<Title>{title()}</Title>
 				<Meta
 					name='description'
-					content={props.thread.post?.record?.text}
+					content={props.thread?.post?.record?.text}
 				/>
 
 				<Meta property='og:title' content={title()} />

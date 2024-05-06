@@ -3,6 +3,7 @@
 	flex-direction: row;
 	padding: 0 1.5rem;
 	justify-content: space-between;
+	border-bottom: 1px solid var(--border);
 }
 .nav a {
 	width: 100%;
@@ -10,4 +11,21 @@
 	text-align: center;
 	position: relative;
 	color: var(--text-secondary);
+}
+
+.people {
+	border-bottom: 1px solid var(--border);
+}
+
+.expand {
+	display: flex;
+	padding: 1rem 1.5rem;
+	width: 100%;
+	/*color: var(--link-primary);*/
+	color: var(--text-secondary);
+}
+
+.expand:hover {
+	background-color: var(--background-primary-hover);
+	color: var(--text-primary);
 }
