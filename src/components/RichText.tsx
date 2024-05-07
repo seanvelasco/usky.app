@@ -1,7 +1,6 @@
 import { RichText } from '@atproto/api'
 import type { Facet } from '../types'
 import { createAsync } from '@solidjs/router'
-import { useAgent } from '../states/agent'
 
 // todo: implement own rich text parser
 // old bundle size before using @atproto/api : 110.34 kB │ gzip: 156.46 kB
@@ -21,8 +20,7 @@ const RichTextComponent = (props: {
 	})
 
 	if (!props.facets) {
-		const agent = useAgent()
-		createAsync(async () => rt.detectFacets(agent))
+		createAsync(async () => rt.detectFacetsWithoutResolution())
 	}
 
 	for (const segment of rt.segments()) {
