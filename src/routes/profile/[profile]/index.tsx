@@ -162,12 +162,7 @@ const Profile = (props: RouteSectionProps) => {
 							<Show when={profile()?.description}>
 								{(description) => (
 									<p class={styles.description}>
-										<RichText
-											text={description()}
-											facets={undefined}
-										/>
-										{/*{JSON.stringify(profile(), null, 2)}*/}
-										{/*{description()}*/}
+										<RichText text={description()} />
 									</p>
 								)}
 							</Show>

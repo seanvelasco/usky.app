@@ -135,7 +135,13 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 
 	return (
 		<>
-			<ErrorBoundary fallback={<Title>{title()}</Title>}>
+			<ErrorBoundary
+				fallback={
+					<Title>{`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
+						props.thread?.post?.author?.handle
+					}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`}</Title>
+				}
+			>
 				<Title>{title()}</Title>
 				<Meta
 					name='description'
@@ -260,8 +266,9 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 						<Show when={props.thread.post?.record?.text}>
 							{(text) => (
 								<p class={styles.text}>
+									{text()}
 									<RichText
-										text={text()}
+										text={props.thread.post?.record?.text}
 										facets={
 											props?.thread?.post?.record?.facets
 										}
