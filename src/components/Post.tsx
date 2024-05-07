@@ -11,6 +11,7 @@ import {
 import type { FeedPost, Thread, ThreadParentOrReply } from '../types'
 import { did, id } from '../utils'
 import Avatar from './Avatar'
+import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
 import TimeAgo from './TimeAgo'
 import Embed from './embeds/Embed'
@@ -243,9 +244,13 @@ export const Post = (
 				style={{
 					'border-bottom': props.hasChild
 						? 'none'
-						: '1px solid var(--border)'
+						: '1px solid var(--border)',
+					...(props.reason && { 'padding-top': '1.25rem' })
 				}}
 			>
+				<Show when={props.reason?.by}>
+					{(actor) => <PostHeader actor={actor()} />}
+				</Show>
 				<div class={styles.inner}>
 					<div class={styles.left}>
 						<Show

@@ -1,11 +1,10 @@
 import { For, Show } from 'solid-js'
+import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import { getPostsData } from '..'
 import Post from '../../../../components/Post'
-import { createAsync, type RouteSectionProps } from '@solidjs/router'
 
 export const Replies = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getPostsData(props.params.profile))
-
 	return (
 		<For each={posts()?.feed}>
 			{(post) => (

@@ -3,6 +3,7 @@ import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
 import { createSignal, ErrorBoundary, For, Show, Suspense } from 'solid-js'
 
 import Post from '../../../components/Post'
+import Spinner from '../../../components/Spinner'
 
 import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
@@ -193,7 +194,7 @@ const Profile = (props: RouteSectionProps) => {
 						<ProfileNav {...routes} />
 					</div>
 				</div>
-				{props.children}
+				<Suspense fallback={<Spinner />}>{props.children}</Suspense>
 			</Show>
 		</Suspense>
 	)
