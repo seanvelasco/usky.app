@@ -2,6 +2,7 @@ import { MetaProvider } from '@solidjs/meta'
 import { Router, Route } from '@solidjs/router'
 import { render } from 'solid-js/web'
 /* @refresh reload */
+import { AgentProvider } from './states/agent'
 import App from './App'
 import { lazy } from 'solid-js'
 // HOME
@@ -38,156 +39,164 @@ import { Top, People, Latest, Media as MediaSearch } from './routes/search'
 
 render(
 	() => (
-		<MetaProvider>
-			<Router root={App}>
-				<Route component={Discover}>
-					<Route
-						path='/'
-						load={() =>
-							getDiscoveryFeed(
-								'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'
-							)
-						}
-					/>
-					<Route
-						path='/hot'
-						load={() =>
-							getDiscoveryFeed(
-								'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
-							)
-						}
-					/>
-				</Route>
-				<Route path='/live' component={Firehose} />
-				<Route path='/search' component={SearchPage}>
-					<Route
-						path='/'
-						component={Top}
-						load={({ location }) => {
-							const query =
-								new URLSearchParams(location.query).get('q') ??
-								''
-							actorSearch(query)
-							postSearch(query, 'top')
-						}}
-					/>
-					<Route
-						path='/latest'
-						component={Latest}
-						load={({ location }) =>
-							postSearch(
-								new URLSearchParams(location.query).get('q') ??
-									'',
-								'latest'
-							)
-						}
-					/>
-					<Route
-						path='/people'
-						component={People}
-						load={({ location }) =>
-							actorSearch(
-								new URLSearchParams(location.query).get('q') ??
-									''
-							)
-						}
-					/>
-					<Route
-						path='/media'
-						component={MediaSearch}
-						load={({ location }) =>
-							postSearch(
-								new URLSearchParams(location.query).get('q') ??
-									'',
-								'top'
-							)
-						}
-					/>
-				</Route>
+		<AgentProvider>
+			<MetaProvider>
+				<Router root={App}>
+					<Route component={Discover}>
+						<Route
+							path='/'
+							load={() =>
+								getDiscoveryFeed(
+									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'
+								)
+							}
+						/>
+						<Route
+							path='/hot'
+							load={() =>
+								getDiscoveryFeed(
+									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
+								)
+							}
+						/>
+					</Route>
+					<Route path='/live' component={Firehose} />
+					<Route path='/search' component={SearchPage}>
+						<Route
+							path='/'
+							component={Top}
+							load={({ location }) => {
+								const query =
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? ''
+								actorSearch(query)
+								postSearch(query, 'top')
+							}}
+						/>
+						<Route
+							path='/latest'
+							component={Latest}
+							load={({ location }) =>
+								postSearch(
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? '',
+									'latest'
+								)
+							}
+						/>
+						<Route
+							path='/people'
+							component={People}
+							load={({ location }) =>
+								actorSearch(
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? ''
+								)
+							}
+						/>
+						<Route
+							path='/media'
+							component={MediaSearch}
+							load={({ location }) =>
+								postSearch(
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? '',
+									'top'
+								)
+							}
+						/>
+					</Route>
 
-				<Route
-					path='/hashtag/:hashtag'
-					component={HashtagPage}
-					load={({ params }) =>
-						postSearch(`#${params.hashtag}`, 'top')
-					}
-				/>
-				<Route path='/feeds' component={PopularFeeds} />
-				<Route path='/about' component={About} />
-				<Route
-					path='/profile/:profile'
-					component={Profile}
-					load={({ params }) => getProfileData(params.profile)}
-				>
-					<Route load={({ params }) => getPostsData(params.profile)}>
-						<Route path='/' component={Posts} />
-						<Route path='/replies' component={Replies} />
-						<Route path='/media' component={Media} />
-					</Route>
 					<Route
-						path='/likes'
-						component={Likes}
-						load={({ params }) => getLikesData(params.profile)}
+						path='/hashtag/:hashtag'
+						component={HashtagPage}
+						load={({ params }) =>
+							postSearch(`#${params.hashtag}`, 'top')
+						}
 					/>
+					<Route path='/feeds' component={PopularFeeds} />
+					<Route path='/about' component={About} />
 					<Route
-						path='/feed'
-						component={UserFeeds}
-						load={({ params }) => getFeedsData(params.profile)}
-					/>
-					<Route
-						path='/lists'
-						component={Lists}
-						load={({ params }) => getListsData(params.profile)}
-					/>
-					<Route>
+						path='/profile/:profile'
+						component={Profile}
+						load={({ params }) => getProfileData(params.profile)}
+					>
 						<Route
-							component={Followers}
-							path='/followers'
-							load={({ params }) =>
-								getFollowersData(params.profile)
-							}
+							load={({ params }) => getPostsData(params.profile)}
+						>
+							<Route path='/' component={Posts} />
+							<Route path='/replies' component={Replies} />
+							<Route path='/media' component={Media} />
+						</Route>
+						<Route
+							path='/likes'
+							component={Likes}
+							load={({ params }) => getLikesData(params.profile)}
 						/>
 						<Route
-							component={Following}
-							path='/following'
-							load={({ params }) =>
-								getFollowsData(params.profile)
-							}
+							path='/feed'
+							component={UserFeeds}
+							load={({ params }) => getFeedsData(params.profile)}
 						/>
+						<Route
+							path='/lists'
+							component={Lists}
+							load={({ params }) => getListsData(params.profile)}
+						/>
+						<Route>
+							<Route
+								component={Followers}
+								path='/followers'
+								load={({ params }) =>
+									getFollowersData(params.profile)
+								}
+							/>
+							<Route
+								component={Following}
+								path='/following'
+								load={({ params }) =>
+									getFollowsData(params.profile)
+								}
+							/>
+						</Route>
 					</Route>
-				</Route>
-				<Route
-					path='/profile/:profile/post/:post'
-					component={Post}
-					load={({ params }) =>
-						getPostData({
-							profile: params.profile,
-							post: params.post
-						})
-					}
-				/>
-				<Route
-					path='/profile/:profile/feed/:feed'
-					component={Feed}
-					load={({ params }) =>
-						feedGeneratorData({
-							profile: params.profile,
-							feed: params.feed
-						})
-					}
-				/>
-				<Route
-					path='/profile/:profile/lists/:list'
-					component={List}
-					load={({ params }) =>
-						getListData({
-							profile: params.profile,
-							list: params.list
-						})
-					}
-				/>
-			</Router>
-		</MetaProvider>
+					<Route
+						path='/profile/:profile/post/:post'
+						component={Post}
+						load={({ params }) =>
+							getPostData({
+								profile: params.profile,
+								post: params.post
+							})
+						}
+					/>
+					<Route
+						path='/profile/:profile/feed/:feed'
+						component={Feed}
+						load={({ params }) =>
+							feedGeneratorData({
+								profile: params.profile,
+								feed: params.feed
+							})
+						}
+					/>
+					<Route
+						path='/profile/:profile/lists/:list'
+						component={List}
+						load={({ params }) =>
+							getListData({
+								profile: params.profile,
+								list: params.list
+							})
+						}
+					/>
+				</Router>
+			</MetaProvider>
+		</AgentProvider>
 	),
 	document.getElementById('root')!
 )
