@@ -266,9 +266,8 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 						<Show when={props.thread.post?.record?.text}>
 							{(text) => (
 								<p class={styles.text}>
-									{text()}
 									<RichText
-										text={props.thread.post?.record?.text}
+										text={text()}
 										facets={
 											props?.thread?.post?.record?.facets
 										}
