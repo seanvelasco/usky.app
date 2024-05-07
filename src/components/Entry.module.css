@@ -35,8 +35,19 @@
 	word-break: break-word;
 	white-space: pre-wrap;
 	color: var(--text-primary);
-    padding-top: 0.5rem;
+	padding-top: 0.5rem;
+	z-index: 1;
+	position: relative;
 }
+
+.description a {
+	color: var(--link-primary);
+}
+
+.description a:hover {
+	text-decoration: underline;
+}
+
 @media (hover: hover) and (pointer: fine) {
 	.name:hover,
 	.handle:hover {

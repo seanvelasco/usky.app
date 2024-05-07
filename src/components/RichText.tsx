@@ -35,7 +35,7 @@ const RichTextComponent = (props: {
 		}
 	}
 
-	return <p style={{ display: 'contents' }} innerHTML={text} />
+	return <span style={{ display: 'contents' }} innerHTML={text} />
 }
 
 export default RichTextComponent

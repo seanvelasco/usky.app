@@ -80,11 +80,11 @@
 }
 
 .description a {
-    color: var(--link-primary);
+	color: var(--link-primary);
 }
 
 .description a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 .info {
@@ -174,4 +174,3 @@
 		padding: 0.75rem 0;
 	}
 }
-
