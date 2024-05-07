@@ -3,17 +3,19 @@ import {
 	createAsync,
 	cache,
 	useSearchParams,
-	type RouteSectionProps,
 	A,
-	useLocation
+	useLocation,
+	type RouteSectionProps
 } from '@solidjs/router'
+import { Link, Meta, Title } from '@solidjs/meta'
+
 import searchActors from '../../api/actor/searchActors'
 import searchPosts from '../../api/feed/searchPosts'
 import Entry from '../../components/Entry'
 import Post from '../../components/Post'
-import { Link, Meta, Title } from '@solidjs/meta'
+import MediaCarousel from '../../components/MediaCarousel'
+import Spinner from '../../components/Spinner'
 import styles from './styles.module.css'
-import carouselStyles from '../../components/MediaCarousel.module.css'
 
 export const actorSearch = cache(
 	async (query: string, limit: number = 3) =>
@@ -37,34 +39,14 @@ export const Media = () => {
 	)
 
 	return (
-		<Suspense>
-			<div class={carouselStyles.carousel}>
-				<For each={posts()?.posts}>
-					{(post) => (
-						<Show
-							when={
-								post?.embed?.$type ===
-									'app.bsky.embed.images#view' &&
-								post?.embed?.images
-							}
-						>
-							{(images) => (
-								<For each={images()}>
-									{(image) => (
-										<img
-											src={image?.thumb}
-											alt={image.alt}
-										/>
-									)}
-								</For>
-							)}
-						</Show>
-					)}
-				</For>
-			</div>
+		<Suspense fallback={<Spinner />}>
+			<MediaCarousel posts={posts()?.posts} />
 		</Suspense>
 	)
 }
+
+// per-page suspense works
+// but a parent page with props.children wrapped in suspense doesnt work
 
 export const Top = () => {
 	const [searchParams] = useSearchParams()
@@ -79,7 +61,7 @@ export const Top = () => {
 	)
 
 	return (
-		<Suspense>
+		<Suspense fallback={<Spinner />}>
 			<Show when={actors()?.actors.length !== 0 && actors()?.actors}>
 				{(actors) => (
 					<div class={styles.people}>
@@ -119,7 +101,7 @@ export const Latest = () => {
 	)
 
 	return (
-		<Suspense>
+		<Suspense fallback={<Spinner />}>
 			<For each={posts()?.posts}>{(post) => <Post post={post} />}</For>
 		</Suspense>
 	)
@@ -131,17 +113,19 @@ export const People = () => {
 		actorSearch(decodeURIComponent(searchParams.q || ''), 100)
 	)
 	return (
-		<For each={actors()?.actors} fallback={<Empty />}>
-			{(actor) => (
-				<Entry
-					displayName={actor?.displayName ?? actor.handle}
-					handle={actor?.handle}
-					description={actor?.description}
-					avatar={actor.avatar ?? '/avatar.svg'}
-					href={`/profile/${actor.handle}`}
-				/>
-			)}
-		</For>
+		<Suspense fallback={<Spinner />}>
+			<For each={actors()?.actors} fallback={<Empty />}>
+				{(actor) => (
+					<Entry
+						displayName={actor?.displayName ?? actor.handle}
+						handle={actor?.handle}
+						description={actor?.description}
+						avatar={actor.avatar ?? '/avatar.svg'}
+						href={`/profile/${actor.handle}`}
+					/>
+				)}
+			</For>
+		</Suspense>
 	)
 }
 
@@ -222,7 +206,11 @@ export const HashtagPage = (props: RouteSectionProps) => {
 				<Meta property='twitter:url' content={url()} />
 				<Link rel='canonical' href={url()} />
 			</ErrorBoundary>
-			<For each={posts()?.posts}>{(post) => <Post post={post} />}</For>
+			<Suspense fallback={<Spinner />}>
+				<For each={posts()?.posts}>
+					{(post) => <Post post={post} />}
+				</For>
+			</Suspense>
 		</>
 	)
 }

@@ -1,0 +1,23 @@
+.repost {
+	display: flex;
+	vertical-align: middle;
+	align-items: center;
+	color: var(--text-secondary);
+	gap: 0.5rem;
+	margin-left: 2.5rem;
+	padding-bottom: 0.75rem;
+}
+
+.icon {
+	width: 1rem;
+	height: 1rem;
+}
+
+.actor {
+	position: relative;
+	z-index: 1;
+	color: inherit;
+}
+.actor:hover {
+	text-decoration: underline;
+}
