@@ -1,6 +1,7 @@
 import { A } from '@solidjs/router'
 import { Show } from 'solid-js'
 import Avatar from './Avatar'
+import RichText from './RichText'
 import styles from './Entry.module.css'
 
 const Entry = (props: {
@@ -30,7 +31,11 @@ const Entry = (props: {
 					</A>{' '}
 				</Show>
 				<Show when={props.description}>
-					<p class={styles.description}>{props.description}</p>
+					{(description) => (
+						<p class={styles.description}>
+							<RichText text={description()} />
+						</p>
+					)}
 				</Show>
 			</div>
 			<A

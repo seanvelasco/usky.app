@@ -1,13 +1,11 @@
-import { Link, Meta, Title } from '@solidjs/meta'
-import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
 import { createSignal, ErrorBoundary, For, Show, Suspense } from 'solid-js'
-
+import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
+import { Link, Meta, Title } from '@solidjs/meta'
 import Post from '../../../components/Post'
 import Spinner from '../../../components/Spinner'
-
 import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
-
+import RichText from '../../../components/RichText'
 import styles from './styles.module.css'
 import type { Profile } from '../../../types'
 
@@ -162,9 +160,11 @@ const Profile = (props: RouteSectionProps) => {
 							</p>
 							<p class={styles.handle}>@{profile()?.handle}</p>
 							<Show when={profile()?.description}>
-								<p class={styles.description}>
-									{profile()?.description}
-								</p>
+								{(description) => (
+									<p class={styles.description}>
+										<RichText text={description()} />
+									</p>
+								)}
 							</Show>
 							<div class={styles.counters}>
 								<A
