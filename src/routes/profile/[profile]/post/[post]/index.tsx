@@ -155,11 +155,20 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 					content={props.thread?.post?.record?.createdAt}
 				/>
 				<Meta
+					property='og:locale'
+					content={props.thread?.post?.record?.langs?.[0]}
+				/>
+				<Meta
 					property='article:author'
 					content={
 						props.thread?.post?.author?.displayName ||
 						props.thread?.post?.author?.handle
 					}
+				/>
+
+				<Meta
+					property='article:tag'
+					content={props.thread?.post?.record?.langs.join(', ')}
 				/>
 				<Meta name='twitter:title' content={title()} />
 				<Meta name='twitter:description' content={description()} />

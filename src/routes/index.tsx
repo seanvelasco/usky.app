@@ -1,6 +1,6 @@
 import { ErrorBoundary, For } from 'solid-js'
 import { cache, createAsync, RouteSectionProps } from '@solidjs/router'
-import { Meta, Title } from '@solidjs/meta'
+import { Meta, Title, Link } from '@solidjs/meta'
 import getFeed from '../api/feed/getFeed'
 import FeedPost from '../components/Post'
 import Spinner from '../components/Spinner'
@@ -19,7 +19,6 @@ const Discover = (props: RouteSectionProps) => {
 	const feed = createAsync(() =>
 		getDiscoveryFeed(feeds[props.location.pathname])
 	)
-
 	return (
 		<>
 			<ErrorBoundary fallback={<Title>Bluesky (usky.app)</Title>}>
@@ -33,6 +32,7 @@ const Discover = (props: RouteSectionProps) => {
 					property='og:description'
 					content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
 				/>
+				<Meta property='og:url' content='https://usky.app' />
 				<Meta name='twitter:title' content='Bluesky (usky.app)' />
 				<Meta
 					name='twitter:description'
@@ -40,6 +40,9 @@ const Discover = (props: RouteSectionProps) => {
 						"Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
 					}
 				/>
+				<Meta property='twitter:url' content='https://usky.app' />
+
+				<Link rel='canonical' href='https://usky.app' />
 			</ErrorBoundary>
 			<For each={feed()?.feed} fallback={<Spinner />}>
 				{(post) => <FeedPost {...post} />}
