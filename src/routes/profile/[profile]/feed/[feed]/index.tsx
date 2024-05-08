@@ -27,7 +27,10 @@ export const feedsData = cache(
 )
 
 const Fallback = (props: { feed: FeedGenerator | undefined }) => (
-	<p>{JSON.stringify(props.feed)}</p>
+	<>
+		<p>{props.feed?.isOnline}</p>
+		<p>{props.feed?.isValid}</p>`
+	</>
 )
 
 const Feed = (props: RouteSectionProps) => {

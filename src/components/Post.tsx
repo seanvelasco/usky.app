@@ -158,7 +158,6 @@ export const PostExpandedChildPost = (props: {
 									)}
 								</Show>
 							</div>
-							\
 							<PostFooter
 								styles={{
 									'margin-top': '1rem'

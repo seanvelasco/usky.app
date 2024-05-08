@@ -124,41 +124,30 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 		}
 	})
 
+	const title = () =>
+		`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
+			props.thread?.post?.author?.handle
+		}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`
+
+	const description = () => props.thread?.post?.record?.text
+
+	const url = () =>
+		`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`
+
+	const image = () =>
+		props.thread?.post?.embed?.$type === 'app.bsky.embed.images#view'
+			? props.thread?.post?.embed.images[0].thumb
+			: props.thread?.post?.author?.avatar
+
 	return (
 		<>
-			<ErrorBoundary
-				fallback={
-					<Title>{`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
-						props.thread?.post?.author?.handle
-					}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`}</Title>
-				}
-			>
-				<Title>{`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
-					props.thread?.post?.author?.handle
-				}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`}</Title>
-				<Meta
-					name='description'
-					content={props.thread?.post?.record?.text}
-				/>
-
-				<Meta
-					property='og:title'
-					content={`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
-						props.thread?.post?.author?.handle
-					}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`}
-				/>
-				<Meta
-					property='og:description'
-					content={props.thread?.post?.record?.text}
-				/>
-				<Meta
-					property='og:url'
-					content={`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`}
-				/>
-				<Meta
-					property='og:image'
-					content={props.thread?.post?.author?.avatar}
-				/>
+			<ErrorBoundary fallback={<Title>{title()}</Title>}>
+				<Title>{title()}</Title>
+				<Meta name='description' content={description()} />
+				<Meta property='og:title' content={title()} />
+				<Meta property='og:description' content={description()} />
+				<Meta property='og:url' content={url()} />
+				<Meta property='og:image' content={image()} />
 				<Meta property='og:image:type' content='image/jpeg' />
 				<Meta property='og:type' content='article' />
 				<Meta
@@ -168,34 +157,16 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 				<Meta
 					property='article:author'
 					content={
-						props.thread?.post?.author?.displayName ??
+						props.thread?.post?.author?.displayName ||
 						props.thread?.post?.author?.handle
 					}
 				/>
-				<Meta
-					name='twitter:title'
-					content={`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
-						props.thread?.post?.author?.handle
-					}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`}
-				/>
-				<Meta
-					name='twitter:description'
-					content={props.thread?.post?.record?.text}
-				/>
-				<Meta
-					property='twitter:url'
-					content={`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`}
-				/>
-				<Meta
-					name='twitter:image'
-					content={props.thread?.post?.author?.avatar}
-				/>
+				<Meta name='twitter:title' content={title()} />
+				<Meta name='twitter:description' content={description()} />
+				<Meta property='twitter:url' content={url()} />
+				<Meta name='twitter:image' content={image()} />
 				<Meta name='twitter:card' content='summary' />
-
-				<Link
-					rel='canonical'
-					href={`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`}
-				/>
+				<Link rel='canonical' href={url()} />
 			</ErrorBoundary>
 
 			<Show when={props.thread.parent}>
@@ -207,7 +178,6 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 					/>
 				)}
 			</Show>
-
 			<ErrorBoundary
 				fallback={(error) => (
 					<div class={styles.error}>

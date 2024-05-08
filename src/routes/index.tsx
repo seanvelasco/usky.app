@@ -10,28 +10,6 @@ export const getDiscoveryFeed = cache(
 	'home'
 )
 
-const HomeMeta = () => (
-	<ErrorBoundary fallback={<Title>Bluesky (usky.app)</Title>}>
-		<Title>Bluesky (usky.app)</Title>
-		<Meta
-			name='description'
-			content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
-		/>
-		<Meta property='og:title' content='Bluesky (usky.app)' />
-		<Meta
-			property='og:description'
-			content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
-		/>
-		<Meta name='twitter:title' content='Bluesky (usky.app)' />
-		<Meta
-			name='twitter:description'
-			content={
-				"Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
-			}
-		/>
-	</ErrorBoundary>
-)
-
 const Discover = (props: RouteSectionProps) => {
 	const feeds: Record<string, string> = {
 		'/': 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
@@ -44,7 +22,25 @@ const Discover = (props: RouteSectionProps) => {
 
 	return (
 		<>
-			<HomeMeta />
+			<ErrorBoundary fallback={<Title>Bluesky (usky.app)</Title>}>
+				<Title>Bluesky (usky.app)</Title>
+				<Meta
+					name='description'
+					content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+				/>
+				<Meta property='og:title' content='Bluesky (usky.app)' />
+				<Meta
+					property='og:description'
+					content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+				/>
+				<Meta name='twitter:title' content='Bluesky (usky.app)' />
+				<Meta
+					name='twitter:description'
+					content={
+						"Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+					}
+				/>
+			</ErrorBoundary>
 			<For each={feed()?.feed} fallback={<Spinner />}>
 				{(post) => <FeedPost {...post} />}
 			</For>

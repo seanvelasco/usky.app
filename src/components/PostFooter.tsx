@@ -1,3 +1,4 @@
+import { For } from 'solid-js'
 import { Show } from 'solid-js/web'
 import { LikesIcon } from '../assets/likes'
 import { RepliesIcon } from '../assets/replies'
@@ -12,41 +13,41 @@ const PostFooter = (props: {
 	likeCount: number
 	styles?: JSX.CSSProperties
 }) => {
+	const stats = [
+		{
+			label: 'replies',
+			count: props.replyCount,
+			icon: <RepliesIcon />
+		},
+		{
+			label: 'repost',
+			count: props.repostCount,
+			icon: <RepostsIcon />
+		},
+		{
+			label: 'likes',
+			count: props.likeCount,
+			icon: <LikesIcon />
+		}
+	]
+
 	return (
 		<div class={styles.footer} style={props.styles}>
-			<div class={styles.wrapper}>
-				<Show when={props.replyCount && props.replyCount !== 0}>
-					<button
-						class={styles.button}
-						aria-label={`${props.replyCount?.toLocaleString()} replies`}
-					>
-						<RepliesIcon />
-					</button>
-					{props.replyCount.toLocaleString()}
-				</Show>
-			</div>
-			<div class={styles.wrapper}>
-				<Show when={props.repostCount && props.repostCount !== 0}>
-					<button
-						class={styles.button}
-						aria-label={`${props.repostCount.toLocaleString()} reposts`}
-					>
-						<RepostsIcon />
-					</button>
-					{props.repostCount.toLocaleString()}
-				</Show>
-			</div>
-			<div class={styles.wrapper}>
-				<Show when={props.likeCount && props.likeCount !== 0}>
-					<button
-						class={styles.button}
-						aria-label={`${props.likeCount.toLocaleString()} likes`}
-					>
-						<LikesIcon />
-					</button>
-					{props.likeCount.toLocaleString()}
-				</Show>
-			</div>
+			<For each={stats}>
+				{(stat) => (
+					<div class={styles.wrapper}>
+						<button
+							class={styles.button}
+							aria-label={`${stat.count.toLocaleString()} ${stat.label}`}
+						>
+							{stat.icon}
+						</button>
+						<Show when={props.replyCount && props.replyCount !== 0}>
+							{stat.count.toLocaleString()}
+						</Show>
+					</div>
+				)}
+			</For>
 		</div>
 	)
 }
