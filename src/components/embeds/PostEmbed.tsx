@@ -52,7 +52,6 @@ const PostEmbed = (props: PostEmbedType) => {
 					<div class={postStyles.content}>
 						<Show when={props?.value?.text}>
 							<p class={postStyles.text}>
-								{props.value.text}
 								<RichText
 									text={props.value.text}
 									facets={props.value.facets}
