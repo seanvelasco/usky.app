@@ -2,12 +2,17 @@ import { createSignal, ErrorBoundary, For, Show, Suspense } from 'solid-js'
 import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
 import Post from '../../../components/Post'
-import Spinner from '../../../components/Spinner'
 import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
 import RichText from '../../../components/RichText'
 import styles from './styles.module.css'
 import type { Profile } from '../../../types'
+
+export const Fallback = (props: { text?: string }) => (
+	<div class={styles.fallback}>
+		<p>{props?.text ?? 'No posts yet'}</p>
+	</div>
+)
 
 export const getProfileData = cache(
 	async (profile: string) => await getProfile(profile),
@@ -23,13 +28,15 @@ export const Posts = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getPostsData(props.params.profile))
 
 	return (
-		<For each={posts()?.feed}>
-			{(post) => (
-				<Show when={!post?.reply}>
-					<Post {...post} />
-				</Show>
-			)}
-		</For>
+		<ErrorBoundary fallback={<Fallback text="Unable to display posts" />}>
+			<For each={posts()?.feed} fallback={<Fallback />} >
+				{(post) => (
+					<Show when={!post?.reply}>
+						<Post {...post} />
+					</Show>
+				)}
+			</For>
+		</ErrorBoundary>
 	)
 }
 
@@ -194,7 +201,7 @@ const Profile = (props: RouteSectionProps) => {
 						<ProfileNav {...routes} />
 					</div>
 				</div>
-				<Suspense fallback={<Spinner />}>{props.children}</Suspense>
+				{props.children}
 			</Show>
 		</Suspense>
 	)

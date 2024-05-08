@@ -2,7 +2,6 @@ import { A } from '@solidjs/router'
 import {
 	For,
 	Show,
-	Suspense,
 	lazy,
 	ErrorBoundary,
 	Switch,
@@ -203,7 +202,7 @@ export const Post = (
 	props: { hasChild?: boolean; hasParent?: boolean } & Thread
 ) => {
 	return (
-		<Suspense>
+		<ErrorBoundary fallback={<FallbackPost post={props.post} />}>
 			<Show
 				when={
 					props?.reply?.parent?.cid === props?.reply?.root?.cid &&
@@ -353,7 +352,7 @@ export const Post = (
 					)}`}
 				/>
 			</article>
-		</Suspense>
+		</ErrorBoundary>
 	)
 }
 

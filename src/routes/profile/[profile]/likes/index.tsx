@@ -1,9 +1,10 @@
 import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
-import { For, Suspense } from 'solid-js'
+import { ErrorBoundary, For, Suspense } from 'solid-js'
 import getPosts from '../../../../api/getPostsOld'
 import listRecords from '../../../../api/repo/listRecords'
 import Post from '../../../../components/Post'
 import Spinner from '../../../../components/Spinner'
+import { Fallback } from '..'
 import type { FeedPost } from '../../../../types'
 
 const getLikes = async (profile: string): Promise<{ posts: FeedPost[] }> => {
@@ -29,9 +30,13 @@ export const Likes = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getLikesData(props.params.profile))
 
 	return (
-		<Suspense fallback={<Spinner />}>
-			<For each={posts()?.posts}>{(post) => <Post post={post} />}</For>
-		</Suspense>
+		<ErrorBoundary fallback={<Fallback text="Unable to display likes" />}>
+			<Suspense fallback={<Spinner />}>
+				<For each={posts()?.posts} fallback={<Fallback text="No likes yet" />}>
+					{(post) => <Post post={post} />}
+				</For>
+			</Suspense>
+		</ErrorBoundary>
 	)
 }
 
