@@ -1,5 +1,5 @@
 import { A } from '@solidjs/router'
-import { For } from 'solid-js'
+import { ErrorBoundary, For } from 'solid-js'
 import type { Feed, Profile } from '../types'
 import { id } from '../utils'
 import Avatar from './Avatar'
@@ -52,18 +52,21 @@ export const ActorsSection = (props: {
 	actors: Pick<Profile, 'displayName' | 'handle' | 'avatar' | 'banner'>[]
 }) => {
 	return (
-		<section class={styles.section}>
-			<p class={styles.title}>{props.title}</p>
-			<For each={props.actors}>
-				{(actor) => (
-					<SectionItem
-						href={`/profile/${actor.handle}`}
-						avatar={actor.avatar ?? '/avatar.svg'}
-						name={actor?.displayName ?? actor.handle}
-					/>
-				)}
-			</For>
-		</section>
+		<ErrorBoundary fallback={<p>{JSON.stringify(props.actors, null, 2)}</p>
+		}>
+			<section class={styles.section}>
+				<p class={styles.title}>{props.title}</p>
+				<For each={props.actors.filter((actor => actor))}>
+					{(actor) => (
+						<SectionItem
+							href={`/profile/${actor.handle}`}
+							avatar={actor.avatar ?? '/avatar.svg'}
+							name={actor?.displayName || `@${actor.handle}`}
+						/>
+					)}
+				</For>
+			</section>
+		</ErrorBoundary>
 	)
 }
 
