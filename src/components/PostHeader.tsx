@@ -20,7 +20,7 @@ const PostHeader = (props: { actor: Actor }) => (
 		</svg>
 		<p class={styles.text}>
 			<A class={styles.actor} href={`/profile/${props.actor.handle}`}>
-				{props.actor.displayName ?? `@${props.actor.handle}`}
+				{props.actor.displayName || `@${props.actor.handle}`}
 			</A>{' '}
 			reposted
 		</p>
