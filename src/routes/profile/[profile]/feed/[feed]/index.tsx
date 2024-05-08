@@ -40,7 +40,7 @@ const Feed = (props: RouteSectionProps) => {
 			feed: props.params.feed
 		})
 	)
- 
+
 	const feeds = createAsync(() =>
 		feedsData({ profile: props.params.profile, feed: props.params.feed })
 	)
