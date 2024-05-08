@@ -1,4 +1,4 @@
-import { createSignal, ErrorBoundary, For, Show, Suspense } from 'solid-js'
+import { For, Show, Suspense, ErrorBoundary } from 'solid-js'
 import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
 import Post from '../../../components/Post'
@@ -6,7 +6,6 @@ import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
 import RichText from '../../../components/RichText'
 import styles from './styles.module.css'
-import type { Profile } from '../../../types'
 
 export const Fallback = (props: { text?: string }) => (
 	<div class={styles.fallback}>
@@ -63,40 +62,6 @@ export const ProfileNav = (
 	)
 }
 
-const ProfileMeta = (props: { profile: Profile | undefined }) => {
-	const [title] = createSignal(
-		`${props.profile?.displayName ?? props.profile?.handle} (@${props.profile?.handle}) - Bluesky (usky.app)`
-	)
-	const [description] = createSignal(props.profile?.description)
-	const [url] = createSignal(
-		`https://usky.app/profile/${props.profile?.handle}`
-	)
-	const [avatar] = createSignal(props.profile?.avatar ?? '/avatar.svg')
-
-	return (
-		<ErrorBoundary fallback={<Title>{title()}</Title>}>
-			<Title>{title()}</Title>
-			<Meta name='og:title' content={title()} />
-			<Meta name='description' content={description()} />
-			<Meta property='og:description' content={description()} />
-			<Meta property='og:url' content={url()} />
-			<Meta property='og:image' content={avatar()} />
-			<Meta
-				property='og:image:type'
-				content={props.profile?.avatar ? 'image/jpeg' : 'image/svg'}
-			/>
-			<Meta property='og:type' content='profile' />
-			<Meta property='profile:username' content={props.profile?.handle} />
-			<Meta name='twitter:title' content={title()} />
-			<Meta name='twitter:description' content={description()} />
-			<Meta property='twitter:url' content={url()} />
-			<Meta name='twitter:image' content={avatar()} />
-			<Meta name='twitter:card' content='summary' />
-			<Link rel='canonical' href={url()} />
-		</ErrorBoundary>
-	)
-}
-
 const Profile = (props: RouteSectionProps) => {
 	const profile = createAsync(() => getProfileData(props.params.profile))
 
@@ -129,81 +94,117 @@ const Profile = (props: RouteSectionProps) => {
 		}
 	]
 
+	const title = () =>
+		`${profile()?.displayName || profile()?.handle} (@${profile()?.handle}) - Bluesky (usky.app)`
+	const description = () => profile()?.description
+	const url = () => `https://usky.app/profile/${profile()?.handle}`
+	const avatar = () => profile()?.avatar ?? '/avatar.svg'
+
 	return (
-		<Suspense>
+		<>
 			<Show when={profile()}>
-				<ProfileMeta profile={profile()} />
-				<div class={styles.profile}>
-					<div>
-						<div class={styles.banner}>
-							<Show when={profile()?.banner}>
+				<ErrorBoundary fallback={<Title>{title()}</Title>}>
+					<Title>{title()}</Title>
+					<Meta name='og:title' content={title()} />
+					<Meta name='description' content={description()} />
+					<Meta property='og:description' content={description()} />
+					<Meta property='og:url' content={url()} />
+					<Meta property='og:image' content={avatar()} />
+					<Meta
+						property='og:image:type'
+						content={profile()?.avatar ? 'image/jpeg' : 'image/svg'}
+					/>
+					<Meta property='og:type' content='profile' />
+					<Meta
+						property='profile:username'
+						content={profile()?.handle}
+					/>
+					<Meta name='twitter:title' content={title()} />
+					<Meta name='twitter:description' content={description()} />
+					<Meta property='twitter:url' content={url()} />
+					<Meta name='twitter:image' content={avatar()} />
+					<Meta name='twitter:card' content='summary' />
+					<Link rel='canonical' href={url()} />
+				</ErrorBoundary>
+			</Show>
+			<Suspense>
+				<Show when={profile()}>
+					<div class={styles.profile}>
+						<div>
+							<div class={styles.banner}>
+								<Show when={profile()?.banner}>
+									<img
+										src={profile()?.banner}
+										alt={`${
+											profile()?.displayName ??
+											profile()?.handle
+										} banner`}
+										draggable='false'
+									/>
+								</Show>
+							</div>
+							<div class={styles.avatar}>
 								<img
-									src={profile()?.banner}
+									src={profile()?.avatar ?? '/avatar.svg'}
 									alt={`${
 										profile()?.displayName ??
 										profile()?.handle
-									} banner`}
+									} avatar`}
 									draggable='false'
 								/>
-							</Show>
-						</div>
-						<div class={styles.avatar}>
-							<img
-								src={profile()?.avatar ?? '/avatar.svg'}
-								alt={`${
-									profile()?.displayName ?? profile()?.handle
-								} avatar`}
-								draggable='false'
-							/>
-						</div>
-						<div class={styles.buttons}>
-							<button type='button' class={styles.button}>
-								Follow
-							</button>
-						</div>
-						<div class={styles.info}>
-							<p class={styles.name}>
-								{profile()?.displayName || profile()?.handle}
-							</p>
-							<p class={styles.handle}>@{profile()?.handle}</p>
-							<Show when={profile()?.description}>
-								{(description) => (
-									<p class={styles.description}>
-										<RichText text={description()} />
-									</p>
-								)}
-							</Show>
-							<div class={styles.counters}>
-								<A
-									href={`/profile/${profile()?.handle}/following`}
-								>
-									<span>
-										{profile()?.followsCount.toLocaleString()}
-									</span>{' '}
-									following
-								</A>
-								<A
-									href={`/profile/${profile()?.handle}/followers`}
-								>
-									<span>
-										{profile()?.followersCount.toLocaleString()}
-									</span>{' '}
-									followers
-								</A>
-								<A href={`/profile/${profile()?.handle}`}>
-									<span>
-										{profile()?.postsCount.toLocaleString()}
-									</span>{' '}
-									posts
-								</A>
 							</div>
+							<div class={styles.buttons}>
+								<button type='button' class={styles.button}>
+									Follow
+								</button>
+							</div>
+							<div class={styles.info}>
+								<p class={styles.name}>
+									{profile()?.displayName ||
+										profile()?.handle}
+								</p>
+								<p class={styles.handle}>
+									@{profile()?.handle}
+								</p>
+								<Show when={profile()?.description}>
+									{(description) => (
+										<p class={styles.description}>
+											<RichText text={description()} />
+										</p>
+									)}
+								</Show>
+								<div class={styles.counters}>
+									<A
+										href={`/profile/${profile()?.handle}/following`}
+									>
+										<span>
+											{profile()?.followsCount.toLocaleString()}
+										</span>{' '}
+										following
+									</A>
+									<A
+										href={`/profile/${profile()?.handle}/followers`}
+									>
+										<span>
+											{profile()?.followersCount.toLocaleString()}
+										</span>{' '}
+										followers
+									</A>
+									<A href={`/profile/${profile()?.handle}`}>
+										<span>
+											{profile()?.postsCount.toLocaleString()}
+										</span>{' '}
+										posts
+									</A>
+								</div>
+							</div>
+							<ProfileNav {...routes} />
 						</div>
-						<ProfileNav {...routes} />
 					</div>
-				</div>
-				{props.children}
-			</Show>
-		</Suspense>
+					{props.children}
+				</Show>
+			</Suspense>
+		</>
 	)
 }
 

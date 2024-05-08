@@ -1,13 +1,5 @@
+import { Show } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
-import type {
-	BlockedEmbed as BlockedEmbedType,
-	DeletedEmbed as DeletedEmbedType,
-	Embed as EmbedType,
-	GeneratorEmbed as GeneratorEmbedType,
-	ImageEmbed as ImageEmbedType,
-	ListEmbed as ListEmbedType,
-	PostEmbed as PostEmbedType
-} from '../../types'
 import BlockedEmbed from './BlockedEmbed'
 import DeletedEmbed from './DeletedEmbed'
 import ExternalEmbed from './ExternalEmbed'
@@ -15,22 +7,45 @@ import GeneratorEmbed from './GeneratorEmbed'
 import ImageEmbed from './ImageEmbed'
 import ListEmbed from './ListEmbed'
 import PostEmbed from './PostEmbed'
+import type {
+	BlockedEmbed as BlockedEmbedType,
+	DeletedEmbed as DeletedEmbedType,
+	Embed as EmbedType,
+	GeneratorEmbed as GeneratorEmbedType,
+	ImageEmbed as ImageEmbedType,
+	ListEmbed as ListEmbedType,
+	PostEmbed as PostEmbedType,
+	ExternalEmbed as ExternalEmbedType
+} from '../../types'
 
 const RecordWithMedia = (props: {
 	record: {
 		record: PostEmbedType
 	}
 	media: {
-		images: ImageEmbedType[]
+		images?: ImageEmbedType[]
+		external?: ExternalEmbedType
 	}
 	did: string
 }) => {
 	return (
 		<>
-			<ImageEmbed
-				images={props.media.images}
-				did={props?.record?.record?.author?.did ?? props?.did}
-			/>
+			<Show when={props.media.external}>
+				{(external) => (
+					<ExternalEmbed
+						external={external()}
+						did={props?.record?.record?.author?.did || props?.did}
+					/>
+				)}
+			</Show>
+			<Show when={props.media.images}>
+				{(images) => (
+					<ImageEmbed
+						images={images()}
+						did={props?.record?.record?.author?.did || props?.did}
+					/>
+				)}
+			</Show>
 			<PostEmbed {...props?.record?.record} />
 		</>
 	)
