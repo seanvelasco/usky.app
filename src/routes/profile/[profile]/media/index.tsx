@@ -11,13 +11,18 @@ export const Media = (props: RouteSectionProps) => {
 		thread()
 			?.feed.filter((thread) => !thread.reason)
 			.map((thread) => thread.post)
-	return <ErrorBoundary fallback={<Fallback text="Unable to display media" />}>
-		<Suspense fallback={<Spinner />}>
-			<Show when={posts()?.length} fallback={<Fallback text="No media yet" />}>
-				<MediaCarousel posts={posts()} />
-			</Show>
-		</Suspense>
-	</ErrorBoundary>
+	return (
+		<ErrorBoundary fallback={<Fallback text='Unable to display media' />}>
+			<Suspense fallback={<Spinner />}>
+				<Show
+					when={posts()?.length}
+					fallback={<Fallback text='No media yet' />}
+				>
+					<MediaCarousel posts={posts()} />
+				</Show>
+			</Suspense>
+		</ErrorBoundary>
+	)
 }
 
 export default Media

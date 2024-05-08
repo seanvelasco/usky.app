@@ -1,4 +1,4 @@
-import { ErrorBoundary, For, Show, Suspense } from 'solid-js'
+import { ErrorBoundary, For, Suspense } from 'solid-js'
 import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import { getPostsData } from '..'
 import Post from '../../../../components/Post'
@@ -8,14 +8,15 @@ import Spinner from '../../../../components/Spinner.tsx'
 export const Replies = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getPostsData(props.params.profile))
 	return (
-		<ErrorBoundary fallback={<Fallback text="Unable to display replies" />}>
+		<ErrorBoundary fallback={<Fallback text='Unable to display replies' />}>
 			<Suspense fallback={<Spinner />}>
-				<For each={posts()?.feed} fallback={<Fallback text="No replies yet" />}>
-					{(post) => (
-						<Show when={post?.reply && !post?.reason}>
-							<Post {...post} />
-						</Show>
+				<For
+					each={posts()?.feed.filter(
+						(post) => post?.reply && !post?.reason
 					)}
+					fallback={<Fallback text='No replies yet' />}
+				>
+					{(post) => <Post {...post} />}
 				</For>
 			</Suspense>
 		</ErrorBoundary>

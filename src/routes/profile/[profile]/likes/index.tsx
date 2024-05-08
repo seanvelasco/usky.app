@@ -30,9 +30,12 @@ export const Likes = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getLikesData(props.params.profile))
 
 	return (
-		<ErrorBoundary fallback={<Fallback text="Unable to display likes" />}>
+		<ErrorBoundary fallback={<Fallback text='Unable to display likes' />}>
 			<Suspense fallback={<Spinner />}>
-				<For each={posts()?.posts} fallback={<Fallback text="No likes yet" />}>
+				<For
+					each={posts()?.posts}
+					fallback={<Fallback text='No likes yet' />}
+				>
 					{(post) => <Post post={post} />}
 				</For>
 			</Suspense>

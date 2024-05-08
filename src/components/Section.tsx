@@ -52,11 +52,12 @@ export const ActorsSection = (props: {
 	actors: Pick<Profile, 'displayName' | 'handle' | 'avatar' | 'banner'>[]
 }) => {
 	return (
-		<ErrorBoundary fallback={<p>{JSON.stringify(props.actors, null, 2)}</p>
-		}>
+		<ErrorBoundary
+			fallback={<p>{JSON.stringify(props.actors, null, 2)}</p>}
+		>
 			<section class={styles.section}>
 				<p class={styles.title}>{props.title}</p>
-				<For each={props.actors.filter((actor => actor))}>
+				<For each={props.actors.filter((actor) => actor)}>
 					{(actor) => (
 						<SectionItem
 							href={`/profile/${actor.handle}`}

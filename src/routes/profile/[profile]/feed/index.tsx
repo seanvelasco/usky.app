@@ -14,9 +14,12 @@ export const getFeedsData = cache(
 export const Feeds = (props: RouteSectionProps) => {
 	const feeds = createAsync(() => getFeedsData(props.params.profile))
 	return (
-		<ErrorBoundary fallback={<Fallback text="Unable to display feeds" />}>
-			<Suspense fallback={<Spinner/>}>
-				<For each={feeds()?.feeds} fallback={<Fallback text="No feeds yet" />}>
+		<ErrorBoundary fallback={<Fallback text='Unable to display feeds' />}>
+			<Suspense fallback={<Spinner />}>
+				<For
+					each={feeds()?.feeds}
+					fallback={<Fallback text='No feeds yet' />}
+				>
 					{(feed) => (
 						<Entry
 							type='creator'

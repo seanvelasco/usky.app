@@ -16,9 +16,12 @@ export const Lists = (props: RouteSectionProps) => {
 	const lists = createAsync(() => getListsData(props.params.profile))
 
 	return (
-		<ErrorBoundary fallback={<Fallback text="Unable to display lists" />}>
+		<ErrorBoundary fallback={<Fallback text='Unable to display lists' />}>
 			<Suspense fallback={<Spinner />}>
-				<For each={lists()?.lists} fallback={<Fallback text="No lists yet" />}>
+				<For
+					each={lists()?.lists}
+					fallback={<Fallback text='No lists yet' />}
+				>
 					{(list) => (
 						<Entry
 							type='creator'

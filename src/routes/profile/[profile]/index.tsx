@@ -28,8 +28,8 @@ export const Posts = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getPostsData(props.params.profile))
 
 	return (
-		<ErrorBoundary fallback={<Fallback text="Unable to display posts" />}>
-			<For each={posts()?.feed} fallback={<Fallback />} >
+		<ErrorBoundary fallback={<Fallback text='Unable to display posts' />}>
+			<For each={posts()?.feed} fallback={<Fallback />}>
 				{(post) => (
 					<Show when={!post?.reply}>
 						<Post {...post} />
@@ -163,7 +163,7 @@ const Profile = (props: RouteSectionProps) => {
 						</div>
 						<div class={styles.info}>
 							<p class={styles.name}>
-								{profile()?.displayName ?? profile()?.handle}
+								{profile()?.displayName || profile()?.handle}
 							</p>
 							<p class={styles.handle}>@{profile()?.handle}</p>
 							<Show when={profile()?.description}>

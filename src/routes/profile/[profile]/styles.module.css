@@ -176,9 +176,9 @@
 }
 
 .fallback {
-    min-height: 12rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-secondary);
+	min-height: 12rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-secondary);
 }

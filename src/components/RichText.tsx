@@ -17,12 +17,10 @@ const rter = ({
 	})
 
 	if (!facets) {
-		// createAsync(async () => rt.detectFacets(agent))
 		rt.detectFacetsWithoutResolution()
 	}
 
 	for (const segment of rt.segments()) {
-		console.log(segment)
 		if (segment.link) {
 			output += `<A target='_blank' rel='nofollow' href="${segment.link.uri}">${segment.text}</A>`
 		} else if (segment.mention) {
