@@ -123,7 +123,7 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 			postRef()?.scrollIntoView()
 		}
 	})
-	
+
 	return (
 		<>
 			<ErrorBoundary
@@ -141,14 +141,20 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 					content={props.thread?.post?.record?.text}
 				/>
 
-				<Meta property='og:title' content={`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
-					props.thread?.post?.author?.handle
-				}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`} />
+				<Meta
+					property='og:title'
+					content={`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
+						props.thread?.post?.author?.handle
+					}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`}
+				/>
 				<Meta
 					property='og:description'
 					content={props.thread?.post?.record?.text}
 				/>
-				<Meta property='og:url' content={`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`} />
+				<Meta
+					property='og:url'
+					content={`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`}
+				/>
 				<Meta
 					property='og:image'
 					content={props.thread?.post?.author?.avatar}
@@ -166,21 +172,30 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 						props.thread?.post?.author?.handle
 					}
 				/>
-				<Meta name='twitter:title' content={`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
-					props.thread?.post?.author?.handle
-				}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`} />
+				<Meta
+					name='twitter:title'
+					content={`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
+						props.thread?.post?.author?.handle
+					}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`}
+				/>
 				<Meta
 					name='twitter:description'
 					content={props.thread?.post?.record?.text}
 				/>
-				<Meta property='twitter:url' content={`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`} />
+				<Meta
+					property='twitter:url'
+					content={`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`}
+				/>
 				<Meta
 					name='twitter:image'
 					content={props.thread?.post?.author?.avatar}
 				/>
 				<Meta name='twitter:card' content='summary' />
 
-				<Link rel='canonical' href={`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`} />
+				<Link
+					rel='canonical'
+					href={`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`}
+				/>
 			</ErrorBoundary>
 
 			<Show when={props.thread.parent}>

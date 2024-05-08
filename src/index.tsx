@@ -66,8 +66,9 @@ render(
 							component={Top}
 							load={({ location }) => {
 								const query =
-									new URLSearchParams(location.query).get('q') ??
-									''
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? ''
 								actorSearch(query)
 								postSearch(query, 'top')
 							}}
@@ -77,8 +78,9 @@ render(
 							component={Latest}
 							load={({ location }) =>
 								postSearch(
-									new URLSearchParams(location.query).get('q') ??
-									'',
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? '',
 									'latest'
 								)
 							}
@@ -88,8 +90,9 @@ render(
 							component={People}
 							load={({ location }) =>
 								actorSearch(
-									new URLSearchParams(location.query).get('q') ??
-									''
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? ''
 								)
 							}
 						/>
@@ -98,14 +101,15 @@ render(
 							component={MediaSearch}
 							load={({ location }) =>
 								postSearch(
-									new URLSearchParams(location.query).get('q') ??
-									'',
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? '',
 									'top'
 								)
 							}
 						/>
 					</Route>
-					
+
 					<Route
 						path='/hashtag/:hashtag'
 						component={HashtagPage}
@@ -120,7 +124,9 @@ render(
 						component={Profile}
 						load={({ params }) => getProfileData(params.profile)}
 					>
-						<Route load={({ params }) => getPostsData(params.profile)}>
+						<Route
+							load={({ params }) => getPostsData(params.profile)}
+						>
 							<Route path='/' component={Posts} />
 							<Route path='/replies' component={Replies} />
 							<Route path='/media' component={Media} />

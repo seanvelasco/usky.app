@@ -5,7 +5,7 @@ import type { Facet } from '../types'
 
 const rter = ({
 	text,
-	facets,
+	facets
 }: {
 	text: string
 	facets: Facet[] | any | undefined
