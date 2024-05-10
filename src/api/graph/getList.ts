@@ -1,3 +1,4 @@
+import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Actor, List } from '../../types'
 
 const getList = async (
@@ -10,7 +11,7 @@ const getList = async (
 	cursor?: string
 }> => {
 	const request = new Request(
-		`https://api.bsky.app/xrpc/app.bsky.graph.getList?list=${list}`
+		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.graph.getList?list=${list}`
 	)
 
 	const response = await fetch(request)

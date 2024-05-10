@@ -1,6 +1,8 @@
+import { PUBLIC_API_BASE_URL } from '../../constants'
+
 const resolveHandle = async (handle: string): Promise<string> => {
 	const response = await fetch(
-		`https://api.bsky.app/xrpc/com.atproto.identity.resolveHandle?handle=${handle}`
+		`${PUBLIC_API_BASE_URL}/xrpc/com.atproto.identity.resolveHandle?handle=${handle}`
 	)
 
 	const body = await response.json()

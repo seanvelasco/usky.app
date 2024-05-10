@@ -1,3 +1,4 @@
+import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Feed } from '../../types'
 
 const getActorFeeds = async (
@@ -6,7 +7,7 @@ const getActorFeeds = async (
 	feeds: Feed[]
 }> => {
 	const response = await fetch(
-		`https://api.bsky.app/xrpc/app.bsky.feed.getActorFeeds?actor=${actor}&limit=100
+		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.getActorFeeds?actor=${actor}&limit=100
         `
 	)
 

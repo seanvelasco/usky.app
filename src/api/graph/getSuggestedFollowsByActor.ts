@@ -1,3 +1,4 @@
+import { SERVICE_BASE_URL } from '../../constants'
 import type { Profile } from '../../types'
 
 const getSuggestedFollowsByActor = async (
@@ -7,7 +8,7 @@ const getSuggestedFollowsByActor = async (
 	suggestions: Profile[]
 }> => {
 	const request = new Request(
-		`https://bsky.social/xrpc/app.bsky.graph.getSuggestedFollowsByActor?actor=${actor}`,
+		`${SERVICE_BASE_URL}/xrpc/app.bsky.graph.getSuggestedFollowsByActor?actor=${actor}`,
 		{
 			method: 'GET',
 			headers: {

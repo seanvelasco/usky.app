@@ -1,3 +1,5 @@
+import { SERVICE_BASE_URL } from '../../constants'
+
 const getRecord = async (
 	repo: string,
 	collection: string,
@@ -12,7 +14,7 @@ const getRecord = async (
 
 	try {
 		const response = await fetch(
-			`https://bsky.social/xrpc/com.atproto.repo.getRecord?repo=${repo}&collection=${collection}&rkey=${rkey}`,
+			`${SERVICE_BASE_URL}/xrpc/com.atproto.repo.getRecord?repo=${repo}&collection=${collection}&rkey=${rkey}`,
 			{
 				signal: controller.signal
 			}
