@@ -1,3 +1,4 @@
+import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { FeedPost } from '../../types'
 
 type SearchActorsQuery = {
@@ -53,7 +54,7 @@ const searchActors = async ({
 		const searchParams = new URLSearchParams(params)
 
 		const response = await fetch(
-			`https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?${searchParams.toString()}`
+			`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.searchPosts?${searchParams.toString()}`
 		)
 
 		return await response.json()

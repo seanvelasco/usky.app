@@ -1,3 +1,4 @@
+import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Actor } from '../../types'
 
 const searchActorsTypeahead = async (
@@ -9,7 +10,7 @@ const searchActorsTypeahead = async (
 }> => {
 	if (query) {
 		const response = await fetch(
-			`https://api.bsky.app/xrpc/app.bsky.actor.searchActorsTypeahead?q=${query}&limit=${limit}`
+			`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.actor.searchActorsTypeahead?q=${query}&limit=${limit}`
 		)
 
 		return await response.json()

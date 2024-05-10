@@ -1,3 +1,4 @@
+import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { List } from '../../types'
 
 const getLists = async (
@@ -8,7 +9,7 @@ const getLists = async (
 }> => {
 	// actor should be DID not handle
 	const response = await fetch(
-		`https://api.bsky.app/xrpc/app.bsky.graph.getLists?actor=${actor}`
+		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.graph.getLists?actor=${actor}`
 	)
 
 	return await response.json()

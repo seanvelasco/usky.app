@@ -1,3 +1,4 @@
+import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Actor } from '../../types'
 
 const getFollows = async (
@@ -8,7 +9,7 @@ const getFollows = async (
 	cursor?: string
 }> => {
 	const response = await fetch(
-		`https://api.bsky.app/xrpc/app.bsky.graph.getFollows?actor=${actor}`
+		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.graph.getFollows?actor=${actor}`
 	)
 
 	return await response.json()

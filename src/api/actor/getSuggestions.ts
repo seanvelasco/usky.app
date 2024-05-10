@@ -1,4 +1,5 @@
 import type { Profile } from '../../types'
+import { PUBLIC_API_BASE_URL } from '../../constants'
 
 const getSuggestions = async () // actor?: string,
 // accessJwt?: string
@@ -32,7 +33,7 @@ const getSuggestions = async () // actor?: string,
 	// 	)
 	// } else {
 	request = new Request(
-		`https://api.bsky.app/xrpc/app.bsky.actor.getSuggestions`,
+		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.actor.getSuggestions`,
 		{
 			method: 'GET'
 		}
@@ -41,13 +42,9 @@ const getSuggestions = async () // actor?: string,
 
 	const response = await fetch(request)
 
-	if (response.status !== 200) {
-		return
+	if (response.ok) {
+		return await response.json()
 	}
-
-	const body = await response.json()
-
-	return body
 }
 
 export { getSuggestions }

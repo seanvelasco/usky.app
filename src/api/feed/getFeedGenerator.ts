@@ -1,8 +1,9 @@
+import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { FeedGenerator } from '../../types'
 
 const getFeedGenerator = async (feed: string): Promise<FeedGenerator> => {
 	const request = new Request(
-		`https://api.bsky.app/xrpc/app.bsky.feed.getFeedGenerator?feed=${feed}`
+		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.getFeedGenerator?feed=${feed}`
 	)
 
 	const response = await fetch(request)

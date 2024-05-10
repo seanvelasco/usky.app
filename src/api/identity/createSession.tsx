@@ -1,3 +1,5 @@
+import { SERVICE_BASE_URL } from '../../constants'
+
 const createSession = async ({
 	identifier,
 	password
@@ -13,7 +15,7 @@ const createSession = async ({
 	refreshJwt: string
 }> => {
 	const response = await fetch(
-		'https://bsky.social/xrpc/com.atproto.server.createSession',
+		`${SERVICE_BASE_URL}/xrpc/com.atproto.server.createSession`,
 		{
 			method: 'POST',
 			headers: {

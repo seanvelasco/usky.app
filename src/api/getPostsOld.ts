@@ -1,3 +1,5 @@
+import { PUBLIC_API_BASE_URL } from '../constants'
+
 const getPosts = async (uris: string[], timeout = 20000) => {
 	const controller = new AbortController()
 
@@ -9,7 +11,7 @@ const getPosts = async (uris: string[], timeout = 20000) => {
 		uris.length = 25
 
 		const response = await fetch(
-			`https://api.bsky.app/xrpc/app.bsky.feed.getPosts?uris=${uris.join(
+			`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.getPosts?uris=${uris.join(
 				'&uris='
 			)}`,
 			{

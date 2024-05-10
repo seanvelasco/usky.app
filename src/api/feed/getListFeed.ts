@@ -1,3 +1,4 @@
+import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { FeedPost } from '../../types'
 
 const getListFeed = async (
@@ -9,7 +10,7 @@ const getListFeed = async (
 	cursor?: string
 }> => {
 	const request = new Request(
-		`https://api.bsky.app/xrpc/app.bsky.feed.getListFeed?list=${list}`,
+		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.getListFeed?list=${list}`,
 		{ method: 'GET' }
 	)
 

@@ -1,11 +1,12 @@
 import { createContext, useContext, type JSXElement } from 'solid-js'
 import { BskyAgent } from '@atproto/api'
+import { SERVICE_BASE_URL } from '../constants'
 
 const AgentContext = createContext<BskyAgent>()
 
 const AgentProvider = (props: { service?: string; children: JSXElement }) => {
 	const agent = new BskyAgent({
-		service: props.service ?? 'https://bsky.social'
+		service: props.service ?? SERVICE_BASE_URL
 	})
 
 	return (
