@@ -4,7 +4,8 @@ import {
 	useNavigate,
 	useLocation,
 	useParams,
-	createAsync
+	createAsync,
+	useMatch
 } from '@solidjs/router'
 import Search from '../Search'
 import { getProfileData } from '../../routes/profile/[profile]'
@@ -103,7 +104,7 @@ const Header = () => {
 	const params = useParams()
 
 	const isHome = () => ['/', '/hot', '/live'].includes(location.pathname)
-
+	const isTrends = useMatch(() => '/trends')
 	const isSearch = () =>
 		['/search', '/hashtag'].some((path) =>
 			location.pathname.startsWith(path)

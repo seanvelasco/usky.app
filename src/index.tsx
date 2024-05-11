@@ -35,6 +35,7 @@ import Feed, { feedGeneratorData } from './routes/profile/[profile]/feed/[feed]'
 import List, { getListData } from './routes/profile/[profile]/lists/[list]'
 // to-do: loaders should be in a separate file
 import { Top, People, Latest, Media as MediaSearch } from './routes/search'
+import Trends, { getTranding } from './routes/trends'
 
 render(
 	() => (
@@ -117,6 +118,12 @@ render(
 							postSearch(`#${params.hashtag}`, 'top')
 						}
 					/>
+					<Route
+						path='/trends'
+						component={Trends}
+						load={() => getTranding(100)}
+					/>
+
 					<Route path='/feeds' component={PopularFeeds} />
 					<Route path='/about' component={About} />
 					<Route

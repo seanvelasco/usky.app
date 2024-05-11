@@ -47,6 +47,38 @@ const Section = (props: { title: string; list: Feed[] }) => {
 	)
 }
 
+export const TagsSection = (props: {
+	tags: { hashtag: string; count: number }[]
+}) => {
+	return (
+		<section class={styles.section}>
+			<p class={styles.title}>Trending</p>
+			<For each={props.tags}>
+				{(list) => (
+					<div class={styles.item}>
+						<div>
+							<A
+								class={`${styles.name} ${styles.hashtag}`}
+								href={`/hashtag/${list.hashtag}`}
+							>
+								#{list.hashtag}
+							</A>
+							<p class={styles.subtitle}>
+								{list.count.toLocaleString()} posts
+							</p>
+						</div>
+						<A
+							aria-label={list.hashtag}
+							class={styles.wrapper}
+							href={`/hashtag/${list.hashtag}`}
+						></A>
+					</div>
+				)}
+			</For>
+		</section>
+	)
+}
+
 export const ActorsSection = (props: {
 	title: string
 	actors: Pick<Profile, 'displayName' | 'handle' | 'avatar' | 'banner'>[]
