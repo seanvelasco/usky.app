@@ -1,12 +1,25 @@
 import { Show, Suspense } from 'solid-js'
 
-import { A, createAsync, useLocation, useParams } from '@solidjs/router'
+import {
+	A,
+	createAsync,
+	useLocation,
+	useParams,
+	useMatch
+} from '@solidjs/router'
 // import getSuggestions from '../../api/actor/getSuggestions'
 import getPopularFeedGenerators from '../../api/unspecced/getPopularFeedGenerators'
 import Search from '../Search'
-import Section, { ActorsSection } from '../Section'
+import Section, { ActorsSection, TagsSection } from '../Section'
 import { getPostData } from '../../routes/profile/[profile]/post/[post]'
+import { getTranding } from '../../routes/trends'
 import styles from './Sidebar.module.css'
+
+const TrendingSection = () => {
+	const tags = createAsync(() => getTranding())
+
+	return <Show when={tags()}>{(tags) => <TagsSection tags={tags()} />}</Show>
+}
 
 const RelevantSection = () => {
 	const params = useParams()
@@ -33,10 +46,14 @@ const Sidebar = () => {
 		['/search', '/hashtag'].some((path) =>
 			location.pathname.startsWith(path)
 		)
+	const isTrends = useMatch(() => '/trends')
 	return (
 		<Suspense>
 			<Show when={!isSearch()}>
 				<Search />
+			</Show>
+			<Show when={!isTrends()}>
+				<TrendingSection />
 			</Show>
 			{/*<Show*/}
 			{/*	when={*/}
@@ -48,7 +65,6 @@ const Sidebar = () => {
 			{/*		<ActorsSection title='People' actors={actors().actors} />*/}
 			{/*	)}*/}
 			{/*</Show>*/}
-
 			<Show when={params.post}>
 				<RelevantSection />
 			</Show>

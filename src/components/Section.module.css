@@ -23,6 +23,15 @@
 	font-weight: 500;
 }
 
+.hashtag {
+	font-weight: 600;
+}
+
+.subtitle {
+	font-size: 0.75rem;
+	color: var(--text-secondary);
+}
+
 .item {
 	position: relative;
 	padding: 0.5rem 1rem;
@@ -58,4 +67,12 @@
 	top: 0;
 	left: 0;
 	z-index: 0;
+}
+
+.more {
+	min-height: 3rem;
+}
+
+.more:hover {
+	text-decoration: underline;
 }
