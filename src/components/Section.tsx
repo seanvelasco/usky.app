@@ -43,6 +43,9 @@ const Section = (props: { title: string; list: Feed[] }) => {
 					/>
 				)}
 			</For>
+			<A class={`${styles.item} ${styles.more}`} href='/feeds'>
+				More feeds
+			</A>
 		</section>
 	)
 }
@@ -75,6 +78,9 @@ export const TagsSection = (props: {
 					</div>
 				)}
 			</For>
+			<A class={`${styles.item} ${styles.more}`} href='/trends'>
+				More trends
+			</A>
 		</section>
 	)
 }

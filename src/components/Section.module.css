@@ -68,3 +68,11 @@
 	left: 0;
 	z-index: 0;
 }
+
+.more {
+	min-height: 3rem;
+}
+
+.more:hover {
+	text-decoration: underline;
+}

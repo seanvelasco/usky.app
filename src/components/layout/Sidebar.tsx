@@ -1,4 +1,4 @@
-import { Show, For, Suspense } from 'solid-js'
+import { Show, Suspense } from 'solid-js'
 
 import {
 	A,
@@ -65,7 +65,6 @@ const Sidebar = () => {
 			{/*		<ActorsSection title='People' actors={actors().actors} />*/}
 			{/*	)}*/}
 			{/*</Show>*/}
-
 			<Show when={params.post}>
 				<RelevantSection />
 			</Show>
