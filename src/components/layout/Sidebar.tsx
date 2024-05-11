@@ -52,6 +52,9 @@ const Sidebar = () => {
 			<Show when={!isSearch()}>
 				<Search />
 			</Show>
+			<Show when={params.post}>
+				<RelevantSection />
+			</Show>
 			<Show when={!isTrends()}>
 				<TrendingSection />
 			</Show>
@@ -65,9 +68,6 @@ const Sidebar = () => {
 			{/*		<ActorsSection title='People' actors={actors().actors} />*/}
 			{/*	)}*/}
 			{/*</Show>*/}
-			<Show when={params.post}>
-				<RelevantSection />
-			</Show>
 			<Show when={location.pathname !== '/feeds' && feeds()?.feeds}>
 				{(feeds) => <Section title='Feeds' list={feeds()} />}
 			</Show>

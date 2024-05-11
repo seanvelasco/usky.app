@@ -55,7 +55,7 @@ export const TagsSection = (props: {
 }) => {
 	return (
 		<section class={styles.section}>
-			<p class={styles.title}>Trending</p>
+			<p class={styles.title}>Trends</p>
 			<For each={props.tags}>
 				{(list) => (
 					<div class={styles.item}>
