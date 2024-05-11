@@ -1,4 +1,4 @@
-import { Show, Switch, Match, Suspense } from 'solid-js'
+import { Show, Switch, Match, Suspense, JSXElement } from 'solid-js'
 import {
 	A,
 	useNavigate,
@@ -98,6 +98,10 @@ const ListHeader = () => {
 	)
 }
 
+const GenericHeader = (props: { children: JSXElement }) => (
+	<p>{props.children}</p>
+)
+
 const Header = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
@@ -105,6 +109,8 @@ const Header = () => {
 
 	const isHome = () => ['/', '/hot', '/live'].includes(location.pathname)
 	const isTrends = useMatch(() => '/trends')
+	const isFeeds = useMatch(() => '/feeds')
+	const isAbout = useMatch(() => '/about')
 	const isSearch = () =>
 		['/search', '/hashtag'].some((path) =>
 			location.pathname.startsWith(path)
@@ -127,6 +133,17 @@ const Header = () => {
 					</Match>
 					<Match when={isSearch()}>
 						<Search />
+					</Match>
+					<Match when={isTrends()}>
+						<GenericHeader>
+							Trending in the past 2 days
+						</GenericHeader>
+					</Match>
+					<Match when={isFeeds()}>
+						<GenericHeader>Feeds</GenericHeader>
+					</Match>
+					<Match when={isAbout()}>
+						<GenericHeader>About usky.app</GenericHeader>
 					</Match>
 					<Match when={params.post}>
 						<PostPageHeader />
