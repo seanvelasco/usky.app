@@ -190,9 +190,12 @@ export const HashtagPage = (props: RouteSectionProps) => {
 	const posts = createAsync(() =>
 		postSearch(decodeURIComponent(`#${props.params.hashtag}`), 'top')
 	)
-	const title = () => `#${props.params.hashtag} - Bluesky (usky.app)`
-	const description = () => `Posts about #${props.params.hashtag} on Bluesky`
-	const url = () => `https://usky.app/hashtag/${props.params.hashtag}`
+	const title = () =>
+		`#${decodeURIComponent(props.params.hashtag)} - Bluesky (usky.app)`
+	const description = () =>
+		`Posts about #${decodeURIComponent(props.params.hashtag)} on Bluesky`
+	const url = () =>
+		`https://usky.app/hashtag/${decodeURIComponent(props.params.hashtag)}`
 	return (
 		<>
 			<ErrorBoundary fallback={<Title>{title()}</Title>}>
