@@ -188,7 +188,7 @@ export const Search = (props: RouteSectionProps) => {
 
 export const HashtagPage = (props: RouteSectionProps) => {
 	const posts = createAsync(() =>
-		postSearch(`#${props.params.hashtag}`, 'top')
+		postSearch(decodeURIComponent(`#${props.params.hashtag}`), 'top')
 	)
 	const title = () => `#${props.params.hashtag} - Bluesky (usky.app)`
 	const description = () => `Posts about #${props.params.hashtag} on Bluesky`

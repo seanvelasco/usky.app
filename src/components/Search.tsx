@@ -40,7 +40,7 @@ export const Search = () => {
 
 	createEffect(() => {
 		if (searchParams.q) setQuery(searchParams.q)
-		if (params.hashtag) setQuery(`#${params.hashtag}`)
+		if (params.hashtag) setQuery(decodeURIComponent(`#${params.hashtag}`))
 	})
 
 	const onSearch = async (event: Event) => {

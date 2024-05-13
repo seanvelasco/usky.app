@@ -115,7 +115,10 @@ render(
 						path='/hashtag/:hashtag'
 						component={HashtagPage}
 						load={({ params }) =>
-							postSearch(`#${params.hashtag}`, 'top')
+							postSearch(
+								decodeURIComponent(`#${params.hashtag}`),
+								'top'
+							)
 						}
 					/>
 					<Route
