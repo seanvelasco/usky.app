@@ -36,10 +36,8 @@
 }
 
 .subtitle {
-	position: relative;
 	display: block;
 	width: fit-content;
-	z-index: 1;
 	color: var(--text-secondary);
 }
 

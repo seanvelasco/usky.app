@@ -13,7 +13,7 @@ export const getTranding = cache(
 const Entry = (props: { hashtag: string; count: number; order: number }) => (
 	<div class={styles.entry}>
 		<div>
-			<p>{props.order.toLocaleString()}</p>
+			<p class={styles.subtitle}>{props.order.toLocaleString()}</p>
 			<A
 				class={`${styles.name} ${styles.hashtag}`}
 				href={`/hashtag/${props.hashtag}`}
@@ -27,7 +27,7 @@ const Entry = (props: { hashtag: string; count: number; order: number }) => (
 )
 
 const Trends = () => {
-	const trends = createAsync(() => getTranding())
+	const trends = createAsync(() => getTranding(100))
 	const title = 'Trends - Bluesky (usky.app)'
 	const description = 'Trending hashtags on Bluesky'
 	const url = 'https://usky.app/trends'
