@@ -31,7 +31,10 @@ const MediaCarousel = (props: { posts: FeedPost[] | undefined }) => {
 												href={`https://usky.app/profile/${post.author.handle}/post/${id(post.uri)}`}
 											>
 												<img
-													src={image.thumb}
+													src={image.thumb?.replace(
+														'jpeg',
+														'webp'
+													)}
 													alt={image.alt}
 												/>
 											</A>

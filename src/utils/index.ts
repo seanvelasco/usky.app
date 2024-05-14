@@ -36,7 +36,7 @@ export const createImageLink = (
 	props: { image?: ImageBlob | string; did?: string } | { image: string }
 ) => {
 	if (typeof props.image === 'string') {
-		return props.image
+		return props.image?.replace('jpeg', 'webp')
 	} else if (
 		typeof props.image === 'object' &&
 		'did' in props &&

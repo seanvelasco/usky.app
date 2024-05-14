@@ -134,7 +134,10 @@ const Profile = (props: RouteSectionProps) => {
 							<div class={styles.banner}>
 								<Show when={profile()?.banner}>
 									<img
-										src={profile()?.banner}
+										src={profile()?.banner?.replace(
+											'jpeg',
+											'webp'
+										)}
 										alt={`${
 											profile()?.displayName ??
 											profile()?.handle

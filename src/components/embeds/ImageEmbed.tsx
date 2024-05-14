@@ -21,7 +21,7 @@ const ImageEmbed = (props: { images: ImageEmbedType[]; did?: string }) => {
 										: 1
 								}}
 								src={
-									image?.thumb ??
+									image?.thumb?.replace('jpeg', 'webp') ||
 									createImageLink({
 										image: image?.image,
 										did: props?.did

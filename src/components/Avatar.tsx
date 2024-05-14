@@ -14,7 +14,7 @@ const Avatar = (
 			loading='lazy'
 			draggable='false'
 			// style:border-radius={shape === "round" ? "50%" : "12px"}
-			src={props.src ?? '/avatar.svg'}
+			src={props.src?.replace('jpeg', 'webp') || '/avatar.svg'}
 			alt={props.alt ?? 'Default avatar'}
 			style={{
 				width: props.size,
