@@ -43,6 +43,6 @@ export const createImageLink = (
 		'ref' in props.image
 	) {
 		const link = props.image.ref?.$link ?? props.image.ref.toString()
-		return `https://cdn.bsky.app/img/feed_thumbnail/plain/${props.did}/${link}@jpeg`
+		return `https://cdn.bsky.app/img/feed_thumbnail/plain/${props.did}/${link}@webp`
 	}
 }
