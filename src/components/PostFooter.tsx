@@ -1,4 +1,4 @@
-import { For } from 'solid-js'
+import { ErrorBoundary, For } from 'solid-js'
 import { Show } from 'solid-js/web'
 import { LikesIcon } from '../assets/likes'
 import { RepliesIcon } from '../assets/replies'
@@ -32,23 +32,29 @@ const PostFooter = (props: {
 	]
 
 	return (
-		<div class={styles.footer} style={props.styles}>
-			<For each={stats}>
-				{(stat) => (
-					<div class={styles.wrapper}>
-						<button
-							class={styles.button}
-							aria-label={`${stat.count.toLocaleString()} ${stat.label}`}
-						>
-							{stat.icon}
-						</button>
-						<Show when={props.replyCount && props.replyCount !== 0}>
-							{stat.count.toLocaleString()}
-						</Show>
-					</div>
-				)}
-			</For>
-		</div>
+		<ErrorBoundary fallback={<p>Error occured</p>}>
+			<div class={styles.footer} style={props.styles}>
+				<For each={stats}>
+					{(stat) => (
+						<div class={styles.wrapper}>
+							<button
+								class={styles.button}
+								aria-label={`${stat.count.toLocaleString()} ${stat.label}`}
+							>
+								{stat.icon}
+							</button>
+							<Show
+								when={
+									props.replyCount && props.replyCount !== 0
+								}
+							>
+								{stat.count.toLocaleString()}
+							</Show>
+						</div>
+					)}
+				</For>
+			</div>
+		</ErrorBoundary>
 	)
 }
 

@@ -19,8 +19,6 @@ const getSuggestions = async () // actor?: string,
 	  }
 	| undefined
 > => {
-	let request
-
 	// if (accessJwt) {
 	// 	request = new Request(
 	// 		`https://bsky.social/xrpc/app.bsky.graph.getSuggestedFollowsByActor?actor=${actor}`,
@@ -32,8 +30,8 @@ const getSuggestions = async () // actor?: string,
 	// 		}
 	// 	)
 	// } else {
-	request = new Request(
-		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.actor.getSuggestions`,
+	const request = new Request(
+		`https://api.usky.app/xrpc/app.bsky.actor.getSuggestions`,
 		{
 			method: 'GET'
 		}
