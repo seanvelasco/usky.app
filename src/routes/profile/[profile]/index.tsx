@@ -6,6 +6,7 @@ import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
 import RichText from '../../../components/RichText'
 import styles from './styles.module.css'
+import Spinner from "../../../components/Spinner.tsx";
 
 export const Fallback = (props: { text?: string }) => (
 	<div class={styles.fallback}>
@@ -208,7 +209,9 @@ const Profile = (props: RouteSectionProps) => {
 							<ProfileNav {...routes} />
 						</div>
 					</div>
-					{props.children}
+					<Suspense fallback={<Spinner />}>
+						{props.children}
+					</Suspense>
 				</Show>
 			</Suspense>
 		</>
