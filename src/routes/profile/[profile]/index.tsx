@@ -118,6 +118,9 @@ const Profile = (props: RouteSectionProps) => {
 		<>
 			<Show when={profile()}>
 				<ErrorBoundary fallback={null}>
+					{/* description */}
+					<Meta name='description' content={profile()?.description} />
+					<Meta property='og:description' content={profile()?.description} />
 					<Meta property='og:image' content={avatar()} />
 					<Meta
 						property='og:image:type'
@@ -128,6 +131,7 @@ const Profile = (props: RouteSectionProps) => {
 						property='profile:username'
 						content={profile()?.handle}
 					/>
+					<Meta name='twitter:description' content={profile()?.description} />
 					<Meta name='twitter:image' content={avatar()} />
 					<Meta name='twitter:card' content='summary' />
 				</ErrorBoundary>
