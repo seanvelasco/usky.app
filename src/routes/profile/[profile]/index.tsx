@@ -25,17 +25,34 @@ export const getPostsData = cache(
 
 export const Posts = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getPostsData(props.params.profile))
+	const profile = createAsync(() => getProfileData(props.params.profile))
+
+	const title = () =>
+		`${profile()?.displayName || profile()?.handle} (@${profile()?.handle}) - Bluesky (usky.app)`
+	const url = () => `https://usky.app/profile/${profile()?.handle}`
 
 	return (
-		<ErrorBoundary fallback={<Fallback text='Unable to display posts' />}>
-			<For each={posts()?.feed} fallback={<Fallback />}>
-				{(post) => (
-					<Show when={!post?.reply}>
-						<Post {...post} />
-					</Show>
-				)}
-			</For>
-		</ErrorBoundary>
+		<>
+			<ErrorBoundary fallback={<Title>{title()}</Title>}>
+				<Title>{title()}</Title>
+				<Meta name='og:title' content={title()} />
+				<Meta property='og:url' content={url()} />
+				<Meta name='twitter:title' content={title()} />
+				<Meta property='twitter:url' content={url()} />
+				<Link rel='canonical' href={url()} />
+			</ErrorBoundary>
+			<ErrorBoundary
+				fallback={<Fallback text='Unable to display posts' />}
+			>
+				<For each={posts()?.feed} fallback={<Fallback />}>
+					{(post) => (
+						<Show when={!post?.reply}>
+							<Post {...post} />
+						</Show>
+					)}
+				</For>
+			</ErrorBoundary>
+		</>
 	)
 }
 
@@ -94,21 +111,12 @@ const Profile = (props: RouteSectionProps) => {
 		}
 	]
 
-	const title = () =>
-		`${profile()?.displayName || profile()?.handle} (@${profile()?.handle}) - Bluesky (usky.app)`
-	const description = () => profile()?.description
-	const url = () => `https://usky.app/profile/${profile()?.handle}`
 	const avatar = () => profile()?.avatar ?? '/avatar.svg'
 
 	return (
 		<>
 			<Show when={profile()}>
-				<ErrorBoundary fallback={<Title>{title()}</Title>}>
-					<Title>{title()}</Title>
-					<Meta name='og:title' content={title()} />
-					<Meta name='description' content={description()} />
-					<Meta property='og:description' content={description()} />
-					<Meta property='og:url' content={url()} />
+				<ErrorBoundary fallback={null}>
 					<Meta property='og:image' content={avatar()} />
 					<Meta
 						property='og:image:type'
@@ -119,12 +127,8 @@ const Profile = (props: RouteSectionProps) => {
 						property='profile:username'
 						content={profile()?.handle}
 					/>
-					<Meta name='twitter:title' content={title()} />
-					<Meta name='twitter:description' content={description()} />
-					<Meta property='twitter:url' content={url()} />
 					<Meta name='twitter:image' content={avatar()} />
 					<Meta name='twitter:card' content='summary' />
-					<Link rel='canonical' href={url()} />
 				</ErrorBoundary>
 			</Show>
 			<Suspense>
