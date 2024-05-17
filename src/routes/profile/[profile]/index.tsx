@@ -6,7 +6,7 @@ import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
 import RichText from '../../../components/RichText'
 import styles from './styles.module.css'
-import Spinner from '../../../components/Spinner.tsx'
+import Spinner from "../../../components/Spinner.tsx";
 
 export const Fallback = (props: { text?: string }) => (
 	<div class={styles.fallback}>
@@ -117,12 +117,10 @@ const Profile = (props: RouteSectionProps) => {
 	return (
 		<>
 			<Show when={profile()}>
-				<ErrorBoundary fallback={<></>}>
+				<ErrorBoundary fallback={null}>
+					{/* description */}
 					<Meta name='description' content={profile()?.description} />
-					<Meta
-						property='og:description'
-						content={profile()?.description}
-					/>
+					<Meta property='og:description' content={profile()?.description} />
 					<Meta property='og:image' content={avatar()} />
 					<Meta
 						property='og:image:type'
@@ -133,10 +131,7 @@ const Profile = (props: RouteSectionProps) => {
 						property='profile:username'
 						content={profile()?.handle}
 					/>
-					<Meta
-						name='twitter:description'
-						content={profile()?.description}
-					/>
+					<Meta name='twitter:description' content={profile()?.description} />
 					<Meta name='twitter:image' content={avatar()} />
 					<Meta name='twitter:card' content='summary' />
 				</ErrorBoundary>
@@ -218,7 +213,9 @@ const Profile = (props: RouteSectionProps) => {
 							<ProfileNav {...routes} />
 						</div>
 					</div>
-					<Suspense fallback={<Spinner />}>{props.children}</Suspense>
+					<Suspense fallback={<Spinner />}>
+						{props.children}
+					</Suspense>
 				</Show>
 			</Suspense>
 		</>

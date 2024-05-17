@@ -1,5 +1,5 @@
 import type { Profile } from '../../types'
-import { CUSTOM_API_BASE_URL } from '../../constants'
+import { PUBLIC_API_BASE_URL } from '../../constants'
 
 const getSuggestions = async () // actor?: string,
 // accessJwt?: string
@@ -19,6 +19,8 @@ const getSuggestions = async () // actor?: string,
 	  }
 	| undefined
 > => {
+	let request
+
 	// if (accessJwt) {
 	// 	request = new Request(
 	// 		`https://bsky.social/xrpc/app.bsky.graph.getSuggestedFollowsByActor?actor=${actor}`,
@@ -30,8 +32,8 @@ const getSuggestions = async () // actor?: string,
 	// 		}
 	// 	)
 	// } else {
-	const request = new Request(
-		`${CUSTOM_API_BASE_URL}/xrpc/app.bsky.actor.getSuggestions`,
+	request = new Request(
+		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.actor.getSuggestions`,
 		{
 			method: 'GET'
 		}
