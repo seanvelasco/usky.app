@@ -13,7 +13,6 @@ const ImageEmbed = (props: { images: ImageEmbedType[]; did?: string }) => {
 					return (
 						<div class={styles.image}>
 							<img
-								loading='lazy'
 								style={{
 									'aspect-ratio': image?.aspectRatio
 										? image.aspectRatio.width /

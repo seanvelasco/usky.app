@@ -1,4 +1,4 @@
-import { For } from 'solid-js'
+import { For, Suspense } from 'solid-js'
 import { A, type RouteSectionProps } from '@solidjs/router'
 import Header from './components/layout/Header'
 import Sidebar from './components/layout/Sidebar'
@@ -6,6 +6,7 @@ import AuthModal from './components/auth/AuthModal'
 import { FeedsIcon } from './assets/FeedsIcon'
 import { HomeIcon } from './assets/HomeIcon'
 import { SearchIcon } from './assets/SearchIcon'
+import Spinner from './components/Spinner'
 import styles from './App.module.css'
 
 const Navigation = () => {
@@ -59,32 +60,36 @@ const Navigation = () => {
 
 const App = (props: RouteSectionProps) => {
 	return (
-		<div
-			style={{
-				display: 'flex',
-				'flex-flow': 'row nowrap',
-				'justify-content': 'center'
-			}}
-		>
-			<aside class={`${styles.sidebar} ${styles.left}`}>
-				<Navigation />
-			</aside>
-			<main class={styles.main}>
-				<div
-					style={{
-						display: 'flex',
-						'flex-direction': 'column',
-						'min-height': '100%'
-					}}
-				>
-					<Header />
-					{props.children}
-				</div>
-			</main>
-			<aside class={`${styles.sidebar} ${styles.right}`}>
-				<Sidebar />
-			</aside>
-		</div>
+		<Suspense fallback={<Spinner />}>
+			<div
+				style={{
+					display: 'flex',
+					'flex-flow': 'row nowrap',
+					'justify-content': 'center'
+				}}
+			>
+				<aside class={`${styles.sidebar} ${styles.left}`}>
+					<Navigation />
+				</aside>
+				<main class={styles.main}>
+					<div
+						style={{
+							display: 'flex',
+							'flex-direction': 'column',
+							'min-height': '100%'
+						}}
+					>
+						<Header />
+						<Suspense fallback={<Spinner />}>
+							{props.children}
+						</Suspense>
+					</div>
+				</main>
+				<aside class={`${styles.sidebar} ${styles.right}`}>
+					<Sidebar />
+				</aside>
+			</div>
+		</Suspense>
 	)
 }
 
