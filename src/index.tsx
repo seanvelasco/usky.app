@@ -3,7 +3,7 @@ import { Router, Route } from '@solidjs/router'
 import { render } from 'solid-js/web'
 /* @refresh reload */
 import App from './App'
-import { lazy } from 'solid-js'
+import { lazy, Suspense } from 'solid-js'
 // HOME
 import Discover, { getDiscoveryFeed } from './routes'
 import PopularFeeds from './routes/feeds'
@@ -36,10 +36,11 @@ import List, { getListData } from './routes/profile/[profile]/lists/[list]'
 // to-do: loaders should be in a separate file
 import { Top, People, Latest, Media as MediaSearch } from './routes/search'
 import Trends, { getTranding } from './routes/trends'
+import Spinner from './components/Spinner.tsx'
 
 render(
 	() => (
-		<>
+		<Suspense fallback={<Spinner />}>
 			<MetaProvider>
 				<Router root={App}>
 					<Route component={Discover}>
@@ -205,7 +206,7 @@ render(
 					/>
 				</Router>
 			</MetaProvider>
-		</>
+		</Suspense>
 	),
 	document.getElementById('root')!
 )
