@@ -15,10 +15,11 @@ export const Fallback = (props: { text?: string }) => (
 	</div>
 )
 
-export const getProfileData = cache(
-	async (profile: string) => await getProfile(profile),
-	'profile'
-)
+export const getProfileData = cache(async (profile: string) => {
+	if (profile) {
+		return await getProfile(profile)
+	}
+}, 'profile')
 
 export const getPostsData = cache(
 	async (profile: string) => await getAuthorFeed(profile),

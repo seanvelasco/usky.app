@@ -58,14 +58,9 @@ const Navigation = () => {
 		{
 			label: 'Lists',
 			href: '/lists',
-			icon: <ListIcon />
+			icon: <ListIcon />,
+			authenticated: true
 		}
-		// {
-		// 	label: 'Profile',
-		// 	href: `/profile/${profile()?.handle}`,
-		// 	icon: <Avatar src={profile()?.avatar} size='1.5rem' />,
-		// 	authenticated: true
-		// }
 	]
 
 	return (
@@ -89,22 +84,15 @@ const Navigation = () => {
 			<ErrorBoundary fallback={<></>}>
 				<Show when={profile()}>
 					{(profile) => (
-						<>
-							<div class={styles.icon}>
-								<A href={`/profile/${profile().handle}`}>
-									<Avatar
-										src={profile().avatar}
-										size='1.5rem'
-									/>
-								</A>
-							</div>
-							{/* <div class={styles.icon}>
-								<AuthModal />
-							</div> */}
-						</>
+						<div class={styles.icon}>
+							<A href={`/profile/${profile().handle}`}>
+								<Avatar src={profile().avatar} size='1.5rem' />
+							</A>
+						</div>
 					)}
 				</Show>
 			</ErrorBoundary>
+			{/* <AuthModal /> */}
 		</nav>
 	)
 }

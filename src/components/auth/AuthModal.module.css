@@ -1,3 +1,29 @@
+.button {
+	background-color: var(--button-secondary);
+	color: var(--secondary-button-text);
+	border-radius: 2.25rem;
+	display: flex;
+	gap: 0.5rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: fit-content;
+	height: 2.25rem;
+	justify-content: center;
+	align-items: center;
+	vertical-align: middle;
+	padding: 0 1rem;
+	outline: none;
+	border: none;
+	transition:
+		background-color 170ms ease,
+		color 170ms ease,
+		border 170ms ease;
+	cursor: pointer;
+	font-weight: 500;
+	margin-right: 12px;
+}
+
 .dialog {
 	/* z-index: 99999999 !important;
 	position: fixed;
