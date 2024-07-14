@@ -1,0 +1,41 @@
+.container {
+	position: relative;
+	display: inline-block;
+}
+
+.content {
+	width: 12rem;
+	padding: 0.5rem 0;
+	margin: 0;
+	right: 0;
+	border-radius: 16px;
+	position: absolute;
+	background-color: var(--button-secondary);
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+	overflow: hidden;
+}
+
+.content ul {
+	padding: 0;
+	list-style-type: none;
+}
+
+.content li {
+	height: 2rem;
+	padding: 0 1rem;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	cursor: pointer;
+}
+
+.content li button {
+	display: flex;
+	width: 100%;
+}
+
+.content li:hover {
+	background-color: var(--button-secondary-hover);
+}
