@@ -1,4 +1,4 @@
-import { For, Suspense, Show } from 'solid-js'
+import { For, Suspense, Show, ErrorBoundary } from 'solid-js'
 import { A, type RouteSectionProps } from '@solidjs/router'
 import Header from './components/layout/Header'
 import Sidebar from './components/layout/Sidebar'
@@ -6,6 +6,9 @@ import AuthModal from './components/auth/AuthModal'
 import { FeedsIcon } from './assets/FeedsIcon'
 import { HomeIcon } from './assets/HomeIcon'
 import { SearchIcon } from './assets/SearchIcon'
+import { BellIcon } from './assets/BellIcon'
+import { BubbleIcon } from './assets/BubbleIcon'
+import { ListIcon } from './assets/ListIcon'
 import Spinner from './components/Spinner'
 import styles from './App.module.css'
 
@@ -36,41 +39,72 @@ const Navigation = () => {
 			icon: <SearchIcon />
 		},
 		{
+			label: 'Notifications',
+			href: '/notifications',
+			icon: <BellIcon />,
+			authenticated: true
+		},
+		{
+			label: 'Chat',
+			href: '/chat',
+			icon: <BubbleIcon />,
+			authenticated: true
+		},
+		{
 			label: 'Feeds',
 			href: '/feeds',
 			icon: <FeedsIcon />
+		},
+		{
+			label: 'Lists',
+			href: '/lists',
+			icon: <ListIcon />
 		}
+		// {
+		// 	label: 'Profile',
+		// 	href: `/profile/${profile()?.handle}`,
+		// 	icon: <Avatar src={profile()?.avatar} size='1.5rem' />,
+		// 	authenticated: true
+		// }
 	]
 
 	return (
 		<nav class={styles.nav}>
 			<For each={links}>
 				{(link) => (
-					<div class={styles.icon}>
-						<A
-							end
-							activeClass='highlight'
-							aria-label={link.label}
-							href={link.href}
-						>
-							{link.icon}
-						</A>
-					</div>
+					<Show when={!link.authenticated || profile()}>
+						<div class={styles.icon}>
+							<A
+								end
+								activeClass='highlight'
+								aria-label={link.label}
+								href={link.href}
+							>
+								{link.icon}
+							</A>
+						</div>
+					</Show>
 				)}
 			</For>
-			<Show when={profile()}>
-				<div
-					class={styles.icon}
-					style={{
-						'border-radius': '50%'
-					}}
-				>
-					<Avatar src={profile()?.avatar} size='1.5rem' />
-				</div>
-				<div class={styles.icon}>
-					<AuthModal />
-				</div>
-			</Show>
+			<ErrorBoundary fallback={<></>}>
+				<Show when={profile()}>
+					{(profile) => (
+						<>
+							<div class={styles.icon}>
+								<A href={`/profile/${profile().handle}`}>
+									<Avatar
+										src={profile().avatar}
+										size='1.5rem'
+									/>
+								</A>
+							</div>
+							{/* <div class={styles.icon}>
+								<AuthModal />
+							</div> */}
+						</>
+					)}
+				</Show>
+			</ErrorBoundary>
 		</nav>
 	)
 }
@@ -98,13 +132,17 @@ const App = (props: RouteSectionProps) => {
 						}}
 					>
 						<Header />
-						<Suspense fallback={<Spinner />}>
-							{props.children}
-						</Suspense>
+						<ErrorBoundary fallback={<p>An error occurred</p>}>
+							<Suspense fallback={<Spinner />}>
+								{props.children}
+							</Suspense>
+						</ErrorBoundary>
 					</div>
 				</main>
 				<aside class={`${styles.sidebar} ${styles.right}`}>
-					<Sidebar />
+					<ErrorBoundary fallback={<p>An error occurred</p>}>
+						<Sidebar />
+					</ErrorBoundary>
 				</aside>
 			</div>
 		</Suspense>
