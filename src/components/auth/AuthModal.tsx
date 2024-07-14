@@ -1,39 +1,38 @@
-import { createResource, createSignal, onCleanup, onMount } from 'solid-js'
+import { createSignal, onCleanup, onMount } from 'solid-js'
+import { action } from '@solidjs/router'
 import createSession from '../../api/identity/createSession'
 import { PlusIcon } from '../../assets/PlusIcon'
 import styles from './AuthModal.module.css'
-// import { cookieStorage, makePersisted } from "@solid-primitives/storage"
+import { setSession } from '../../storage/session'
 
 const [identifier, setIdentifier] = createSignal('')
 const [password, setPassword] = createSignal('')
 
-const credentials = () => {
-	return { identifier: identifier(), password: password() }
-}
+// Personal note: && vs ||
+// I thought && means both should be true
+// But using || results in the corrent behavior
 
-const handleLogin = (event: Event) => {
-	event.preventDefault()
-	const [session] = createResource(credentials(), createSession)
+// To-do
+// identifier validation: bsky max length and domain validation
+// app password validaation: should be app password syntax, disallow main password authentication
+const isLoginDisabled = () => !identifier() || !password()
 
-	// const session = await createSession(credentials())
+const credentials = () => ({ identifier: identifier(), password: password() })
 
-	// const [signal, setSignal] = makePersisted(createSignal())
-
-	if (session.error) {
-		return
+const authenticate = action(async () => {
+	const session = await createSession(credentials())
+	if (session) {
+		setSession(session)
+		setIdentifier('')
+		setPassword('')
 	}
-
-	// if (session()) {
-	// 	cookieStorage.setItem("accessJwt", session().accessJwt)
-	// 	cookieStorage.setItem("refreshJwt", session().refreshJwt)
-	// }
-}
+})
 
 const AuthModal = () => {
-	let dialog: HTMLDialogElement | undefined
+	let dialog: HTMLDialogElement
 
 	const handleOpen = () => {
-		dialog?.showModal()
+		dialog.showModal()
 		document.body.style.scrollBehavior = 'none'
 		document.body.style.overflow = 'hidden'
 	}
@@ -45,7 +44,7 @@ const AuthModal = () => {
 
 	const handleOutsideClick = (event: MouseEvent) => {
 		if (event.target === dialog) {
-			dialog?.close()
+			dialog.close()
 		}
 	}
 
@@ -64,29 +63,41 @@ const AuthModal = () => {
 			<button type='button' onClick={handleOpen}>
 				<PlusIcon />
 			</button>
-			<dialog ref={dialog} class={styles.dialog}>
-				<form class={styles.content} onsubmit={handleLogin}>
-					<p>Login to your account 👋</p>
+			<dialog ref={dialog!} class={styles.dialog}>
+				<form
+					action={authenticate}
+					method='post'
+					class={styles.content}
+				>
+					<div class={styles.title}>
+						<h3>Login to your account</h3>
+					</div>
 					<input
 						class={styles.input}
 						type='text'
 						name='handle'
-						placeholder='Handle or DID'
+						placeholder='Username or email address'
 						required
 						onInput={(event) => setIdentifier(event.target.value)}
 					/>
 					<input
 						class={styles.input}
-						type='passport'
+						type='password'
 						name='password'
-						placeholder='App passowrd'
+						placeholder='Password'
 						required
 						onInput={(event) => setPassword(event.target.value)}
 					/>
-					<button class={styles.input} type='submit'>
+					<button
+						class={`${styles.input} ${styles.submit}`}
+						disabled={isLoginDisabled()}
+						type='submit'
+					>
 						Submit
 					</button>
-					<button type='button'>Create an account</button>
+					<div class={styles.alternate}>
+						<button type='button'>Create an account</button>
+					</div>
 				</form>
 			</dialog>
 		</>

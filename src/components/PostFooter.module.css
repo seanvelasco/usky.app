@@ -4,7 +4,6 @@
 }
 
 .button {
-	all: unset;
 	z-index: 1;
 	min-height: 100%;
 	display: flex;
