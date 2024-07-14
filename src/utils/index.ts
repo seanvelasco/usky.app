@@ -1,4 +1,5 @@
-import { ImageBlob } from '../types'
+import { ImageBlob, Profile } from '../types'
+import { session } from '../storage/session'
 
 export const id = (uri: string) => {
 	if (!uri) return null
@@ -46,3 +47,5 @@ export const createImageLink = (
 		return `https://cdn.bsky.app/img/feed_thumbnail/plain/${props.did}/${link}@webp`
 	}
 }
+
+export const isOwnProfile = (profile: Profile) => profile.did && session.did === profile.did

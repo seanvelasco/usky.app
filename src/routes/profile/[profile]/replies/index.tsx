@@ -4,7 +4,7 @@ import { Title, Meta, Link } from '@solidjs/meta'
 import { getPostsData, getProfileData } from '..'
 import Post from '../../../../components/Post'
 import { Fallback } from '..'
-import Spinner from '../../../../components/Spinner.tsx'
+import Spinner from '../../../../components/Spinner'
 
 export const Replies = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getPostsData(props.params.profile))

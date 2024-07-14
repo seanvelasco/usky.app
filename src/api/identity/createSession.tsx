@@ -1,4 +1,5 @@
 import { SERVICE_BASE_URL } from '../../constants'
+import type { Session } from '../../types'
 
 const createSession = async ({
 	identifier,
@@ -6,14 +7,7 @@ const createSession = async ({
 }: {
 	identifier: string
 	password: string
-}): Promise<{
-	did: string
-	handle: string
-	emailConfirmed: boolean
-	description: string
-	accessJwt: string
-	refreshJwt: string
-}> => {
+}): Promise<Session | undefined> => {
 	const response = await fetch(
 		`${SERVICE_BASE_URL}/xrpc/com.atproto.server.createSession`,
 		{

@@ -13,12 +13,47 @@ import { getPostData } from '../../routes/profile/[profile]/post/[post]'
 import { feedGeneratorData } from '../../routes/profile/[profile]/feed/[feed]'
 import { getListData } from '../../routes/profile/[profile]/lists/[list]'
 import { ChevronLeft } from '../../assets/ChevronLeft'
+import EllipsisIcon from '../../assets/EllipsisIcon'
+import { isOwnProfile } from '../../utils'
 import styles from './Header.module.css'
+import Dropdown from '../Dropdown'
+import { setSession } from '../../storage/session'
+import { action, useAction, redirect } from '@solidjs/router'
+
+const logout = action(async () => {
+	console.log('attempting to logout')
+	setSession({})
+	throw redirect('/')
+})
 
 export const ProfilePageHeader = () => {
 	const params = useParams()
 	const profile = createAsync(() => getProfileData(params.profile))
-	return <p>{profile()?.displayName ?? profile()?.handle}</p>
+	const signoff = useAction(logout)
+	return (
+		<Show when={profile()}>
+			{(profile) => (
+				<div class={styles.profile}>
+					<p>{profile().displayName ?? profile().handle}</p>
+					<Show when={isOwnProfile(profile())}>
+						<Dropdown.Container>
+							<Dropdown.Trigger>
+								<button class={styles.button}>
+									<EllipsisIcon />
+								</button>
+							</Dropdown.Trigger>
+							<Dropdown.Content>
+								{/* <Dropdown.Item>Settings</Dropdown.Item> */}
+								<Dropdown.Item>
+									<button onclick={signoff}>Logout</button>
+								</Dropdown.Item>
+							</Dropdown.Content>
+						</Dropdown.Container>
+					</Show>
+				</div>
+			)}
+		</Show>
+	)
 }
 
 export const PostPageHeader = () => {
@@ -103,6 +138,8 @@ const GenericHeader = (props: { children: JSXElement }) => (
 )
 
 const Header = () => {
+	// Should Header be its own Router?
+	// What's the performance implication of using multiple useMatch
 	const navigate = useNavigate()
 	const location = useLocation()
 	const params = useParams()

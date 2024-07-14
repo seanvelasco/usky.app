@@ -1,14 +1,15 @@
 import { A } from '@solidjs/router'
 import { For, Show, lazy, ErrorBoundary, Switch, Match } from 'solid-js'
-import type { FeedPost, Thread, ThreadParentOrReply } from '../types'
 import { did, id } from '../utils'
 import Avatar from './Avatar'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
 import TimeAgo from './TimeAgo'
 import Embed from './embeds/Embed'
-const RichText = lazy(() => import('./RichText'))
 import styles from './Post.module.css'
+import type { FeedPost, Thread, ThreadParentOrReply } from '../types'
+
+const RichText = lazy(() => import('./RichText'))
 
 export const FallbackPost = (props: {
 	post: ThreadParentOrReply | FeedPost | undefined

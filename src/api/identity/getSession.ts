@@ -1,15 +1,21 @@
-import { PUBLIC_API_BASE_URL } from '../../constants'
+import { SERVICE_BASE_URL } from '../../constants'
+import type { Session } from '../../types'
 
-const resolveHandle = async (handle: string): Promise<string> => {
+const getSession = async (accessJwt: string): Promise<Session | undefined> => {
 	const response = await fetch(
-		`${PUBLIC_API_BASE_URL}/xrpc/com.atproto.server.getSession?handle=${handle}`
+		`${SERVICE_BASE_URL}/xrpc/com.atproto.server.getSession`,
+		{
+			headers: {
+				'Accept': 'application/json',
+				'Authorization': `Bearer ${accessJwt}`
+			}
+		}
+
 	)
 
-	const body = await response.json()
-
-	return body
+	return await response.json()
 }
 
-export { resolveHandle }
+export { getSession }
 
-export default resolveHandle
+export default getSession
