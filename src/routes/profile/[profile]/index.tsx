@@ -1,12 +1,13 @@
-import { For, Show, Suspense, ErrorBoundary } from 'solid-js'
+import { For, Show, Suspense, ErrorBoundary, lazy } from 'solid-js'
 import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
 import Post from '../../../components/Post'
 import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
-import RichText from '../../../components/RichText'
 import styles from './styles.module.css'
-import Spinner from '../../../components/Spinner.tsx'
+import Spinner from '../../../components/Spinner'
+
+const RichText = lazy(() => import('../../../components/RichText'))
 
 export const Fallback = (props: { text?: string }) => (
 	<div class={styles.fallback}>

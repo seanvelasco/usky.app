@@ -11,15 +11,15 @@ import styles from './App.module.css'
 
 // this is for auth
 import { session } from './storage/session'
-import { cache, createAsync } from '@solidjs/router'
-import { getSession } from './api/identity/getSession'
+import { createAsync } from '@solidjs/router' // cache,
+// import { getSession } from './api/identity/getSession'
 import { getProfileData } from './routes/profile/[profile]'
 import Avatar from './components/Avatar'
 
-const getBlueskySession = cache(
-	async () => await getSession(session.accessJwt),
-	'session'
-)
+// const getBlueskySession = cache(
+// 	async () => await getSession(session.accessJwt),
+// 	'session'
+// )
 
 const Navigation = () => {
 	const profile = createAsync(() => getProfileData(session.did))
@@ -76,7 +76,7 @@ const Navigation = () => {
 }
 
 const App = (props: RouteSectionProps) => {
-	const session = createAsync(() => getBlueskySession())
+	// const session = createAsync(() => getBlueskySession())
 	return (
 		<Suspense fallback={<Spinner />}>
 			<div
