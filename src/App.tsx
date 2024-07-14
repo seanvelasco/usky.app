@@ -1,4 +1,4 @@
-import { For, Suspense } from 'solid-js'
+import { For, Suspense, Show } from 'solid-js'
 import { A, type RouteSectionProps } from '@solidjs/router'
 import Header from './components/layout/Header'
 import Sidebar from './components/layout/Sidebar'
@@ -9,7 +9,21 @@ import { SearchIcon } from './assets/SearchIcon'
 import Spinner from './components/Spinner'
 import styles from './App.module.css'
 
+// this is for auth
+import { session } from './storage/session'
+import { cache, createAsync } from '@solidjs/router'
+import { getSession } from './api/identity/getSession'
+import { getProfileData } from './routes/profile/[profile]'
+import Avatar from './components/Avatar'
+
+const getBlueskySession = cache(
+	async () => await getSession(session.accessJwt),
+	'session'
+)
+
 const Navigation = () => {
+	const profile = createAsync(() => getProfileData(session.did))
+
 	const links = [
 		{
 			label: 'Home',
@@ -32,7 +46,7 @@ const Navigation = () => {
 		<nav class={styles.nav}>
 			<For each={links}>
 				{(link) => (
-					<div>
+					<div class={styles.icon}>
 						<A
 							end
 							activeClass='highlight'
@@ -44,21 +58,25 @@ const Navigation = () => {
 					</div>
 				)}
 			</For>
-			{/* <div
-				style={{
-					"border-radius": "50%"
-				}}
-			>
-				<Avatar size="1.5rem" />
-			</div> */}
-			<div>
-				<AuthModal />
-			</div>
+			<Show when={profile()}>
+				<div
+					class={styles.icon}
+					style={{
+						'border-radius': '50%'
+					}}
+				>
+					<Avatar src={profile()?.avatar} size='1.5rem' />
+				</div>
+				<div class={styles.icon}>
+					<AuthModal />
+				</div>
+			</Show>
 		</nav>
 	)
 }
 
 const App = (props: RouteSectionProps) => {
+	const session = createAsync(() => getBlueskySession())
 	return (
 		<Suspense fallback={<Spinner />}>
 			<div

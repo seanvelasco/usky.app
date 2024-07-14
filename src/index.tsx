@@ -36,7 +36,9 @@ import List, { getListData } from './routes/profile/[profile]/lists/[list]'
 // to-do: loaders should be in a separate file
 import { Top, People, Latest, Media as MediaSearch } from './routes/search'
 import Trends, { getTranding } from './routes/trends'
-import Spinner from './components/Spinner.tsx'
+import Spinner from './components/Spinner'
+import { session } from './storage/session'
+console.log(session.accessJwt)
 
 render(
 	() => (
@@ -111,7 +113,6 @@ render(
 							}
 						/>
 					</Route>
-
 					<Route
 						path='/hashtag/:hashtag'
 						component={HashtagPage}
