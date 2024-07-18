@@ -72,9 +72,26 @@ const About = () => {
 				<p>
 					usky.app is a statically exported Solid.js SPA and PWA
 					(previously a server-rendered SvelteKit app). Uses CSS
-					modules for styling. Has two external dependencies:
-					solid-router and solid-meta. All icons are from Heroicons
-					(including app logo).
+					modules for styling. Has 8 external dependencies: solid-js
+					@solidjs/router, @solidjs/meta, @solid-primitives/storage,
+					@ipld/car, @ipld/dag-cbor, cbor-x, and @atproto/api. All
+					icons are from Heroicons (including app logo).
+				</p>
+				<h3>Developer</h3>
+				<p>
+					Developed by{' '}
+					<a target='_blank' href='https://seanvelasco.com'>
+						Sean Velasco
+					</a>
+					, a Software Engineer based in the Philippines.
+				</p>
+				<p>
+					He is currently looking for a frontend or full-stack work!
+					Hire him for short-term projects or full-time roles.
+				</p>
+				<p>
+					Please feel free to send an email at{' '}
+					<a href='mailto:sean@sean.app'>sean@sean.app</a>.
 				</p>
 			</div>
 		</>

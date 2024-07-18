@@ -29,3 +29,7 @@
 		padding: 1rem;
 	}
 }
+
+.about a {
+	color: var(--link-primary);
+}
