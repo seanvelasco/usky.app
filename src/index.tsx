@@ -37,8 +37,9 @@ import List, { getListData } from './routes/profile/[profile]/lists/[list]'
 import { Top, People, Latest, Media as MediaSearch } from './routes/search'
 import Trends, { getTranding } from './routes/trends'
 import Spinner from './components/Spinner'
+// NOTIFICATIONS
+import Notifications, { getNotifications } from './routes/notifications'
 import { session } from './storage/session'
-console.log(session.accessJwt)
 
 render(
 	() => (
@@ -131,6 +132,12 @@ render(
 
 					<Route path='/feeds' component={PopularFeeds} />
 					<Route path='/about' component={About} />
+					<Route
+						path='/notifications'
+						component={Notifications}
+						load={() => getNotifications(session.accessJwt)}
+					/>
+
 					<Route
 						path='/profile/:profile'
 						component={Profile}

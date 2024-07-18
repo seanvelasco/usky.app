@@ -324,3 +324,14 @@ export interface Session {
 	refreshJwt: string
 	active: boolean
 }
+
+interface Notification {
+	uri: string;
+	cid: string;
+	author: Actor;
+	reason: string;
+	record: Record;
+	isRead: boolean;
+	indexedAt: string;
+	labels: unknown[]
+}
