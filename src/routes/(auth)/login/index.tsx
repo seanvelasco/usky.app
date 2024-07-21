@@ -1,7 +1,5 @@
 import { createSignal } from 'solid-js'
-import { useAction } from '@solidjs/router'
-import createSession from '../../../api/identity/createSession'
-import { useSession, login } from '../../../states/session'
+import { login } from '../../../states/session'
 import styles from './styles.module.css'
 
 const Login = () => {

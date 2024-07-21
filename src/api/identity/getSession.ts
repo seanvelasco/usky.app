@@ -13,6 +13,8 @@ const getSession = async (accessJwt: string): Promise<Session | undefined> => {
 
 	)
 
+	if (!response.ok) return
+
 	return await response.json()
 }
 

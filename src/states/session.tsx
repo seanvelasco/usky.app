@@ -9,9 +9,10 @@ import {
 	setSession as setSessionStorage
 } from '../storage/session'
 import type { Session } from '../types'
+import { useNavigate } from '@solidjs/router'
 
 const getBlueskySession = cache(
-	(accessJwt: string) => getSession(accessJwt),
+	async (accessJwt: string) => getSession(accessJwt),
 	'session'
 )
 
@@ -20,28 +21,38 @@ const refreshBlueskySession = cache(
 	'refresh_session'
 )
 
-const SessionContext = createContext<Session>()
-
-const SessionProvider = (props: { service?: string; children: JSXElement }) => {
+const runSessionLogic = () => {
+	// "bruh" moment
+	// accessors are undefined, logic does not work
+	// also, if an inner IF is false, it does evaluate the outer ELSE, it will just return
 	if (sessionStorage.accessJwt) {
 		const session = createAsync(() =>
 			getBlueskySession(sessionStorage.accessJwt)
 		)
 		if (session()) {
-			setSessionStorage(session() as Session)
+			console.log('This is a valid session')
+			// setSessionStorage(session() as Session)
 		} else if (sessionStorage.refreshJwt) {
+			console.log(`Unable to getSession, attempting to refresh`)
 			const session = createAsync(() =>
 				refreshBlueskySession(sessionStorage.refreshJwt)
 			)
 			if (session()) {
+				console.log('Tokens refreshed', session())
 				setSessionStorage('accessJwt', session()?.accessJwt!)
 				setSessionStorage('refreshJwt', session()?.refreshJwt!)
 			}
 		}
 	} else {
+		console.log('Unable to refresh revoked, NUCLEAR')
 		setSessionStorage(reconcile({}))
 	}
+}
 
+const SessionContext = createContext<Session>()
+
+const SessionProvider = (props: { service?: string; children: JSXElement }) => {
+	runSessionLogic()
 	return (
 		<SessionContext.Provider value={sessionStorage as Session}>
 			{props.children}
@@ -51,8 +62,9 @@ const SessionProvider = (props: { service?: string; children: JSXElement }) => {
 
 // should this be an exported fn or should this be part of value like { session, logout } = useSession?
 const logout = () => {
+	const navigate = useNavigate()
 	setSessionStorage(reconcile({}))
-	throw redirect('/')
+	navigate('/', { replace: true })
 }
 
 const login = action(async (formData: FormData) => {
@@ -62,6 +74,7 @@ const login = action(async (formData: FormData) => {
 	const session = await createSession({ identifier, password })
 	if (session) {
 		setSessionStorage(session)
+		// navigate('/', { replace: true })
 		throw redirect('/')
 	}
 })
