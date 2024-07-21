@@ -1,0 +1,72 @@
+.button {
+	background-color: var(--button-secondary);
+	color: var(--secondary-button-text);
+	border-radius: 2.25rem;
+	display: flex;
+	gap: 0.5rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: fit-content;
+	height: 2.25rem;
+	justify-content: center;
+	align-items: center;
+	vertical-align: middle;
+	padding: 0 1rem;
+	outline: none;
+	border: none;
+	transition:
+		background-color 170ms ease,
+		color 170ms ease,
+		border 170ms ease;
+	cursor: pointer;
+	font-weight: 500;
+	margin-right: 12px;
+}
+
+.dialog {
+	padding: 1.5rem;
+}
+
+.content {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.input {
+	display: block;
+	width: 100%;
+	border-radius: 8px;
+	height: 2.75rem;
+	background-color: var(--background-secondary);
+	outline: none;
+	border: none;
+	padding: 0 0.75rem;
+}
+
+.submit {
+	text-align: center;
+	font-weight: 600;
+}
+
+.title {
+	width: 100%;
+}
+
+.title h3 {
+	font-weight: 500;
+	font-size: 1.125rem;
+	margin-bottom: 1rem;
+}
+
+.alternate {
+	height: 2.25rem;
+	display: flex;
+}
+
+.alternate button:hover {
+	text-decoration: underline;
+}

@@ -1,6 +1,7 @@
 import { createContext, useContext, type JSXElement } from 'solid-js'
 import { reconcile } from 'solid-js/store'
-import { createAsync, cache, redirect } from '@solidjs/router'
+import { createAsync, cache, action, redirect } from '@solidjs/router'
+import createSession from '../api/identity/createSession'
 import getSession from '../api/identity/getSession'
 import refreshSession from '../api/identity/refreshSession'
 import {
@@ -54,6 +55,17 @@ const logout = () => {
 	throw redirect('/')
 }
 
+const login = action(async (formData: FormData) => {
+	const identifier = String(formData.get('identifier'))
+	const password = String(formData.get('password'))
+	console.log({ identifier, password })
+	const session = await createSession({ identifier, password })
+	if (session) {
+		setSessionStorage(session)
+		throw redirect('/')
+	}
+})
+
 const useSession = () => {
 	const session = useContext(SessionContext)
 
@@ -64,4 +76,4 @@ const useSession = () => {
 	return session
 }
 
-export { SessionProvider, useSession, logout }
+export { SessionProvider, useSession, logout, login }

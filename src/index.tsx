@@ -39,13 +39,20 @@ import Trends, { getTranding } from './routes/trends'
 import Spinner from './components/Spinner'
 // NOTIFICATIONS
 import Notifications, { getNotifications } from './routes/notifications'
+// Session and auth
 import { session } from './storage/session'
+import Login from './routes/(auth)/login'
+
+// to-do
+// check session before rendering
+// never, in any circumstance, render auth layout if a user has a valid session
 
 render(
 	() => (
 		<Suspense fallback={<Spinner />}>
 			<MetaProvider>
 				<Router root={App}>
+					<Route path='/login' component={Login} />
 					<Route component={Discover}>
 						<Route
 							path='/'
