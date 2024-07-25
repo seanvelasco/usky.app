@@ -6,11 +6,10 @@ const getSession = async (accessJwt: string): Promise<Session | undefined> => {
 		`${SERVICE_BASE_URL}/xrpc/com.atproto.server.getSession`,
 		{
 			headers: {
-				'Accept': 'application/json',
-				'Authorization': `Bearer ${accessJwt}`
+				Accept: 'application/json',
+				Authorization: `Bearer ${accessJwt}`
 			}
 		}
-
 	)
 
 	if (!response.ok) return

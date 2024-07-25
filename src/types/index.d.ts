@@ -29,10 +29,10 @@ export interface Profile {
 export interface ImageBlob {
 	$type: 'blob'
 	ref:
-	| {
-		$link: string
-	}
-	| any
+		| {
+				$link: string
+		  }
+		| any
 	mimeType: string
 	size: number
 }
@@ -45,7 +45,7 @@ export interface Record {
 	createdAt: string
 }
 
-export interface Facet { }
+export interface Facet {}
 
 export interface ExternalEmbed {
 	$type: 'app.bsky.embed.external#view' | 'app.bsky.embed.external'
@@ -139,33 +139,33 @@ export interface ListEmbed extends RecordEmbed {
 
 export type Embed =
 	| {
-		$type: 'app.bsky.embed.record#view' | 'app.bsky.embed.record'
-		record:
-		| PostEmbed
-		| GeneratorEmbed
-		| ListEmbed
-		| DeletedEmbed
-		| BlockedEmbed
-	}
+			$type: 'app.bsky.embed.record#view' | 'app.bsky.embed.record'
+			record:
+				| PostEmbed
+				| GeneratorEmbed
+				| ListEmbed
+				| DeletedEmbed
+				| BlockedEmbed
+	  }
 	| {
-		$type:
-		| 'app.bsky.embed.recordWithMedia#view'
-		| 'app.bsky.embed.recordWithMedia'
-		record: {
-			record: PostEmbed
-		}
-		media: {
+			$type:
+				| 'app.bsky.embed.recordWithMedia#view'
+				| 'app.bsky.embed.recordWithMedia'
+			record: {
+				record: PostEmbed
+			}
+			media: {
+				images: ImageEmbed[]
+			}
+	  }
+	| {
+			$type: 'app.bsky.embed.images#view' | 'app.bsky.embed.images'
 			images: ImageEmbed[]
-		}
-	}
+	  }
 	| {
-		$type: 'app.bsky.embed.images#view' | 'app.bsky.embed.images'
-		images: ImageEmbed[]
-	}
-	| {
-		$type: 'app.bsky.embed.external#view' | 'app.bsky.embed.external'
-		external: ExternalEmbed
-	}
+			$type: 'app.bsky.embed.external#view' | 'app.bsky.embed.external'
+			external: ExternalEmbed
+	  }
 
 export interface Reason {
 	$type: 'app.bsky.feed.defs#reasonRepost'
@@ -326,12 +326,12 @@ export interface Session {
 }
 
 interface Notification {
-	uri: string;
-	cid: string;
-	author: Actor;
-	reason: string;
-	record: Record;
-	isRead: boolean;
-	indexedAt: string;
+	uri: string
+	cid: string
+	author: Actor
+	reason: string
+	record: Record
+	isRead: boolean
+	indexedAt: string
 	labels: unknown[]
 }

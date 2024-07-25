@@ -48,4 +48,5 @@ export const createImageLink = (
 	}
 }
 
-export const isOwnProfile = (profile: Profile) => profile.did && session.did === profile.did
+export const isOwnProfile = (profile: Profile) =>
+	profile.did && session.did === profile.did
