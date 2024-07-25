@@ -13,18 +13,13 @@ import Spinner from './components/Spinner'
 import styles from './App.module.css'
 
 // this is for auth
-import { session } from './storage/session'
-import { createAsync } from '@solidjs/router' // cache,
-// import { getSession } from './api/identity/getSession'
+import { createAsync } from '@solidjs/router'
 import { getProfileData } from './routes/profile/[profile]'
 import Avatar from './components/Avatar'
-
-// const getBlueskySession = cache(
-// 	async () => await getSession(session.accessJwt),
-// 	'session'
-// )
+import { SessionProvider, useSession } from './states/session'
 
 const Navigation = () => {
+	const session = useSession()
 	const profile = createAsync(() => getProfileData(session.did))
 
 	const links = [
@@ -98,41 +93,42 @@ const Navigation = () => {
 }
 
 const App = (props: RouteSectionProps) => {
-	// const session = createAsync(() => getBlueskySession())
 	return (
 		<Suspense fallback={<Spinner />}>
-			<div
-				style={{
-					display: 'flex',
-					'flex-flow': 'row nowrap',
-					'justify-content': 'center'
-				}}
-			>
-				<aside class={`${styles.sidebar} ${styles.left}`}>
-					<Navigation />
-				</aside>
-				<main class={styles.main}>
-					<div
-						style={{
-							display: 'flex',
-							'flex-direction': 'column',
-							'min-height': '100%'
-						}}
-					>
-						<Header />
+			<SessionProvider>
+				<div
+					style={{
+						display: 'flex',
+						'flex-flow': 'row nowrap',
+						'justify-content': 'center'
+					}}
+				>
+					<aside class={`${styles.sidebar} ${styles.left}`}>
+						<Navigation />
+					</aside>
+					<main class={styles.main}>
+						<div
+							style={{
+								display: 'flex',
+								'flex-direction': 'column',
+								'min-height': '100%'
+							}}
+						>
+							<Header />
+							<ErrorBoundary fallback={<p>An error occurred</p>}>
+								<Suspense fallback={<Spinner />}>
+									{props.children}
+								</Suspense>
+							</ErrorBoundary>
+						</div>
+					</main>
+					<aside class={`${styles.sidebar} ${styles.right}`}>
 						<ErrorBoundary fallback={<p>An error occurred</p>}>
-							<Suspense fallback={<Spinner />}>
-								{props.children}
-							</Suspense>
+							<Sidebar />
 						</ErrorBoundary>
-					</div>
-				</main>
-				<aside class={`${styles.sidebar} ${styles.right}`}>
-					<ErrorBoundary fallback={<p>An error occurred</p>}>
-						<Sidebar />
-					</ErrorBoundary>
-				</aside>
-			</div>
+					</aside>
+				</div>
+			</SessionProvider>
 		</Suspense>
 	)
 }

@@ -22,6 +22,8 @@ const createSession = async ({
 		}
 	)
 
+	if (!response.ok) return
+
 	return await response.json()
 }
 

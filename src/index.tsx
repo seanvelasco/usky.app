@@ -37,14 +37,22 @@ import List, { getListData } from './routes/profile/[profile]/lists/[list]'
 import { Top, People, Latest, Media as MediaSearch } from './routes/search'
 import Trends, { getTranding } from './routes/trends'
 import Spinner from './components/Spinner'
+// NOTIFICATIONS
+import Notifications, { getNotifications } from './routes/notifications'
+// Session and auth
 import { session } from './storage/session'
-console.log(session.accessJwt)
+import Login from './routes/(auth)/login'
+
+// to-do
+// check session before rendering
+// never, in any circumstance, render auth layout if a user has a valid session
 
 render(
 	() => (
 		<Suspense fallback={<Spinner />}>
 			<MetaProvider>
 				<Router root={App}>
+					<Route path='/login' component={Login} />
 					<Route component={Discover}>
 						<Route
 							path='/'
@@ -131,6 +139,12 @@ render(
 
 					<Route path='/feeds' component={PopularFeeds} />
 					<Route path='/about' component={About} />
+					<Route
+						path='/notifications'
+						component={Notifications}
+						load={() => getNotifications(session.accessJwt)}
+					/>
+
 					<Route
 						path='/profile/:profile'
 						component={Profile}
