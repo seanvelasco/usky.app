@@ -21,26 +21,28 @@ const refreshBlueskySession = cache(
 	'refresh_session'
 )
 
-const runSessionLogic = () => {
+const runSessionLogic = async () => {
 	// "bruh" moment
 	// accessors are undefined, logic does not work
 	// also, if an inner IF is false, it does evaluate the outer ELSE, it will just return
+	console.log(sessionStorage.accessJwt)
 	if (sessionStorage.accessJwt) {
-		const session = createAsync(() =>
-			getBlueskySession(sessionStorage.accessJwt)
-		)
-		if (session()) {
+		const session = await getBlueskySession(sessionStorage.accessJwt)
+		if (session) {
 			console.log('This is a valid session')
 			// setSessionStorage(session() as Session)
 		} else if (sessionStorage.refreshJwt) {
 			console.log(`Unable to getSession, attempting to refresh`)
-			const session = createAsync(() =>
-				refreshBlueskySession(sessionStorage.refreshJwt)
+			const session = await refreshBlueskySession(
+				sessionStorage.refreshJwt
 			)
-			if (session()) {
-				console.log('Tokens refreshed', session())
-				setSessionStorage('accessJwt', session()?.accessJwt!)
-				setSessionStorage('refreshJwt', session()?.refreshJwt!)
+			if (session) {
+				console.log('Tokens refreshed', session)
+				setSessionStorage('accessJwt', session.accessJwt!)
+				setSessionStorage('refreshJwt', session.refreshJwt!)
+			} else {
+				console.log('Unable to refresh revoked, NUCLEAR')
+				setSessionStorage(reconcile({}))
 			}
 		}
 	} else {
@@ -49,10 +51,12 @@ const runSessionLogic = () => {
 	}
 }
 
+export const checkSession = cache(() => runSessionLogic(), 'check_session')
+
 const SessionContext = createContext<Session>()
 
 const SessionProvider = (props: { service?: string; children: JSXElement }) => {
-	runSessionLogic()
+	createAsync(() => checkSession())
 	return (
 		<SessionContext.Provider value={sessionStorage as Session}>
 			{props.children}

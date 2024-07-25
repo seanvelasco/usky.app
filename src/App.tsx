@@ -93,8 +93,6 @@ const Navigation = () => {
 }
 
 const App = (props: RouteSectionProps) => {
-	// const session = createAsync(() => refreshBlueskySession())
-
 	return (
 		<Suspense fallback={<Spinner />}>
 			<SessionProvider>
