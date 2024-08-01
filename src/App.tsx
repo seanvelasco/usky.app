@@ -18,6 +18,8 @@ import { getProfileData } from './routes/profile/[profile]'
 import Avatar from './components/Avatar'
 import { SessionProvider, useSession } from './states/session'
 
+import MobileNav from './components/layout/MobileNav'
+
 const Navigation = () => {
 	const session = useSession()
 	const profile = createAsync(() => getProfileData(session.did))
@@ -121,6 +123,7 @@ const App = (props: RouteSectionProps) => {
 								</Suspense>
 							</ErrorBoundary>
 						</div>
+						<MobileNav />
 					</main>
 					<aside class={`${styles.sidebar} ${styles.right}`}>
 						<ErrorBoundary fallback={<p>An error occurred</p>}>
