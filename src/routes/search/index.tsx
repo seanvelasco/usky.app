@@ -8,7 +8,6 @@ import {
 	type RouteSectionProps
 } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
-
 import searchActors from '../../api/actor/searchActors'
 import searchPosts from '../../api/feed/searchPosts'
 import Entry from '../../components/Entry'

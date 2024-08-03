@@ -8,14 +8,15 @@ import {
 	redirect,
 	useAction,
 	useParams,
-	useLocation,
-	useNavigate
+	useNavigate,
+	useBeforeLeave
 } from '@solidjs/router'
 import searchActorsTypeahead from '../api/actor/searchActorsTypeahead'
 import styles from './Search.module.css'
 import { ListItem } from './Section'
 import listStyles from './Section.module.css'
 import Spinner from './Spinner'
+import useMatches from '../utils/useMatches'
 
 const typeaheadSearch = cache(
 	async (query: string) => await searchActorsTypeahead(query),
@@ -32,11 +33,7 @@ const Search = () => {
 	const [results, setSearchResults] =
 		createSignal<Awaited<ReturnType<typeof searchActorsTypeahead>>>()
 	const navigate = useNavigate()
-	const location = useLocation()
-	const isSearchOrHashtagPage = () =>
-		['/search', '/hashtag'].some((path) =>
-			location.pathname.startsWith(path)
-		)
+	const isSearchOrHashtagPage = useMatches(() => ['/search', '/hashtag'])
 	const isSearchPage = useMatch(() => '/search')
 	const isHashtagPage = useMatch(() => '/hashtag/:hashtag')
 	const params = useParams()
@@ -82,6 +79,8 @@ const Search = () => {
 		if (isSearchOrHashtagPage()) return
 		await search(query())
 	}
+
+	useBeforeLeave(() => setQuery(''))
 
 	return (
 		<>
