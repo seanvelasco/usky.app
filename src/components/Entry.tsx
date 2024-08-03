@@ -12,9 +12,11 @@ const Entry = (props: {
 	avatar: string
 	href: string
 	type?: 'creator'
+	mini?: boolean
 }) => {
+	console.log(props.mini)
 	return (
-		<div class={styles.entry}>
+		<div class={`${styles.entry} ${props.mini && styles.mini}`}>
 			<Avatar
 				style={{
 					'border-radius': props.type === 'creator' ? '12px' : '50%'

@@ -7,6 +7,7 @@ import {
 	useParams,
 	useMatch
 } from '@solidjs/router'
+import useMatches from '../../utils/useMatches'
 // import getSuggestions from '../../api/actor/getSuggestions'
 import getPopularFeedGenerators from '../../api/unspecced/getPopularFeedGenerators'
 import Search from '../Search'
@@ -42,10 +43,7 @@ const Sidebar = () => {
 	// this should be dynamic with :profile, wrap this with auth
 	// const users = createAsync(getSuggestions)
 	const feeds = createAsync(getPopularFeedGenerators)
-	const isSearch = () =>
-		['/search', '/hashtag'].some((path) =>
-			location.pathname.startsWith(path)
-		)
+	const isSearch = useMatches(() => ['/search', '/hashtag'])
 	const isTrends = useMatch(() => '/trends')
 	return (
 		<Suspense>

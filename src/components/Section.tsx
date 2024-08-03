@@ -1,11 +1,12 @@
 import { A } from '@solidjs/router'
-import { ErrorBoundary, For } from 'solid-js'
+import { ErrorBoundary, For, Show } from 'solid-js'
 import type { Feed, Profile } from '../types'
 import { id } from '../utils'
 import Avatar from './Avatar'
 import styles from './Section.module.css'
+import entryStyles from './Entry.module.css'
 
-const SectionItem = (props: {
+export const ListItem = (props: {
 	href: string
 	avatar: string
 	name: string
@@ -18,7 +19,12 @@ const SectionItem = (props: {
 				<A class={styles.name} href={props.href}>
 					{props.name}
 				</A>
-				{/* <A href={props.href}>{props.handle}</A> */}
+				<Show when={props.handle}>
+					<A class={entryStyles.handle} href={props.href}>
+						@{props.handle}
+					</A>
+				</Show>
+
 				{/* <A href={props.href}>{props.name}</A> */}
 			</div>
 			<A
@@ -36,7 +42,7 @@ const Section = (props: { title: string; list: Feed[] }) => {
 			<p class={styles.title}>{props.title}</p>
 			<For each={props.list}>
 				{(list) => (
-					<SectionItem
+					<ListItem
 						href={`/profile/${list.creator.did}/feed/${id(list.uri)}`}
 						avatar={list?.avatar ?? '/feed.svg'}
 						name={list.displayName}
@@ -97,7 +103,7 @@ export const ActorsSection = (props: {
 				<p class={styles.title}>{props.title}</p>
 				<For each={props.actors.filter((actor) => actor)}>
 					{(actor) => (
-						<SectionItem
+						<ListItem
 							href={`/profile/${actor.handle}`}
 							avatar={actor.avatar ?? '/avatar.svg'}
 							name={actor?.displayName || `@${actor.handle}`}
