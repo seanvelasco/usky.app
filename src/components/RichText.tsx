@@ -1,7 +1,5 @@
-// import { onMount, createEffect, createSignal } from 'solid-js'
 import { RichText } from '@atproto/api'
 import type { Facet } from '../types'
-// import { useAgent } from '../states/agent'
 
 const rter = ({
 	text,
@@ -45,30 +43,6 @@ const RichTextComponent = (props: {
 	text: string
 	facets?: Facet[] | undefined
 }) => {
-	// const agent = useAgent()
-	//
-	// if (!props.facets) {
-	// 	rt.detectFacetsWithoutResolution()
-	// }
-
-	// for (const segment of rt.segments()) {
-	// 	if (segment.link) {
-	// 		setText((prev) => (prev += `<A href="${segment.link?.uri}">${segment.text}</A>`))
-	//
-	// 		// text += `<A target='_blank' rel='nofollow' href="${segment.link.uri}">${segment.text}</A>`
-	// 	} else if (segment.mention) {
-	// 		setText((prev) => (prev += `<A href="${segment.mention?.did}">${segment.text}</A>`))
-	//
-	// 		// text += `<A href="/profile/${segment.mention.did}">${segment.text}</A>`
-	// 	} else if (segment.tag) {
-	// 		setText((prev) => (prev += `<A href="/hashtag/${segment.tag?.tag}">${segment.text}</A>`))
-	//
-	// 		// text += `<A href="/hashtag/${segment.tag.tag}">${segment.text}</A>`
-	// 	} else {
-	// 		setText((prev) => (prev += segment.text))
-	// 	}
-	// }
-
 	return (
 		<span
 			style={{ display: 'contents' }}
