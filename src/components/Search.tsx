@@ -13,6 +13,9 @@ import {
 } from '@solidjs/router'
 import searchActorsTypeahead from '../api/actor/searchActorsTypeahead'
 import styles from './Search.module.css'
+import { ListItem } from './Section'
+import listStyles from './Section.module.css'
+import Spinner from './Spinner'
 
 const typeaheadSearch = cache(
 	async (query: string) => await searchActorsTypeahead(query),
@@ -23,7 +26,9 @@ const goToSearch = action(async (query: string) => {
 	throw redirect(`/search?q=${encodeURIComponent(query)}`)
 })
 
-export const Search = () => {
+// This same search input component is used in the /search page as well as
+// in the sidebar for other pages
+const Search = () => {
 	const [results, setSearchResults] =
 		createSignal<Awaited<ReturnType<typeof searchActorsTypeahead>>>()
 	const navigate = useNavigate()
@@ -43,6 +48,12 @@ export const Search = () => {
 		if (params.hashtag) setQuery(decodeURIComponent(`#${params.hashtag}`))
 	})
 
+	// On input, there are three possible behaviors
+	// If on the search page, every input sets the search params
+	// search params are tracked; every change results in a cache invalidation
+	// If on the hashtag page, navigate to the search page and use its behavior
+	// If on the sidebar (typeahead), every input sets a query signal
+	// in the same input listener,
 	const onSearch = async (event: Event) => {
 		const { value } = event.target as HTMLInputElement
 
@@ -51,8 +62,14 @@ export const Search = () => {
 		}
 
 		if (isSearchOrHashtagPage()) {
-			setSearchParams({ q: value.trim() })
+			// .trim() has UX issues when a user tries to search for a sentence
+			// search input automatically strips space even if there is user intent to have spaces
+			// possible solution is to just .trim() in the API call and not override UI
+			setSearchParams({ q: value }) // tried to remove .trim()
 		} else {
+			// Do we need to use this query signal?
+			// Can't we just pass this to typeaheadSearch() and set the results
+			// Todo - explain decodeURIComponent vs encodeURIComponent in this context
 			setQuery(decodeURIComponent(value.trim()))
 			setSearchResults(await typeaheadSearch(encodeURIComponent(query())))
 		}
@@ -84,14 +101,39 @@ export const Search = () => {
 				/>
 			</form>
 			<Show when={query() && !isSearchOrHashtagPage()}>
-				<A href={`/search?q=${encodeURIComponent(query())}`}>
-					Search for "{query()}"
-				</A>
-				<Suspense>
-					<For each={results()?.actors}>
-						{(actors) => <p>{actors.did}</p>}
-					</For>
-				</Suspense>
+				<div
+					class={listStyles.section}
+					style={{
+						'max-height': 'unset'
+					}}
+				>
+					{/* Todo: investigate why this Suspense is never triggered */}
+					<Suspense fallback={<Spinner />}>
+						<A
+							class={`${listStyles.item} ${listStyles.more}`}
+							href={`/search?q=${encodeURIComponent(query())}`}
+						>
+							Search for "{query()}"
+						</A>
+						<For each={results()?.actors}>
+							{(actor) => {
+								if (actor.handle === 'handle.invalid') {
+									actor.handle = actor.did
+								}
+								return (
+									<ListItem
+										name={
+											actor?.displayName ?? actor.handle
+										}
+										handle={actor?.handle}
+										avatar={actor.avatar ?? '/avatar.svg'}
+										href={`/profile/${actor.handle}`}
+									/>
+								)
+							}}
+						</For>
+					</Suspense>
+				</div>
 			</Show>
 		</>
 	)
