@@ -32,7 +32,7 @@ const Search = () => {
 	const [results, setSearchResults] =
 		createSignal<Awaited<ReturnType<typeof searchActorsTypeahead>>>()
 	const navigate = useNavigate()
-	const isSearchPage = useMatch(() => '/search')
+	const isSearchPage = useMatch(() => '/search/*')
 	const isHashtagPage = useMatch(() => '/hashtag/:hashtag')
 	const isSearchOrHashtagPage = () => isSearchPage() || isHashtagPage()
 	const params = useParams()
