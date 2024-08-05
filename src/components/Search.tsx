@@ -9,6 +9,7 @@ import {
 	useAction,
 	useParams,
 	useNavigate,
+	useLocation,
 	useBeforeLeave
 } from '@solidjs/router'
 import searchActorsTypeahead from '../api/actor/searchActorsTypeahead'
@@ -16,7 +17,6 @@ import styles from './Search.module.css'
 import { ListItem } from './Section'
 import listStyles from './Section.module.css'
 import Spinner from './Spinner'
-import useMatches from '../utils/useMatches'
 
 const typeaheadSearch = cache(
 	async (query: string) => await searchActorsTypeahead(query),
@@ -30,10 +30,15 @@ const goToSearch = action(async (query: string) => {
 // This same search input component is used in the /search page as well as
 // in the sidebar for other pages
 const Search = () => {
+	const location = useLocation()
 	const [results, setSearchResults] =
 		createSignal<Awaited<ReturnType<typeof searchActorsTypeahead>>>()
 	const navigate = useNavigate()
-	const isSearchOrHashtagPage = useMatches(() => ['/search', '/hashtag'])
+	// const isSearchOrHashtagPage = () => false //useMatches(() => ['/search', '/hashtag'])
+	const isSearchOrHashtagPage = () =>
+		['/search', '/hashtag'].some((path) =>
+			location.pathname.startsWith(path)
+		)
 	const isSearchPage = useMatch(() => '/search')
 	const isHashtagPage = useMatch(() => '/hashtag/:hashtag')
 	const params = useParams()
@@ -62,7 +67,7 @@ const Search = () => {
 			// .trim() has UX issues when a user tries to search for a sentence
 			// search input automatically strips space even if there is user intent to have spaces
 			// possible solution is to just .trim() in the API call and not override UI
-			setSearchParams({ q: value }) // tried to remove .trim()
+			setSearchParams({ q: value.trim() }) // tried to remove .trim()
 		} else {
 			// Do we need to use this query signal?
 			// Can't we just pass this to typeaheadSearch() and set the results
