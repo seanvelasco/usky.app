@@ -9,7 +9,6 @@ import {
 	useAction,
 	useParams,
 	useNavigate,
-	useLocation,
 	useBeforeLeave
 } from '@solidjs/router'
 import searchActorsTypeahead from '../api/actor/searchActorsTypeahead'
@@ -30,24 +29,23 @@ const goToSearch = action(async (query: string) => {
 // This same search input component is used in the /search page as well as
 // in the sidebar for other pages
 const Search = () => {
-	const location = useLocation()
 	const [results, setSearchResults] =
 		createSignal<Awaited<ReturnType<typeof searchActorsTypeahead>>>()
 	const navigate = useNavigate()
-	// const isSearchOrHashtagPage = () => false //useMatches(() => ['/search', '/hashtag'])
-	const isSearchOrHashtagPage = () =>
-		['/search', '/hashtag'].some((path) =>
-			location.pathname.startsWith(path)
-		)
 	const isSearchPage = useMatch(() => '/search')
 	const isHashtagPage = useMatch(() => '/hashtag/:hashtag')
+	const isSearchOrHashtagPage = () => isSearchPage() || isHashtagPage()
 	const params = useParams()
 	const [searchParams, setSearchParams] = useSearchParams()
 	const [query, setQuery] = createSignal('')
 
 	createEffect(() => {
-		if (searchParams.q) setQuery(searchParams.q)
-		if (params.hashtag) setQuery(decodeURIComponent(`#${params.hashtag}`))
+		if (searchParams.q) {
+			setQuery(searchParams.q)
+		}
+		if (params.hashtag) {
+			setQuery(decodeURIComponent(`#${params.hashtag}`))
+		}
 	})
 
 	// On input, there are three possible behaviors
@@ -63,15 +61,9 @@ const Search = () => {
 			await navigate('/search')
 		}
 
-		if (isSearchOrHashtagPage()) {
-			// .trim() has UX issues when a user tries to search for a sentence
-			// search input automatically strips space even if there is user intent to have spaces
-			// possible solution is to just .trim() in the API call and not override UI
-			setSearchParams({ q: value.trim() }) // tried to remove .trim()
+		if (isSearchPage()) {
+			setSearchParams({ q: value })
 		} else {
-			// Do we need to use this query signal?
-			// Can't we just pass this to typeaheadSearch() and set the results
-			// Todo - explain decodeURIComponent vs encodeURIComponent in this context
 			setQuery(decodeURIComponent(value.trim()))
 			setSearchResults(await typeaheadSearch(encodeURIComponent(query())))
 		}
@@ -85,7 +77,11 @@ const Search = () => {
 		await search(query())
 	}
 
-	useBeforeLeave(() => setQuery(''))
+	useBeforeLeave(() => {
+		if (!isSearchOrHashtagPage()) {
+			setQuery('')
+		}
+	})
 
 	return (
 		<>
@@ -104,7 +100,7 @@ const Search = () => {
 					placeholder='Search'
 				/>
 			</form>
-			<Show when={query() && !isSearchOrHashtagPage()}>
+			<Show when={query() && !(isSearchPage() || isHashtagPage())}>
 				<div
 					class={listStyles.section}
 					style={{
