@@ -27,14 +27,11 @@ const ExternalEmbed = (props: { external: ExternalEmbedType; did: string }) => {
 				)}
 			</Show>
 			<div class={styles.text}>
-				<A
-					target='_blank'
-					rel='nofollow'
-					class={styles.url}
-					href={baseUrl.origin}
-				>
-					{baseUrl.host}
-				</A>
+				<Show when={props?.external?.uri}>
+					<span class={styles.urlText}>
+						{props.external.uri}
+					</span>
+				</Show>
 				<Show when={props?.external?.title}>
 					<A
 						target='_blank'
