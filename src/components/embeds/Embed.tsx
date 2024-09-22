@@ -7,6 +7,7 @@ import GeneratorEmbed from './GeneratorEmbed'
 import ImageEmbed from './ImageEmbed'
 import ListEmbed from './ListEmbed'
 import PostEmbed from './PostEmbed'
+import VideoEmbed from './VideoEmbed'
 import type {
 	BlockedEmbed as BlockedEmbedType,
 	DeletedEmbed as DeletedEmbedType,
@@ -79,17 +80,17 @@ const embed = {
 	'app.bsky.embed.record#view': RecordEmbed,
 	'app.bsky.embed.record': RecordEmbed,
 	'app.bsky.embed.recordWithMedia#view': RecordWithMedia,
-	'app.bsky.embed.recordWithMedia': RecordWithMedia
+	'app.bsky.embed.recordWithMedia': RecordWithMedia,
+	"app.bsky.embed.video#view": VideoEmbed,
+	"app.bsky.embed.video": VideoEmbed
 }
 
-const Embed = (props: { embed: EmbedType; did: string }) => {
-	return (
-		<Dynamic
-			component={embed[props?.embed?.$type]}
-			{...props.embed}
-			did={props?.did}
-		/>
-	)
-}
+const Embed = (props: { embed: EmbedType; did: string }) => (
+	<Dynamic
+		component={embed[props?.embed?.$type]}
+		{...props.embed}
+		did={props?.did}
+	/>
+)
 
 export default Embed

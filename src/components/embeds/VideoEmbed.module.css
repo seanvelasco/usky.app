@@ -1,0 +1,9 @@
+.video {
+    background-color: var(--background-secondary);
+    width: 100%;
+    height: auto;
+    max-height: 35.125rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    z-index: 1;
+}

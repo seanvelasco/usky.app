@@ -2,7 +2,7 @@ import { A } from '@solidjs/router'
 import type { GeneratorEmbed as GeneratorEmbedType } from '../../types'
 import Avatar from '../Avatar'
 import commonStyles from './Embed.module.css'
-import { id } from './../../utils'
+import { id } from '../../utils'
 
 const GeneratorEmbed = (props: GeneratorEmbedType) => {
 	return (
