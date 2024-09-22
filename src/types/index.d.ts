@@ -55,6 +55,17 @@ export interface ExternalEmbed {
 	description?: string
 }
 
+export interface VideoEmbed {
+	$type: 'app.bsky.embed.video#view' | 'app.bsky.embed.video'
+	aspectRatio: {
+		height: number
+		width: number
+	}
+	cid: string
+	playlist: string
+	thumbnail: string
+}
+
 export interface ImageEmbed {
 	thumb: string
 	fullsize: string
