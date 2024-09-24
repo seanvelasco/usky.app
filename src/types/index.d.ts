@@ -113,7 +113,6 @@ export interface PostEmbed extends RecordEmbed {
 	labels: string[]
 	indexedAt: string
 	embeds: Embed[]
-
 	blocked?: boolean
 }
 
@@ -177,6 +176,7 @@ export type Embed =
 			$type: 'app.bsky.embed.external#view' | 'app.bsky.embed.external'
 			external: ExternalEmbed
 	  }
+	| VideoEmbed
 
 export interface Reason {
 	$type: 'app.bsky.feed.defs#reasonRepost'

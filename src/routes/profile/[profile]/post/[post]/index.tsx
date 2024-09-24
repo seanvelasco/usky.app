@@ -94,8 +94,90 @@ const Timestamp = (props: { date: Date }) => {
 	)
 }
 
-export const PostExpanded = (props: { thread: ThreadPost }) => {
+const PostMeta = (props: { thread: ThreadPost }) => {
 	const params = useParams()
+	
+	const title = () =>
+		`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
+			props.thread?.post?.author?.handle
+		}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`
+	
+	const description = () => props.thread?.post?.record?.text
+	
+	const url = () =>
+		`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`
+	
+	const image = () => {
+		if (props.thread?.post?.embed?.$type === 'app.bsky.embed.images#view' ||
+			props.thread?.post?.embed?.$type === 'app.bsky.embed.images') {
+			return props.thread?.post.embed.images[0].thumb ?? props.thread?.post?.embed.images[0].fullsize
+		}
+		else if (props.thread?.post?.embed?.$type === 'app.bsky.embed.video#view' ||
+			props.thread?.post?.embed?.$type === 'app.bsky.embed.video') {
+			return props.thread.post.embed.thumbnail
+		}
+		
+		// todo: check official implementation if we display external embed preview
+		
+		return props.thread.post.author.avatar
+	}
+	
+	return (
+		<ErrorBoundary fallback={<Title>{title()}</Title>}>
+			<Title>{title()}</Title>
+			<Meta name='description' content={description()} />
+			<Meta property='og:title' content={title()} />
+			<Meta property='og:description' content={description()} />
+			<Meta property='og:url' content={url()} />
+			<Meta property='og:image' content={image()} />
+			<Meta property='og:image:type' content='image/jpeg' />
+			<Show when={(props.thread?.post?.embed?.$type === 'app.bsky.embed.video' || props.thread?.post?.embed?.$type === 'app.bsky.embed.video#view') && props.thread?.post?.embed}>
+				{(video) => (
+					<>
+						<Meta property='og:video' content={video().playlist} />
+						<Meta property='og:video:url' content={video().playlist} />
+						<Meta property='og:video:secure_url' content={video().playlist} />
+						<Meta property='og:video:type' content="application/x-mpegURL" />
+						<Meta property='og:video:width' content={video().aspectRatio.width.toString()} />
+						<Meta property='og:video:height' content={video().aspectRatio.height.toString()} />
+						{/*<Meta name='twitter:card' content='player' />*/}
+						<Meta property='twitter:player' content={video().playlist} />
+						<Meta property='twitter:player:width' content={video().aspectRatio.width.toString()} />
+						<Meta property='twitter:player:height' content={video().aspectRatio.height.toString()} />
+					</>
+				)}
+			</Show>
+			<Meta property='og:type' content='article' />
+			<Meta
+				property='article:published_time'
+				content={props.thread?.post?.record?.createdAt}
+			/>
+			<Meta
+				property='og:locale'
+				content={props.thread?.post?.record?.langs?.[0]}
+			/>
+			<Meta
+				property='article:author'
+				content={
+					props.thread?.post?.author?.displayName ||
+					props.thread?.post?.author?.handle
+				}
+			/>
+			<Meta
+				property='article:tag'
+				content={props.thread?.post?.record?.langs.join(', ')}
+			/>
+			<Meta name='twitter:title' content={title()} />
+			<Meta name='twitter:description' content={description()} />
+			<Meta property='twitter:url' content={url()} />
+			<Meta name='twitter:image' content={image()} />
+			<Meta name='twitter:card' content='summary' />
+			<Link rel='canonical' href={url()} />
+		</ErrorBoundary>
+	)
+}
+
+export const PostExpanded = (props: { thread: ThreadPost }) => {
 	const [postRef, setPostRef] = createSignal<HTMLElement>()
 	const [repliesRef, setRepliesRef] = createSignal<HTMLElement>()
 
@@ -123,61 +205,10 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 			postRef()?.scrollIntoView()
 		}
 	})
-
-	const title = () =>
-		`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
-			props.thread?.post?.author?.handle
-		}) on Bluesky: "${props.thread?.post.record?.text}" - Bluesky (usky.app)`
-
-	const description = () => props.thread?.post?.record?.text
-
-	const url = () =>
-		`https://usky.app/profile/${props.thread?.post?.author?.handle}/post/${params.post}`
-
-	const image = () =>
-		props.thread?.post?.embed?.$type === 'app.bsky.embed.images#view'
-			? props.thread?.post?.embed.images[0].thumb
-			: props.thread?.post?.author?.avatar
-
+	
 	return (
 		<>
-			<ErrorBoundary fallback={<Title>{title()}</Title>}>
-				<Title>{title()}</Title>
-				<Meta name='description' content={description()} />
-				<Meta property='og:title' content={title()} />
-				<Meta property='og:description' content={description()} />
-				<Meta property='og:url' content={url()} />
-				<Meta property='og:image' content={image()} />
-				<Meta property='og:image:type' content='image/jpeg' />
-				<Meta property='og:type' content='article' />
-				<Meta
-					property='article:published_time'
-					content={props.thread?.post?.record?.createdAt}
-				/>
-				<Meta
-					property='og:locale'
-					content={props.thread?.post?.record?.langs?.[0]}
-				/>
-				<Meta
-					property='article:author'
-					content={
-						props.thread?.post?.author?.displayName ||
-						props.thread?.post?.author?.handle
-					}
-				/>
-
-				<Meta
-					property='article:tag'
-					content={props.thread?.post?.record?.langs.join(', ')}
-				/>
-				<Meta name='twitter:title' content={title()} />
-				<Meta name='twitter:description' content={description()} />
-				<Meta property='twitter:url' content={url()} />
-				<Meta name='twitter:image' content={image()} />
-				<Meta name='twitter:card' content='summary' />
-				<Link rel='canonical' href={url()} />
-			</ErrorBoundary>
-
+			<PostMeta thread={props.thread} />
 			<Show when={props.thread.parent}>
 				{(parent) => (
 					<PostExpandedChildPost
@@ -290,7 +321,6 @@ export const PostExpanded = (props: { thread: ThreadPost }) => {
 					/>
 				</article>
 			</ErrorBoundary>
-
 			<div ref={setRepliesRef}>
 				<Show when={props.thread.replies}>
 					{(replies) => (
@@ -310,7 +340,7 @@ const PostPage = (props: RouteSectionProps) => {
 	const data = createAsync(() =>
 		getPostData({ profile: props.params.profile, post: props.params.post })
 	)
-
+	
 	return (
 		<Suspense fallback={<Spinner />}>
 			<Show
