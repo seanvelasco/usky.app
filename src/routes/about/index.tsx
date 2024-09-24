@@ -72,10 +72,10 @@ const About = () => {
 				<p>
 					usky.app is a statically exported Solid.js SPA and PWA
 					(previously a server-rendered SvelteKit app). Uses CSS
-					modules for styling. Has 8 external dependencies: solid-js
+					modules for styling. Has 9 external dependencies: solid-js
 					@solidjs/router, @solidjs/meta, @solid-primitives/storage,
-					@ipld/car, @ipld/dag-cbor, cbor-x, and @atproto/api. All
-					icons are from Heroicons (including app logo).
+					@ipld/car, @ipld/dag-cbor, cbor-x, hls.js, and @atproto/api.
+					All icons are from Heroicons (including app logo).
 				</p>
 				<h3>Developer</h3>
 				<p>
