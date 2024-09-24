@@ -10,15 +10,15 @@
 		"prettier": "prettier --write ."
 	},
 	"dependencies": {
-		"@atproto/api": "^0.12.7",
-		"@ipld/car": "^5.3.0",
-		"@ipld/dag-cbor": "^9.2.0",
-		"@solid-primitives/storage": "^2.1.1",
-		"@solidjs/meta": "^0.29.3",
-		"@solidjs/router": "^0.13.2",
-		"cbor-x": "^1.5.9",
+		"@atproto/api": "^0.13.7",
+		"@ipld/car": "^5.3.2",
+		"@ipld/dag-cbor": "^9.2.1",
+		"@solid-primitives/storage": "^4.2.1",
+		"@solidjs/meta": "^0.29.4",
+		"@solidjs/router": "^0.14.5",
+		"cbor-x": "^1.6.0",
 		"hls.js": "^1.5.15",
-		"solid-js": "^1.8.15"
+		"solid-js": "^1.8.23"
 	},
 	"devDependencies": {
 		"prettier": "3.2.5",
