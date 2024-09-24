@@ -97,6 +97,15 @@ const Timestamp = (props: { date: Date }) => {
 const PostMeta = (props: { thread: ThreadPost }) => {
 	const params = useParams()
 	
+	console.log(props.thread.post)
+	
+	// if (props.thread.post.record.embed?.$type === 'app.bsky.embed.video') {
+	// 	const mimeType = props.thread.post.record.embed.video.mimeType
+	// 	const id = props.thread.post.record.embed.video.ref.$link
+	// 	const link = `https://cdn.bsky.app/img/feed_thumbnail/plain/${props.thread.post.author.did}/${id}@webp`
+	// 	console.log(link)
+	// }
+	
 	const title = () =>
 		`${props.thread?.post?.author?.displayName ?? props.thread?.post?.author?.handle} (@${
 			props.thread?.post?.author?.handle
@@ -110,16 +119,33 @@ const PostMeta = (props: { thread: ThreadPost }) => {
 	const image = () => {
 		if (props.thread?.post?.embed?.$type === 'app.bsky.embed.images#view' ||
 			props.thread?.post?.embed?.$type === 'app.bsky.embed.images') {
-			return props.thread?.post.embed.images[0].thumb ?? props.thread?.post?.embed.images[0].fullsize
+				return {
+					image: props.thread?.post.embed.images[0].thumb ?? props.thread?.post?.embed.images[0].fullsize,
+					aspectRatio: {
+						width: props.thread?.post?.embed.images[0].aspectRatio?.width,
+						height: props.thread?.post?.embed.images[0].aspectRatio?.height
+					},
+					alt: props.thread.post.embed.images[0].alt,
+			}
+			
 		}
-		else if (props.thread?.post?.embed?.$type === 'app.bsky.embed.video#view' ||
-			props.thread?.post?.embed?.$type === 'app.bsky.embed.video') {
-			return props.thread.post.embed.thumbnail
+		else if (props.thread?.post?.embed?.$type === 'app.bsky.embed.video#view') {
+			return {
+				image: props.thread.post.embed.thumbnail,
+				aspectRatio: {
+					width: props.thread.post.embed.aspectRatio.width,
+					height: props.thread.post.embed.aspectRatio.height
+				},
+			}
 		}
-		
 		// todo: check official implementation if we display external embed preview
-		
-		return props.thread.post.author.avatar
+		return {
+			image: props.thread.post.author.avatar,
+			aspectRatio: {
+				width: 100,
+				height: 100
+			}
+		}
 	}
 	
 	return (
@@ -129,9 +155,18 @@ const PostMeta = (props: { thread: ThreadPost }) => {
 			<Meta property='og:title' content={title()} />
 			<Meta property='og:description' content={description()} />
 			<Meta property='og:url' content={url()} />
-			<Meta property='og:image' content={image()} />
+			<Meta property='og:image' content={image().image} />
+			<Meta property='og:image:url' content={image().image} />
+			<Meta property='og:image:secure_url' content={image().image} />
+			<Meta property='og:image:width' content={image().aspectRatio.width?.toString()} />
+			<Meta property='og:image:height' content={image().aspectRatio.height?.toString()} />
+			<Show when={image().alt}>
+				{(alt) => (
+					<Meta property='og:image:alt' content={alt()} />
+				)}
+			</Show>
 			<Meta property='og:image:type' content='image/jpeg' />
-			<Show when={(props.thread?.post?.embed?.$type === 'app.bsky.embed.video' || props.thread?.post?.embed?.$type === 'app.bsky.embed.video#view') && props.thread?.post?.embed}>
+			<Show when={(props.thread?.post?.embed?.$type === 'app.bsky.embed.video#view') && props.thread?.post?.embed}>
 				{(video) => (
 					<>
 						<Meta property='og:video' content={video().playlist} />
@@ -170,7 +205,12 @@ const PostMeta = (props: { thread: ThreadPost }) => {
 			<Meta name='twitter:title' content={title()} />
 			<Meta name='twitter:description' content={description()} />
 			<Meta property='twitter:url' content={url()} />
-			<Meta name='twitter:image' content={image()} />
+			<Meta name='twitter:image' content={image().image} />
+			<Show when={image().alt}>
+				{(alt) => (
+					<Meta property='twitter:image:alt' content={alt()} />
+				)}
+			</Show>
 			<Meta name='twitter:card' content='summary' />
 			<Link rel='canonical' href={url()} />
 		</ErrorBoundary>
