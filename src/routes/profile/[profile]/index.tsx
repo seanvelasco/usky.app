@@ -6,7 +6,6 @@ import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
 import styles from './styles.module.css'
 import Spinner from '../../../components/Spinner'
-
 const RichText = lazy(() => import('../../../components/RichText'))
 
 export const Fallback = (props: { text?: string }) => (

@@ -39,16 +39,11 @@ const rter = ({
 // difference of 611.04 kB │ gzip: 122.9 kB
 // the edge of usky.app is its lightweightness, so we should limit the use of external libs
 
-const RichTextComponent = (props: {
-	text: string
-	facets?: Facet[] | undefined
-}) => {
-	return (
-		<span
-			style={{ display: 'contents' }}
-			innerHTML={rter({ text: props.text, facets: props.facets })}
-		/>
-	)
-}
+const RichTextComponent = (props: { text: string; facets?: Facet[] }) => (
+	<span
+		style={{ display: 'contents' }}
+		innerHTML={rter({ text: props.text, facets: props.facets })}
+	/>
+)
 
 export default RichTextComponent

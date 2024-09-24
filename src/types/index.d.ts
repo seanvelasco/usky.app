@@ -38,7 +38,7 @@ export interface ImageBlob {
 }
 
 export interface Record {
-	"$type": "app.bsky.feed.post"
+	$type?: 'app.bsky.feed.post'
 	text: string
 	embed?: Embed
 	langs: string[]
@@ -54,15 +54,6 @@ export interface ExternalEmbed {
 	uri: string
 	thumb?: ImageBlob | string
 	description?: string
-}
-
-export interface VideoBlob {
-	$type: 'blob'
-	ref: {
-		$link: string
-	}
-	mimeType: string
-	size: number
 }
 
 export interface ImageEmbed {
@@ -176,15 +167,11 @@ export type Embed =
 			$type: 'app.bsky.embed.external#view' | 'app.bsky.embed.external'
 			external: ExternalEmbed
 	  }
-	| {
-	$type:'app.bsky.embed.video'
-	aspectRatio: {
-		height: number
-		width: number
-	}
-	video: VideoBlob
-      } | {
-	$type:'app.bsky.embed.video#view'
+	| VideoEmbedView
+// | VideoEmbed
+
+export type VideoEmbedView = {
+	$type: 'app.bsky.embed.video#view'
 	aspectRatio: {
 		height: number
 		width: number
@@ -192,6 +179,24 @@ export type Embed =
 	cid: string
 	playlist: string
 	thumbnail: string
+}
+
+export type VideoEmbed = {
+	$type: 'app.bsky.embed.video'
+	aspectRatio: {
+		height: number
+		width: number
+	}
+	video: VideoBlob
+}
+
+export interface VideoBlob {
+	$type: 'blob'
+	ref: {
+		$link: string
+	}
+	mimeType: string
+	size: number
 }
 
 export interface Reason {

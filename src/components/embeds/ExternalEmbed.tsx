@@ -28,9 +28,7 @@ const ExternalEmbed = (props: { external: ExternalEmbedType; did: string }) => {
 			</Show>
 			<div class={styles.text}>
 				<Show when={props?.external?.uri}>
-					<span class={styles.urlText}>
-						{props.external.uri}
-					</span>
+					<span class={styles.urlText}>{props.external.uri}</span>
 				</Show>
 				<Show when={props?.external?.title}>
 					<A

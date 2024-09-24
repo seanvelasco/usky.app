@@ -1,4 +1,4 @@
-import { Show } from 'solid-js'
+import { lazy, Show } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
 import BlockedEmbed from './BlockedEmbed'
 import DeletedEmbed from './DeletedEmbed'
@@ -7,7 +7,7 @@ import GeneratorEmbed from './GeneratorEmbed'
 import ImageEmbed from './ImageEmbed'
 import ListEmbed from './ListEmbed'
 import PostEmbed from './PostEmbed'
-import VideoEmbed from './VideoEmbed'
+const VideoEmbed = lazy(() => import('./VideoEmbed'))
 import type {
 	BlockedEmbed as BlockedEmbedType,
 	DeletedEmbed as DeletedEmbedType,
@@ -81,8 +81,8 @@ const embed = {
 	'app.bsky.embed.record': RecordEmbed,
 	'app.bsky.embed.recordWithMedia#view': RecordWithMedia,
 	'app.bsky.embed.recordWithMedia': RecordWithMedia,
-	"app.bsky.embed.video#view": VideoEmbed,
-	"app.bsky.embed.video": VideoEmbed
+	'app.bsky.embed.video#view': VideoEmbed
+	// 'app.bsky.embed.video': VideoEmbed
 }
 
 const Embed = (props: { embed: EmbedType; did: string }) => (

@@ -2,7 +2,6 @@ import { A } from '@solidjs/router'
 import { Show, lazy } from 'solid-js'
 import Avatar from './Avatar'
 import styles from './Entry.module.css'
-
 const RichText = lazy(() => import('./RichText'))
 
 const Entry = (props: {
