@@ -10,13 +10,11 @@
 		<link rel="manifest" href="/manifest.json" />
 		<link rel="apple-touch-icon" href="/usky.svg" />
 		<meta name="theme-color" content="#282828" />
-
 		<meta name="twitter:site" content="@uskyapp" />
 		<meta property="og:site_name" content="usky.app" />
 		<meta property="twitter:domain" content="usky.app" />
 		<meta property="og:locale" content="en_US" />
 	</head>
-
 	<body id="root"></body>
 	<script type="module" src="/src/index.tsx" async></script>
 	<style>
@@ -42,24 +40,44 @@
 			line-height: 1.25rem;
 			font-weight: 400;
 			color-scheme: dark;
-			color: rgba(255, 255, 255, 0.9);
+			color: var(--text-primary);
 			font-synthesis: none;
 			text-rendering: optimizeLegibility;
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
 			-webkit-text-size-adjust: 100%;
-			--background-primary: #282828;
-			--background-primary-hover: #323232;
-			--background-secondary: #323232;
-			--background-tertiary: #1e1e1e;
-			--border: #3d3d3d;
-			--link-primary: rgba(4, 168, 252, 255);
+            --link-primary: rgba(4, 168, 252, 255);
 			--button-primary: rgba(4, 168, 252, 255);
-			--button-secondary: #4e5058;
-			--button-secondary-text: black;
 			--button-secondary-hover: #6d6f78;
-			--text-primary: rgba(255, 255, 255, 0.9);
-			--text-secondary: #b5bac1;
+
+		}
+        @media (prefers-color-scheme: light) {
+           :root {
+               --background-primary: #ffffff;
+               --border: #f2f2f2;
+               --background-primary-hover: #fbfbfb;
+               --background-secondary: #f2f2f2;
+               --text-primary: #111;
+               --text-secondary: #999;
+               --background-tertiary: #f2f2f2;
+               --button-secondary: #e0e0e0;
+		   }
+        }
+
+        @media (prefers-color-scheme: dark) {
+			:root {
+                --background-primary: #282828;
+                --background-primary-hover: #323232;
+                --background-secondary: #323232;
+                --background-tertiary: #1e1e1e;
+                --border: #3d3d3d;
+                --text-primary: rgba(255, 255, 255, 0.9);
+                --text-secondary: #b5bac1;
+                --link-primary: rgba(4, 168, 252, 255);
+                --button-primary: rgba(4, 168, 252, 255);
+                --button-secondary: #4e5058;
+                --button-secondary-hover: #6d6f78;
+			}
 		}
 
 		* {
