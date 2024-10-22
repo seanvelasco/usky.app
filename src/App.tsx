@@ -1,5 +1,5 @@
 import { For, Suspense, Show, ErrorBoundary } from 'solid-js'
-import { A, type RouteSectionProps } from '@solidjs/router'
+import { A, useMatch, type RouteSectionProps } from '@solidjs/router'
 import Header from './components/layout/Header'
 import Sidebar from './components/layout/Sidebar'
 // import AuthModal from './components/auth/AuthModal'
@@ -23,22 +23,29 @@ import MobileNav from './components/layout/MobileNav'
 const Navigation = () => {
 	const session = useSession()
 	const profile = createAsync(() => getProfileData(session.did))
+	const isHome = useMatch(() => '/:home?', {
+		home: ['hot', 'live']
+	})
+	const isSearch = useMatch(() => '/search/*')
+	const isNotifications = useMatch(() => '/notifications')
 
 	const links = [
 		{
 			label: 'Home',
 			href: '/',
-			icon: <HomeIcon />
+			active: isHome(),
+			icon: <HomeIcon filled={Boolean(isHome())} />
 		},
 		{
 			label: 'Search',
 			href: '/search',
+			active: isSearch(),
 			icon: <SearchIcon />
 		},
 		{
 			label: 'Notifications',
 			href: '/notifications',
-			icon: <BellIcon />,
+			icon: <BellIcon filled={Boolean(isNotifications())} />,
 			authenticated: true
 		},
 		{
@@ -68,6 +75,9 @@ const Navigation = () => {
 						<div class={styles.icon}>
 							<A
 								end
+								classList={{
+									highlight_alt: Boolean(link.active)
+								}}
 								activeClass='highlight'
 								aria-label={link.label}
 								href={link.href}

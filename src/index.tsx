@@ -53,25 +53,27 @@ render(
 			<MetaProvider>
 				<Router root={App}>
 					<Route path='/login' component={Login} />
-					<Route component={Discover}>
-						<Route
-							path='/'
-							load={() =>
-								getDiscoveryFeed(
-									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'
-								)
-							}
-						/>
-						<Route
-							path='/hot'
-							load={() =>
-								getDiscoveryFeed(
-									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
-								)
-							}
-						/>
+					<Route path='/'>
+						<Route component={Discover}>
+							<Route
+								path='/'
+								load={() =>
+									getDiscoveryFeed(
+										'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'
+									)
+								}
+							/>
+							<Route
+								path='/hot'
+								load={() =>
+									getDiscoveryFeed(
+										'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
+									)
+								}
+							/>
+						</Route>
+						<Route path='/live' component={Firehose} />
 					</Route>
-					<Route path='/live' component={Firehose} />
 					<Route path='/search' component={SearchPage}>
 						<Route
 							path='/'
