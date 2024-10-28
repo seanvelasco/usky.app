@@ -1,4 +1,4 @@
-import { ErrorBoundary, For, Suspense } from 'solid-js'
+import { For, Suspense } from 'solid-js'
 // import { Dynamic } from 'solid-js/web'
 import { cache, createAsync } from '@solidjs/router'
 import { Title } from '@solidjs/meta'
@@ -29,9 +29,7 @@ const Notifications = () => {
 	const title = 'Notifications - Bluesky (usky.app)'
 	return (
 		<>
-			<ErrorBoundary fallback={<Title>{title}</Title>}>
-				<Title>{title}</Title>
-			</ErrorBoundary>
+			<Title>{title}</Title>
 			<Suspense fallback={<Spinner />}>
 				<For
 					each={notifications()?.notifications}

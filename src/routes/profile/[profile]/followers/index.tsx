@@ -1,5 +1,5 @@
 import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
-import { ErrorBoundary, For } from 'solid-js'
+import { For } from 'solid-js'
 import getFollowers from '../../../../api/graph/getFollowers'
 import Entry from '../../../../components/Entry'
 import { Link, Meta, Title } from '@solidjs/meta'
@@ -20,14 +20,12 @@ export const Followers = (props: RouteSectionProps) => {
 
 	return (
 		<>
-			<ErrorBoundary fallback={<Title>{title()}</Title>}>
-				<Title>{title()}</Title>
-				<Meta name='og:title' content={title()} />
-				<Meta property='og:url' content={url()} />
-				<Meta name='twitter:title' content={title()} />
-				<Meta property='twitter:url' content={url()} />
-				<Link rel='canonical' href={url()} />
-			</ErrorBoundary>
+			<Title>{title()}</Title>
+			<Meta name='og:title' content={title()} />
+			<Meta property='og:url' content={url()} />
+			<Meta name='twitter:title' content={title()} />
+			<Meta property='twitter:url' content={url()} />
+			<Link rel='canonical' href={url()} />
 			<For each={followers()?.followers}>
 				{(actor) => (
 					<Entry

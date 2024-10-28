@@ -1,4 +1,4 @@
-import { ErrorBoundary, For } from 'solid-js'
+import { For } from 'solid-js'
 import { cache, createAsync, RouteSectionProps } from '@solidjs/router'
 import { Meta, Title, Link } from '@solidjs/meta'
 import getFeed from '../api/feed/getFeed'
@@ -21,29 +21,27 @@ const Discover = (props: RouteSectionProps) => {
 	)
 	return (
 		<>
-			<ErrorBoundary fallback={<Title>Bluesky (usky.app)</Title>}>
-				<Title>Bluesky (usky.app)</Title>
-				<Meta
-					name='description'
-					content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
-				/>
-				<Meta property='og:title' content='Bluesky (usky.app)' />
-				<Meta
-					property='og:description'
-					content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
-				/>
-				<Meta property='og:url' content='https://usky.app' />
-				<Meta name='twitter:title' content='Bluesky (usky.app)' />
-				<Meta
-					name='twitter:description'
-					content={
-						"Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
-					}
-				/>
-				<Meta property='twitter:url' content='https://usky.app' />
+			<Title>Bluesky (usky.app)</Title>
+			<Meta
+				name='description'
+				content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+			/>
+			<Meta property='og:title' content='Bluesky (usky.app)' />
+			<Meta
+				property='og:description'
+				content="Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+			/>
+			<Meta property='og:url' content='https://usky.app' />
+			<Meta name='twitter:title' content='Bluesky (usky.app)' />
+			<Meta
+				name='twitter:description'
+				content={
+					"Minimalist web client for the decentralized social network Bluesky - see what's happening, discover new things, and look up people you know."
+				}
+			/>
+			<Meta property='twitter:url' content='https://usky.app' />
 
-				<Link rel='canonical' href='https://usky.app' />
-			</ErrorBoundary>
+			<Link rel='canonical' href='https://usky.app' />
 			<For each={feed()?.feed} fallback={<Spinner />}>
 				{(post) => <FeedPost {...post} />}
 			</For>

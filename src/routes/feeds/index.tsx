@@ -1,4 +1,4 @@
-import { ErrorBoundary, For, Suspense } from 'solid-js'
+import { For, Suspense } from 'solid-js'
 import { cache, createAsync } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
 import Entry from '../../components/Entry'
@@ -18,17 +18,15 @@ const Feeds = () => {
 	const url = 'https://usky.app/feeds'
 	return (
 		<>
-			<ErrorBoundary fallback={<Title>{title}</Title>}>
-				<Title>{title}</Title>
-				<Meta name='description' content={description} />
-				<Meta property='og:title' content={title} />
-				<Meta property='og:description' content={description} />
-				<Meta property='og:url' content={url} />
-				<Meta name='twitter:title' content={title} />
-				<Meta name='twitter:description' content={description} />
-				<Meta property='twitter:url' content={url} />
-				<Link rel='canonical' href={url} />
-			</ErrorBoundary>
+			<Title>{title}</Title>
+			<Meta name='description' content={description} />
+			<Meta property='og:title' content={title} />
+			<Meta property='og:description' content={description} />
+			<Meta property='og:url' content={url} />
+			<Meta name='twitter:title' content={title} />
+			<Meta name='twitter:description' content={description} />
+			<Meta property='twitter:url' content={url} />
+			<Link rel='canonical' href={url} />
 			<Suspense fallback={<Spinner />}>
 				<For each={feeds()?.feeds} fallback={<p>No feeds</p>}>
 					{(feed) => (

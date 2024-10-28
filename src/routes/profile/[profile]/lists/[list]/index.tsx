@@ -1,4 +1,4 @@
-import { For, ErrorBoundary, Suspense } from 'solid-js'
+import { For, Suspense } from 'solid-js'
 import { createAsync, cache, type RouteSectionProps } from '@solidjs/router'
 import Avatar from '../../../../../components/Avatar'
 import Post from '../../../../../components/Post'
@@ -40,19 +40,17 @@ const List = (props: RouteSectionProps) => {
 
 	return (
 		<Suspense>
-			<ErrorBoundary fallback={<Title>{title()}</Title>}>
-				<Title>{title()}</Title>
-				<Meta name='description' content={description()} />
-				<Meta property='og:title' content={title()} />
-				<Meta property='og:description' content={description()} />
-				<Meta property='og:url' content={url()} />
-				<Meta property='og:image' content={avatar} />
-				<Meta name='twitter:title' content={title()} />
-				<Meta name='twitter:description' content={description()} />
-				<Meta property='twitter:url' content={url()} />
-				<Meta name='twitter:image' content={avatar} />
-				<Link rel='canonical' href={url()} />
-			</ErrorBoundary>
+			<Title>{title()}</Title>
+			<Meta name='description' content={description()} />
+			<Meta property='og:title' content={title()} />
+			<Meta property='og:description' content={description()} />
+			<Meta property='og:url' content={url()} />
+			<Meta property='og:image' content={avatar} />
+			<Meta name='twitter:title' content={title()} />
+			<Meta name='twitter:description' content={description()} />
+			<Meta property='twitter:url' content={url()} />
+			<Meta name='twitter:image' content={avatar} />
+			<Link rel='canonical' href={url()} />
 			<div class={styles.card}>
 				<Avatar
 					size='3.5rem'

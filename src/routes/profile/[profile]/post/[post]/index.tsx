@@ -144,7 +144,7 @@ const PostMeta = (props: { thread: ThreadPost }) => {
 	}
 
 	return (
-		<ErrorBoundary fallback={<Title>{title()}</Title>}>
+		<>
 			<Title>{title()}</Title>
 			<Meta name='description' content={description()} />
 			<Meta property='og:title' content={title()} />
@@ -239,7 +239,7 @@ const PostMeta = (props: { thread: ThreadPost }) => {
 			</Show>
 			<Meta name='twitter:card' content='summary' />
 			<Link rel='canonical' href={url()} />
-		</ErrorBoundary>
+		</>
 	)
 }
 

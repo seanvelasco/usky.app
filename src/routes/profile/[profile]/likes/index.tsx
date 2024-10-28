@@ -37,14 +37,12 @@ export const Likes = (props: RouteSectionProps) => {
 
 	return (
 		<ErrorBoundary fallback={<Fallback text='Unable to display likes' />}>
-			<ErrorBoundary fallback={<Title>{title()}</Title>}>
-				<Title>{title()}</Title>
-				<Meta name='og:title' content={title()} />
-				<Meta property='og:url' content={url()} />
-				<Meta name='twitter:title' content={title()} />
-				<Meta property='twitter:url' content={url()} />
-				<Link rel='canonical' href={url()} />
-			</ErrorBoundary>
+			<Title>{title()}</Title>
+			<Meta name='og:title' content={title()} />
+			<Meta property='og:url' content={url()} />
+			<Meta name='twitter:title' content={title()} />
+			<Meta property='twitter:url' content={url()} />
+			<Link rel='canonical' href={url()} />
 			<Suspense fallback={<Spinner />}>
 				<For
 					each={posts()?.posts}
