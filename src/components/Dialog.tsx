@@ -1,21 +1,92 @@
-// import { createSignal, Show, type JSX } from "solid-js"
+import {
+	createContext,
+	createEffect,
+	createSignal,
+	onCleanup,
+	onMount,
+	useContext,
+	type JSXElement
+} from 'solid-js'
+import styles from './Dialog.module.css'
 
-// type ModalProps = {
-// 	children: JSX.Element
-// }
+interface DialogContextValue {
+	toggle: () => void
+	open: () => boolean
+}
 
-// const Modal = (props: ModalProps) => {
-// 	const [open, setOpen] = createSignal(false)
+const DialogContext = createContext<DialogContextValue>()
 
-// 	return (
-// 		<>
-// 			<button onClick={() => setOpen(true)}></button>
+const useDialogContext = () => {
+	const context = useContext(DialogContext)
+	if (!context) {
+		throw new Error('useDialogContext')
+	}
+	return context
+}
 
-// 			<Show when={open()}>
-// 				<div role="presentation">
-// 					<section role="dialog">{props.children}</section>
-// 				</div>
-// 			</Show>
-// 		</>
-// 	)
-// }
+const Trigger = (props: { children: JSXElement }) => {
+	const context = useDialogContext()
+	return <button onClick={context.toggle}>{props.children}</button>
+}
+
+const Content = (props: { children: JSXElement }) => {
+	const context = useDialogContext()
+	let dialog: HTMLDialogElement
+
+	createEffect(() => {
+		if (context.open()) handleOpen()
+		else handleClose()
+	})
+
+	const handleOpen = () => {
+		dialog.showModal()
+		document.body.style.overflow = 'hidden'
+	}
+
+	const handleClose = () => {
+		dialog.close()
+		document.body.style.overflow = 'initial'
+	}
+
+	const handleOutsideClick = (event: MouseEvent) => {
+		if (event.target === dialog) context.toggle()
+	}
+
+	onMount(() => {
+		dialog.addEventListener('click', handleOutsideClick)
+		dialog.addEventListener('close', handleClose)
+	})
+
+	onCleanup(() => {
+		dialog.removeEventListener('click', handleOutsideClick)
+		dialog.removeEventListener('close', handleClose)
+	})
+
+	return (
+		<dialog ref={dialog!} class={styles.dialog}>
+			<div class={styles.content}>{props.children}</div>
+		</dialog>
+	)
+}
+
+const Root = (props: { children: JSXElement }) => {
+	const [open, setOpen] = createSignal(false)
+
+	const context = {
+		toggle: () => setOpen((prev) => !prev),
+		open
+	}
+
+	return (
+		<DialogContext.Provider value={context}>
+			{props.children}
+		</DialogContext.Provider>
+	)
+}
+
+const Dialog = Object.assign(Root, {
+	Content,
+	Trigger
+})
+
+export default Dialog

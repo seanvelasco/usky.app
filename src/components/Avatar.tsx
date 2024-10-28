@@ -21,6 +21,8 @@ const Avatar = (
 			style={{
 				'max-width': props.size,
 				'max-height': props.size,
+				'min-width': props.size,
+				'min-height': props.size,
 				...props.style
 			}}
 		/>
