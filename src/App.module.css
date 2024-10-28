@@ -31,7 +31,7 @@
 	top: 0;
 	max-width: 348px;
 	height: 100dvh;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .nav {

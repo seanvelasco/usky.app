@@ -15,11 +15,12 @@
 		<meta property="twitter:domain" content="usky.app" />
 		<meta property="og:locale" content="en_US" />
 	</head>
+
 	<body id="root"></body>
 	<script type="module" src="/src/index.tsx" async></script>
 	<style>
 		html {
-			overscroll-behavior: none;
+			/* overscroll-behavior: none; */
 		}
 
 		body {
@@ -32,7 +33,7 @@
 			height: 100%;
 			max-height: 100%;
 			overflow: auto;
-			overscroll-behavior: none;
+			/* overscroll-behavior: none; */
 		}
 
 		:root {
@@ -50,6 +51,7 @@
 			--button-primary: rgba(4, 168, 252, 255);
 			--button-secondary-hover: #6d6f78;
 		}
+
 		@media (prefers-color-scheme: light) {
 			:root {
 				--background-primary: #ffffff;
@@ -119,7 +121,7 @@
 			content-visibility: auto;
 		}
 
-        @supports (-webkit-overflow-scrolling: touch) {
+		@supports (-webkit-overflow-scrolling: touch) {
 			input {
 				font-size: 1rem !important;
 			}
