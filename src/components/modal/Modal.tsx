@@ -1,56 +1,35 @@
-import styles from './Modal.module.css'
-import { onMount, type JSXElement, onCleanup } from 'solid-js' // createSignal
+import { createSignal, type JSXElement, onCleanup, onMount } from 'solid-js'
+import Content from './Content'
+import Trigger from './Trigger'
+import { DialogContext } from './context'
 
-const Trigger = (props: { children: JSXElement }) => {
-	return (
-		<div>
-			{props.children}
-		</div>
-	)
-}
-
-const Content = (props: { children: JSXElement }) => {
+const Root = (props: { children: JSXElement }) => {
 	
-	// const [open, setOpen] = createSignal(false)
+	const [open, setOpen] = createSignal(false)
 	
-	let dialog: HTMLDialogElement
-	
-	// const handleOpen = () => {
-	// 	dialog.showModal()
-	// 	document.body.style.scrollBehavior = 'none'
-	// 	document.body.style.overflow = 'hidden'
-	// }
-	
-	const handleClose = () => {
-		document.body.style.scrollBehavior = 'initial'
-		document.body.style.overflow = 'initial'
-	}
-	
-	const handleOutsideClick = (event: MouseEvent) => {
-		if (event.target === dialog) {
-			dialog.close()
-		}
+	const context = {
+		toggle: () => setOpen((prev) => !prev),
+		open: open()
 	}
 	
 	onMount(() => {
-		window.addEventListener('click', handleOutsideClick)
-		dialog!.addEventListener('close', handleClose)
+	
 	})
 	
 	onCleanup(() => {
-		document.removeEventListener('click', handleOutsideClick)
-		dialog!.removeEventListener('close', handleClose)
+	
 	})
 	
 	return (
-		<dialog ref={dialog!} class={styles.dialog}>
+		<DialogContext.Provider value={context}>
 			{props.children}
-		</dialog>
+		</DialogContext.Provider>
 	)
 }
 
-const Modal = () => {
-
-}
+const Modal = Object.assign(Root, {
+	Content,
+	Trigger
+})
 
 export default Modal

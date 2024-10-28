@@ -20,6 +20,9 @@ import { SessionProvider, useSession } from './states/session'
 
 import MobileNav from './components/layout/MobileNav'
 
+import Banner from './components/Banner'
+
+
 const Navigation = () => {
 	const session = useSession()
 	const profile = createAsync(() => getProfileData(session.did))
@@ -140,6 +143,7 @@ const App = (props: RouteSectionProps) => {
 							<Sidebar />
 						</ErrorBoundary>
 					</aside>
+					<Banner />
 				</div>
 			</SessionProvider>
 		</Suspense>

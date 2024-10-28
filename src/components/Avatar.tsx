@@ -1,3 +1,4 @@
+import styles from './Avatar.module.css'
 import type { JSX } from 'solid-js'
 
 const Avatar = (
@@ -13,15 +14,13 @@ const Avatar = (
 		<img
 			loading='lazy'
 			draggable='false'
+			class={styles.avatar}
 			// style:border-radius={shape === "round" ? "50%" : "12px"}
 			src={props.src?.replace('jpeg', 'webp') || '/avatar.svg'}
 			alt={props.alt ?? 'Default avatar'}
 			style={{
-				width: props.size,
-				height: props.size,
-				'vertical-align': 'middle',
-				'object-fit': 'cover',
-				'border-radius': '50%',
+				'max-width': props.size,
+				'max-height': props.size,
 				...props.style
 			}}
 		/>

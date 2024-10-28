@@ -5,6 +5,7 @@ import Post from '../../../components/Post'
 import getProfile from '../../../api/actor/getProfile'
 import getAuthorFeed from '../../../api/feed/getAuthorFeed'
 import styles from './styles.module.css'
+import Button from '../../../components/Button'
 import Spinner from '../../../components/Spinner'
 const RichText = lazy(() => import('../../../components/RichText'))
 
@@ -173,9 +174,9 @@ const Profile = (props: RouteSectionProps) => {
 								/>
 							</div>
 							<div class={styles.buttons}>
-								<button type='button' class={styles.button}>
+								<Button>
 									Follow
-								</button>
+								</Button>
 							</div>
 							<div class={styles.info}>
 								<p class={styles.name}>

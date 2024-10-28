@@ -1,4 +1,4 @@
-.img {
+.avatar {
     height: 100%;
     width: 100%;
     vertical-align: middle;
@@ -6,6 +6,6 @@
     border-radius: 50%;
 }
 
-.img:not([src]) {
+.avatar:not([src]) {
     visibility: hidden;
 }
