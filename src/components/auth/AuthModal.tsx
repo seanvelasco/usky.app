@@ -2,6 +2,7 @@ import { createSignal } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
 import { action } from '@solidjs/router'
 import Dialog from '../Dialog'
+import Button from '../Button'
 import createSession from '../../api/identity/createSession'
 import createAccount from '../../api/server/createAccount'
 import { setSession } from '../../storage/session'
@@ -45,7 +46,7 @@ const Register = () => {
 	return (
 		<form action={register} method='post' class={styles.content}>
 			<div class={styles.title}>
-				<h3>Login to your account</h3>
+				<h3>Create an account</h3>
 			</div>
 			<label>Server</label>
 			<input
@@ -113,7 +114,7 @@ const Register = () => {
 				</button>
 				<button
 					class={styles.submit}
-					disabled={isSubmitDisabled()}
+					disabled={true && isSubmitDisabled()}
 					type='submit'
 				>
 					Register
@@ -212,7 +213,14 @@ const options = {
 const AuthModal = () => (
 	<Dialog>
 		<Dialog.Trigger>
-			<div class={styles.button}>Login</div>
+			<Button
+				style={{
+					'background-color': '#e0e0e0',
+					color: '#111'
+				}}
+			>
+				Login
+			</Button>
 		</Dialog.Trigger>
 		<Dialog.Content>
 			<Dynamic component={options[selected()]} />

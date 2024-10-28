@@ -7,6 +7,7 @@
     right: 0;
     width: 100vw !important;
     height: 100vh !important; */
+    min-width: 18rem;
 	max-width: 24rem;
 	width: 100%;
 	background-color: var(--background-primary);
@@ -38,11 +39,14 @@ dialog[open]::backdrop {
 }
 
 .content {
+    min-width: 18rem;
+    max-width: 24rem;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
 	padding: 1.5rem;
+    overflow: auto;
 }
 
 .input {

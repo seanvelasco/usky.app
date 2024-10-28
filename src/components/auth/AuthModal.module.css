@@ -9,6 +9,21 @@
 	color: var(--text-secondary);
 }
 
+.input:not(:disabled), .submit:not(:disabled) {
+    color: var(--text-primary);
+}
+
+.input[type="date"] {
+    display: flex;
+    align-items: center;
+    color: var(--text-primary);
+}
+
+/*.input::placeholder {*/
+/*    color: var(--text-secondary);*/
+/*    opacity: 1;*/
+/*}*/
+
 .input,
 .submit {
 	display: block;

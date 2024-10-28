@@ -1,6 +1,5 @@
 import { Show } from 'solid-js'
 import { useSession } from '../states/session'
-// import Button from './Button'
 import AuthModal from './auth/AuthModal'
 import styles from './Banner.module.css'
 
@@ -15,15 +14,6 @@ const Banner = () => {
 						people
 					</p>
 					<AuthModal />
-
-					{/*<Button*/}
-					{/*	style={{*/}
-					{/*		'background-color': '#e0e0e0',*/}
-					{/*		color: '#111'*/}
-					{/*	}}*/}
-					{/*>*/}
-					{/*	Login*/}
-					{/*</Button>*/}
 				</div>
 			</div>
 		</Show>
