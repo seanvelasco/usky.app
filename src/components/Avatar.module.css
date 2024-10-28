@@ -1,0 +1,11 @@
+.img {
+    height: 100%;
+    width: 100%;
+    vertical-align: middle;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.img:not([src]) {
+    visibility: hidden;
+}
