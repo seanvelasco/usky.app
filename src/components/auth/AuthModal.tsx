@@ -1,107 +1,223 @@
-import { createSignal, onCleanup, onMount } from 'solid-js'
+import { createSignal } from 'solid-js'
+import { Dynamic } from 'solid-js/web'
 import { action } from '@solidjs/router'
+import Dialog from '../Dialog'
 import createSession from '../../api/identity/createSession'
-// import { PlusIcon } from '../../assets/PlusIcon'
-import styles from './AuthModal.module.css'
+import createAccount from '../../api/server/createAccount'
 import { setSession } from '../../storage/session'
+import { DEFAULT_PROVIDER } from '../../constants'
+import styles from './AuthModal.module.css'
 
-const [identifier, setIdentifier] = createSignal('')
-const [password, setPassword] = createSignal('')
+const [selected, setSelected] = createSignal<'login' | 'register'>('login')
+// Only contains letters, numbers, and hyphens
+// At least 3 characters
+// need to resolve handle first
 
-// Personal note: && vs ||
-// I thought && means both should be true
-// But using || results in the corrent behavior
+const Register = () => {
+	const [provider, setProvider] = createSignal(DEFAULT_PROVIDER)
+	const [email, setEmail] = createSignal('')
+	const [handle, setHandle] = createSignal('')
+	const [password, setPassword] = createSignal('')
+	const [birthdate, setBirthdate] = createSignal('')
 
-// To-do
-// identifier validation: bsky max length and domain validation
-// app password validaation: should be app password syntax, disallow main password authentication
-const isLoginDisabled = () => !identifier() || !password()
+	const isSubmitDisabled = () =>
+		!provider() || !email() || !handle() || !password() || !birthdate()
 
-const credentials = () => ({ identifier: identifier(), password: password() })
-
-const authenticate = action(async () => {
-	const session = await createSession(credentials())
-	if (session) {
-		setSession(session)
-		setIdentifier('')
-		setPassword('')
-	}
-})
-
-const AuthModal = () => {
-	let dialog: HTMLDialogElement
-
-	const handleOpen = () => {
-		dialog.showModal()
-		document.body.style.scrollBehavior = 'none'
-		document.body.style.overflow = 'hidden'
-	}
-
-	const handleClose = () => {
-		document.body.style.scrollBehavior = 'initial'
-		document.body.style.overflow = 'initial'
-	}
-
-	const handleOutsideClick = (event: MouseEvent) => {
-		if (event.target === dialog) {
-			dialog.close()
-		}
-	}
-
-	onMount(() => {
-		window.addEventListener('click', handleOutsideClick)
-		dialog!.addEventListener('close', handleClose)
+	const credentials = () => ({
+		email: email(),
+		handle: handle(),
+		password: password(),
+		inviteCode: '',
+		verificationCode: ''
 	})
 
-	onCleanup(() => {
-		document.removeEventListener('click', handleOutsideClick)
-		dialog!.removeEventListener('close', handleClose)
+	const register = action(async () => {
+		const session = await createAccount(credentials())
+		if (session) {
+			setSession(session)
+			setEmail('')
+			setHandle('')
+			setPassword('')
+			setBirthdate('')
+		}
 	})
 
 	return (
-		<>
-			<button class={styles.button} type='button' onClick={handleOpen}>
-				Login
-			</button>
-			<dialog ref={dialog!} class={styles.dialog}>
-				<form
-					action={authenticate}
-					method='post'
-					class={styles.content}
+		<form action={register} method='post' class={styles.content}>
+			<div class={styles.title}>
+				<h3>Login to your account</h3>
+			</div>
+			<label>Server</label>
+			<input
+				class={styles.input}
+				type='text'
+				name='provider'
+				placeholder='bsky.social'
+				required={true}
+				value={provider()}
+				disabled={true}
+				onInput={(event) => setProvider(event.target.value)}
+			/>
+			<label>Email</label>
+			<input
+				autofocus={true}
+				class={styles.input}
+				type='email'
+				name='email'
+				placeholder='Enter your email address'
+				required={true}
+				value={email()}
+				onInput={(event) => setEmail(event.target.value)}
+			/>
+			<label>Username</label>
+			<input
+				autofocus={true}
+				class={styles.input}
+				type='text'
+				name='username'
+				placeholder='Enter your desired username'
+				required={true}
+				value={handle()}
+				onInput={(event) => setHandle(event.target.value)}
+			/>
+			<label>Password</label>
+			<input
+				class={styles.input}
+				type='password'
+				name='password'
+				placeholder='Choose your password'
+				required={true}
+				value={password()}
+				onInput={(event) => setPassword(event.target.value)}
+			/>
+			<label>Birthdate</label>
+			<input
+				class={styles.input}
+				type='date'
+				name='birth'
+				placeholder='Birthdate'
+				required={true}
+				value={birthdate()}
+				onInput={(event) => setBirthdate(event.target.value)}
+			/>
+			<div class={styles.controls}>
+				<button
+					onClick={() => setSelected('login')}
+					style={{
+						'background-color': 'transparent',
+						'font-weight': 'normal'
+					}}
+					class={styles.submit}
 				>
-					<div class={styles.title}>
-						<h3>Login to your account</h3>
-					</div>
-					<input
-						class={styles.input}
-						type='text'
-						name='handle'
-						placeholder='Username or email address'
-						required
-						onInput={(event) => setIdentifier(event.target.value)}
-					/>
-					<input
-						class={styles.input}
-						type='password'
-						name='password'
-						placeholder='Password'
-						required
-						onInput={(event) => setPassword(event.target.value)}
-					/>
-					<button
-						class={`${styles.input} ${styles.submit}`}
-						disabled={isLoginDisabled()}
-						type='submit'
-					>
-						Submit
-					</button>
-					<div class={styles.alternate}>
-						<button type='button'>Create an account</button>
-					</div>
-				</form>
-			</dialog>
-		</>
+					I already have an account
+				</button>
+				<button
+					class={styles.submit}
+					disabled={isSubmitDisabled()}
+					type='submit'
+				>
+					Register
+				</button>
+			</div>
+		</form>
 	)
 }
+
+const Login = () => {
+	const [provider, setProvider] = createSignal(DEFAULT_PROVIDER)
+	const [identifier, setIdentifier] = createSignal('')
+	const [password, setPassword] = createSignal('')
+	// identifier validation: bsky max length and domain validation
+	// app password validaation: should be app password syntax, disallow main password authentication
+	const isLoginDisabled = () => !provider() || !identifier() || !password()
+
+	const credentials = () => ({
+		identifier: identifier(),
+		password: password()
+	})
+
+	const authenticate = action(async () => {
+		const session = await createSession(credentials())
+		if (session) {
+			setSession(session)
+			setIdentifier('')
+			setPassword('')
+		}
+	})
+
+	return (
+		<form action={authenticate} method='post' class={styles.content}>
+			<div class={styles.title}>
+				<h3>Login to your account</h3>
+			</div>
+			<label>Server</label>
+			<input
+				class={styles.input}
+				type='text'
+				name='provider'
+				placeholder='bsky.social'
+				required={true}
+				value={provider()}
+				disabled={true}
+				onInput={(event) => setProvider(event.target.value)}
+			/>
+			<label>Account</label>
+			<input
+				autofocus={true}
+				class={styles.input}
+				type='text'
+				name='handle'
+				placeholder='Username or email address'
+				required={true}
+				value={identifier()}
+				onInput={(event) => setIdentifier(event.target.value)}
+			/>
+			<input
+				class={styles.input}
+				type='password'
+				name='password'
+				placeholder='Password'
+				required={true}
+				value={password()}
+				onInput={(event) => setPassword(event.target.value)}
+			/>
+			<div class={styles.controls}>
+				<button
+					onClick={() => setSelected('register')}
+					style={{
+						'background-color': 'transparent',
+						'font-weight': 'normal'
+					}}
+					class={styles.submit}
+				>
+					Create an account
+				</button>
+				<button
+					class={styles.submit}
+					disabled={isLoginDisabled()}
+					type='submit'
+				>
+					Submit
+				</button>
+			</div>
+		</form>
+	)
+}
+
+const options = {
+	login: Login,
+	register: Register
+}
+
+const AuthModal = () => (
+	<Dialog>
+		<Dialog.Trigger>
+			<div class={styles.button}>Login</div>
+		</Dialog.Trigger>
+		<Dialog.Content>
+			<Dynamic component={options[selected()]} />
+		</Dialog.Content>
+	</Dialog>
+)
 
 export default AuthModal

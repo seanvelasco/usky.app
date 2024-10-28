@@ -367,3 +367,11 @@ interface Notification {
 	indexedAt: string
 	labels: unknown[]
 }
+
+export interface CreateAccountProps {
+	email: string
+	password: string
+	handle: string
+	inviteCode: string
+	verificationCode: string
+}
