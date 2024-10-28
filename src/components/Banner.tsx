@@ -16,15 +16,24 @@ import styles from './Banner.module.css'
 // )
 
 const Banner = () => {
-	return <div class={styles.banner}>
-		<div class={styles.content}>
-			<p>See what's happening, discover new things, and find your people</p>
-			<Button style={{
-				'background-color': "#e0e0e0",
-				color: '#111'
-			}}>Login</Button>
+	return (
+		<div class={styles.banner}>
+			<div class={styles.content}>
+				<p>
+					See what's happening, discover new things, and find your
+					people
+				</p>
+				<Button
+					style={{
+						'background-color': '#e0e0e0',
+						color: '#111'
+					}}
+				>
+					Login
+				</Button>
+			</div>
 		</div>
-	</div>
+	)
 }
 
 export default Banner

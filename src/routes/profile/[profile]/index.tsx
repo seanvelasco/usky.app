@@ -174,9 +174,7 @@ const Profile = (props: RouteSectionProps) => {
 								/>
 							</div>
 							<div class={styles.buttons}>
-								<Button>
-									Follow
-								</Button>
+								<Button>Follow</Button>
 							</div>
 							<div class={styles.info}>
 								<p class={styles.name}>

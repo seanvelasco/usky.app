@@ -22,7 +22,6 @@ import MobileNav from './components/layout/MobileNav'
 
 import Banner from './components/Banner'
 
-
 const Navigation = () => {
 	const session = useSession()
 	const profile = createAsync(() => getProfileData(session.did))

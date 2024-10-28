@@ -4,22 +4,17 @@ import Trigger from './Trigger'
 import { DialogContext } from './context'
 
 const Root = (props: { children: JSXElement }) => {
-	
 	const [open, setOpen] = createSignal(false)
-	
+
 	const context = {
 		toggle: () => setOpen((prev) => !prev),
 		open: open()
 	}
-	
-	onMount(() => {
-	
-	})
-	
-	onCleanup(() => {
-	
-	})
-	
+
+	onMount(() => {})
+
+	onCleanup(() => {})
+
 	return (
 		<DialogContext.Provider value={context}>
 			{props.children}
