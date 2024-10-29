@@ -57,7 +57,7 @@ const SessionContext = createContext<{ pds: string } & Session>()
 
 const SessionProvider = (props: { service?: string; children: JSXElement }) => {
 	createAsync(() => checkSession())
-	const pds = () => (sessionStorage as Session).didDoc.service[0].serviceEndpoint
+	const pds = () => (sessionStorage as Session)?.didDoc?.service[0]?.serviceEndpoint
 	const value = {
 		pds: pds(),
 		...(sessionStorage as Session),
