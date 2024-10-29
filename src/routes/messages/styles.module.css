@@ -21,3 +21,8 @@
 		opacity: 1;
 	}
 }
+@media (hover: hover) and (pointer: fine) {
+	.message:hover {
+		background-color: var(--background-secondary);
+	}
+}

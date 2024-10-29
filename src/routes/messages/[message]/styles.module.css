@@ -1,0 +1,25 @@
+.history {
+	display: flex;
+	flex-direction: column-reverse;
+	gap: 1rem;
+	padding: 1rem;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+}
+
+.container time {
+	width: fit-content;
+	color: var(--text-secondary);
+	font-size: 0.75rem;
+}
+
+.bubble {
+	background-color: #1083fe;
+	color: var(--text-primary);
+	padding: 0.5rem 1rem;
+	width: fit-content;
+	max-width: 80%;
+}

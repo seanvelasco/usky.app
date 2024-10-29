@@ -421,3 +421,27 @@ export interface Convo {
 	unreadCount: number
 	muted: false
 }
+
+export interface Message {
+	$type: string
+	id: string
+	sender: {
+		did: string
+	}
+	text: string
+	sentAt: string
+}
+
+const m = {
+	messages: [
+		{
+			$type: 'chat.bsky.convo.defs#messageView',
+			id: '3kw55tqtlwc2l',
+			rev: '22222222jmobz',
+			sender: { did: 'did:plc:rzce2k6qit4s5kcmo4i6dfxb' },
+			text: 'asd',
+			sentAt: '2024-06-30T10:29:09.045Z'
+		}
+	],
+	cursor: '22222222jmobz'
+}
