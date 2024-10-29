@@ -53,12 +53,17 @@ const runSessionLogic = async () => {
 
 export const checkSession = cache(() => runSessionLogic(), 'check_session')
 
-const SessionContext = createContext<Session>()
+const SessionContext = createContext<{ pds: string } & Session>()
 
 const SessionProvider = (props: { service?: string; children: JSXElement }) => {
 	createAsync(() => checkSession())
+	const pds = () => (sessionStorage as Session).didDoc.service[0].serviceEndpoint
+	const value = {
+		pds: pds(),
+		...(sessionStorage as Session),
+	}
 	return (
-		<SessionContext.Provider value={sessionStorage as Session}>
+		<SessionContext.Provider value={value}>
 			{props.children}
 		</SessionContext.Provider>
 	)

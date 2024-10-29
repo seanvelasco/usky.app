@@ -140,7 +140,7 @@ const Login = () => {
 	const authenticate = action(async () => {
 		const session = await createSession(credentials())
 		if (session) {
-			setSession(session)
+			setSession({ ...session })
 			setIdentifier('')
 			setPassword('')
 		}

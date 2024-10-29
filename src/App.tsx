@@ -51,7 +51,7 @@ const Navigation = () => {
 		},
 		{
 			label: 'Chat',
-			href: '/chat',
+			href: '/messages',
 			icon: <BubbleIcon />,
 			authenticated: true
 		},
