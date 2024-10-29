@@ -9,11 +9,11 @@ interface ListConvosResponse {
 const listConvos = async (): Promise<ListConvosResponse | undefined> => {
 	const session = useSession()
 	const response = await fetch(
-		`${session.pds}/xrpc/chat.bsky.convo.listConvos`,
+		`${session.didDoc?.service[0]?.serviceEndpoint}/xrpc/chat.bsky.convo.listConvos`,
 		{
 			method: 'GET',
 			headers: {
-				"atproto-proxy": "did:web:api.bsky.chat#bsky_chat",
+				'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat',
 				Authorization: `Bearer ${session.accessJwt}`
 			}
 		}

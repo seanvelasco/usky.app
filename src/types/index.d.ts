@@ -386,6 +386,7 @@ interface ConvoMember {
 	did: string
 	handle: string
 	displayName: string
+	avatar: string
 	associated: {
 		list: number
 		feedgens: number

@@ -8,10 +8,10 @@
 	padding: 0.5rem 0;
 	margin: 0;
 	right: 0;
-	border-radius: 16px;
+	border-radius: 0.5rem;
 	position: absolute;
-	background-color: var(--button-secondary);
-	min-width: 160px;
+	background-color: var(--background-primary);
+	min-width: 10rem;
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 	z-index: 1;
 	overflow: hidden;
@@ -37,5 +37,5 @@
 }
 
 .content li:hover {
-	background-color: var(--button-secondary-hover);
+	background-color: var(--background-secondary);
 }

@@ -17,19 +17,13 @@ import EllipsisIcon from '../../assets/EllipsisIcon'
 import { isOwnProfile } from '../../utils'
 import styles from './Header.module.css'
 import Dropdown from '../Dropdown'
-import { setSession } from '../../storage/session'
-import { action, useAction, redirect } from '@solidjs/router'
-
-const logout = action(async () => {
-	console.log('attempting to logout')
-	setSession({})
-	throw redirect('/')
-})
+import { useAction } from '@solidjs/router'
+import { logout } from '../../states/session'
 
 export const ProfilePageHeader = () => {
 	const params = useParams()
 	const profile = createAsync(() => getProfileData(params.profile))
-	const signoff = useAction(logout)
+	const logoutAction = useAction(logout)
 	return (
 		<Show when={profile()}>
 			{(profile) => (
@@ -43,9 +37,13 @@ export const ProfilePageHeader = () => {
 								</button>
 							</Dropdown.Trigger>
 							<Dropdown.Content>
-								{/* <Dropdown.Item>Settings</Dropdown.Item> */}
 								<Dropdown.Item>
-									<button onclick={signoff}>Logout</button>
+									<button>Settings</button>
+								</Dropdown.Item>
+								<Dropdown.Item>
+									<button onClick={logoutAction}>
+										Logout
+									</button>
 								</Dropdown.Item>
 							</Dropdown.Content>
 						</Dropdown.Container>

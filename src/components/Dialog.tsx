@@ -34,8 +34,12 @@ const Content = (props: { children: JSXElement }) => {
 	let dialog: HTMLDialogElement
 
 	createEffect(() => {
-		if (context.open()) handleOpen()
-		else handleClose()
+		console.log(context.open())
+		if (context.open()) {
+			handleOpen()
+		} else {
+			handleClose()
+		}
 	})
 
 	const handleOpen = () => {
