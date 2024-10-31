@@ -332,22 +332,22 @@ export interface Payload {
 
 export interface Session {
 	did: string
-	// didDoc: {
-	// 	'@context': string[]
-	// 	id: string
-	// 	alsoKnownAs: string[]
-	// 	verificationMethod: {
-	// 		id: string
-	// 		type: string
-	// 		controller: string
-	// 		publicKeyMultibase: string
-	// 	}[]
-	// 	service: {
-	// 		id: string
-	// 		type: string
-	// 		serviceEndpoint: string
-	// 	}[]
-	// }
+	didDoc: {
+		'@context': string[]
+		id: string
+		alsoKnownAs: string[]
+		verificationMethod: {
+			id: string
+			type: string
+			controller: string
+			publicKeyMultibase: string
+		}[]
+		service: {
+			id: string
+			type: string
+			serviceEndpoint: string
+		}[]
+	}
 	handle: string
 	email: string
 	emailConfirmed: boolean
@@ -374,4 +374,74 @@ export interface CreateAccountProps {
 	handle: string
 	inviteCode: string
 	verificationCode: string
+}
+
+// {"cursor":"22222222jmobz","convos":[
+// {"id":"3kw55tn5bww26","rev":"22222222jmobz",
+// "members":[{"did":"did:plc:gjblkz2ashspospatvmeieel","handle":"seanvelasco.bsky.social","displayName":"Sean Velasco",
+// "associated":{"lists":0,"feedgens":0,"starterPacks":0,"labeler":false,"chat":{"allowIncoming":"all"}},
+// "viewer":{"muted":false,"blockedBy":false,"followedBy":"at://did:plc:gjblkz2ashspospatvmeieel/app.bsky.graph.follow/3krvmzkhzef2r"},"labels":[]},{"did":"did:plc:rzce2k6qit4s5kcmo4i6dfxb","handle":"sean.app","displayName":"sean.app","avatar":"https://cdn.bsky.app/img/avatar/plain/did:plc:rzce2k6qit4s5kcmo4i6dfxb/bafkreifdnzfx72k26mvu35j5emyzxfvq5ejwy2qnwggajabgzk3ajhjoxi@jpeg","associated":{"lists":1,"feedgens":0,"starterPacks":0,"labeler":false,"chat":{"allowIncoming":"all"}},"viewer":{"muted":false,"blockedBy":false,"knownFollowers":{"count":1,"followers":[{"did":"did:plc:gv2onfivqh55ew2ovuxhw5jj","handle":"isabellaa.bsky.social","displayName":"Isabella","avatar":"https://cdn.bsky.app/img/avatar/plain/did:plc:gv2onfivqh55ew2ovuxhw5jj/bafkreiblylsxdwckuyf3berdpzflajqswlhljvvjubzbkql76sihybmsau@jpeg","viewer":{"muted":false,"blockedBy":false,"following":"at://did:plc:rzce2k6qit4s5kcmo4i6dfxb/app.bsky.graph.follow/3k7ttespueh22","followedBy":"at://did:plc:gv2onfivqh55ew2ovuxhw5jj/app.bsky.graph.follow/3k7trjvcsbw2s"},"labels":[],"createdAt":"2023-09-19T20:55:36.929Z"}]}},"labels":[]}],"lastMessage":{"$type":"chat.bsky.convo.defs#messageView","id":"3kw55tqtlwc2l","rev":"22222222jmobz","sender":{"did":"did:plc:rzce2k6qit4s5kcmo4i6dfxb"},"text":"asd","sentAt":"2024-06-30T10:29:09.045Z"},"unreadCount":0,"muted":false}]}
+
+interface ConvoMember {
+	did: string
+	handle: string
+	displayName: string
+	avatar: string
+	associated: {
+		list: number
+		feedgens: number
+		starterPacks: number
+		labeler: boolean
+		chat: {
+			allowIncoming: 'all'
+		}
+	}
+	viewer: {
+		muted: boolean
+		blockedBy: boolean
+		followedBy: string
+	}
+	labels: unknown[]
+}
+
+export interface Convo {
+	id: string
+	rev: string
+	members: ConvoMember[]
+	lastMessage: {
+		$type: string
+		id: string
+		rev: string
+		sender: {
+			did: string
+		}
+		text: string
+		sentAt: string
+	}
+	unreadCount: number
+	muted: false
+}
+
+export interface Message {
+	$type: string
+	id: string
+	sender: {
+		did: string
+	}
+	text: string
+	sentAt: string
+}
+
+const m = {
+	messages: [
+		{
+			$type: 'chat.bsky.convo.defs#messageView',
+			id: '3kw55tqtlwc2l',
+			rev: '22222222jmobz',
+			sender: { did: 'did:plc:rzce2k6qit4s5kcmo4i6dfxb' },
+			text: 'asd',
+			sentAt: '2024-06-30T10:29:09.045Z'
+		}
+	],
+	cursor: '22222222jmobz'
 }

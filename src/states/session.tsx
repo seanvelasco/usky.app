@@ -9,7 +9,6 @@ import {
 	setSession as setSessionStorage
 } from '../storage/session'
 import type { Session } from '../types'
-import { useNavigate } from '@solidjs/router'
 
 const getBlueskySession = cache(
 	async (accessJwt: string) => getSession(accessJwt),
@@ -57,6 +56,13 @@ const SessionContext = createContext<Session>()
 
 const SessionProvider = (props: { service?: string; children: JSXElement }) => {
 	createAsync(() => checkSession())
+	// const pds = () =>
+	// 	(sessionStorage as Session)?.didDoc?.service[0]?.serviceEndpoint
+	// problem seems to happen bc sessionStorage is spread
+	// const value = {
+	// 	pds: pds(),
+	// 	...()
+	// }
 	return (
 		<SessionContext.Provider value={sessionStorage as Session}>
 			{props.children}
@@ -65,11 +71,12 @@ const SessionProvider = (props: { service?: string; children: JSXElement }) => {
 }
 
 // should this be an exported fn or should this be part of value like { session, logout } = useSession?
-const logout = () => {
-	const navigate = useNavigate()
+const logout = action(() => {
+	// const navigate = useNavigate()
 	setSessionStorage(reconcile({}))
-	navigate('/', { replace: true })
-}
+	// navigate('/', { replace: true })
+	throw redirect('/', { revalidate: 'session' })
+})
 
 const login = action(async (formData: FormData) => {
 	const identifier = String(formData.get('identifier'))
@@ -78,8 +85,7 @@ const login = action(async (formData: FormData) => {
 	const session = await createSession({ identifier, password })
 	if (session) {
 		setSessionStorage(session)
-		// navigate('/', { replace: true })
-		throw redirect('/')
+		return redirect('/', { revalidate: ['getAllTodos'] })
 	}
 })
 

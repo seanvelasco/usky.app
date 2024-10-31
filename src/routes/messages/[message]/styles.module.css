@@ -1,0 +1,53 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	height: calc(100dvh - 3.25rem - 1px);
+}
+
+.history {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem;
+	overflow: auto;
+	height: 100%;
+	scrollbar-width: thin;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+}
+
+.container time {
+	width: fit-content;
+	color: var(--text-secondary);
+	font-size: 0.75rem;
+}
+
+.bubble {
+	background-color: #1083fe;
+	color: var(--text-primary);
+	padding: 0.5rem 1rem;
+	width: fit-content;
+	max-width: 80%;
+}
+
+.form {
+	margin-top: auto;
+	position: sticky;
+	bottom: 0;
+	padding: 0.5rem;
+	background-color: var(--background-primary);
+}
+
+.input {
+	padding: 0.5rem 1rem;
+	height: 2.5rem;
+	width: 100%;
+	border: none;
+	border-radius: 999px;
+	background-color: var(--background-secondary);
+	/*color: var(--primary);*/
+	outline: none;
+}

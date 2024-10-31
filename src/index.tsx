@@ -42,188 +42,182 @@ import Notifications, { getNotifications } from './routes/notifications'
 // Session and auth
 import { session } from './storage/session'
 import Login from './routes/(auth)/login'
+import Messages from './routes/messages'
+import Message from './routes/messages/[message]'
 
-// to-do
-// check session before rendering
-// never, in any circumstance, render auth layout if a user has a valid session
-
-render(
-	() => (
-		<Suspense fallback={<Spinner />}>
-			<MetaProvider>
-				<Router root={App}>
-					<Route path='/login' component={Login} />
-					<Route path='/'>
-						<Route component={Discover}>
-							<Route
-								path='/'
-								load={() =>
-									getDiscoveryFeed(
-										'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'
-									)
-								}
-							/>
-							<Route
-								path='/hot'
-								load={() =>
-									getDiscoveryFeed(
-										'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
-									)
-								}
-							/>
-						</Route>
-						<Route path='/live' component={Firehose} />
-					</Route>
-					<Route path='/search' component={SearchPage}>
+const Root = () => (
+	<Suspense fallback={<Spinner />}>
+		<MetaProvider>
+			<Router root={App}>
+				<Route path='/login' component={Login} />
+				<Route path='/'>
+					<Route component={Discover}>
 						<Route
 							path='/'
-							component={Top}
-							load={({ location }) => {
-								const query =
-									new URLSearchParams(location.query).get(
-										'q'
-									) ?? ''
-								actorSearch(query)
-								postSearch(query, 'top')
-							}}
-						/>
-						<Route
-							path='/latest'
-							component={Latest}
-							load={({ location }) =>
-								postSearch(
-									new URLSearchParams(location.query).get(
-										'q'
-									) ?? '',
-									'latest'
+							preload={() =>
+								getDiscoveryFeed(
+									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'
 								)
 							}
 						/>
 						<Route
-							path='/people'
-							component={People}
-							load={({ location }) =>
-								actorSearch(
-									new URLSearchParams(location.query).get(
-										'q'
-									) ?? ''
-								)
-							}
-						/>
-						<Route
-							path='/media'
-							component={MediaSearch}
-							load={({ location }) =>
-								postSearch(
-									new URLSearchParams(location.query).get(
-										'q'
-									) ?? '',
-									'top'
+							path='/hot'
+							preload={() =>
+								getDiscoveryFeed(
+									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
 								)
 							}
 						/>
 					</Route>
+					<Route path='/live' component={Firehose} />
+				</Route>
+				<Route path='/search' component={SearchPage}>
 					<Route
-						path='/hashtag/:hashtag'
-						component={HashtagPage}
-						load={({ params }) =>
+						path='/'
+						component={Top}
+						preload={({ location }) => {
+							const query =
+								new URLSearchParams(location.query).get('q') ??
+								''
+							actorSearch(query)
+							postSearch(query, 'top')
+						}}
+					/>
+					<Route
+						path='/latest'
+						component={Latest}
+						preload={({ location }) =>
 							postSearch(
-								decodeURIComponent(`#${params.hashtag}`),
-								'top'
+								new URLSearchParams(location.query).get('q') ??
+									'',
+								'latest'
 							)
 						}
 					/>
 					<Route
-						path='/trends'
-						component={Trends}
-						load={() => getTranding(100)}
+						path='/people'
+						component={People}
+						preload={({ location }) =>
+							actorSearch(
+								new URLSearchParams(location.query).get('q') ??
+									''
+							)
+						}
 					/>
-
-					<Route path='/feeds' component={PopularFeeds} />
-					<Route path='/about' component={About} />
 					<Route
-						path='/notifications'
-						component={Notifications}
-						load={() => getNotifications(session.accessJwt)}
+						path='/media'
+						component={MediaSearch}
+						preload={({ location }) =>
+							postSearch(
+								new URLSearchParams(location.query).get('q') ??
+									'',
+								'top'
+							)
+						}
 					/>
+				</Route>
+				<Route
+					path='/hashtag/:hashtag'
+					component={HashtagPage}
+					preload={({ params }) =>
+						postSearch(
+							decodeURIComponent(`#${params.hashtag}`),
+							'top'
+						)
+					}
+				/>
+				<Route
+					path='/trends'
+					component={Trends}
+					preload={() => getTranding(100)}
+				/>
 
+				<Route path='/feeds' component={PopularFeeds} />
+				<Route path='/about' component={About} />
+				<Route
+					path='/notifications'
+					component={Notifications}
+					preload={() => getNotifications(session.accessJwt)}
+				/>
+				<Route path='/messages' component={Messages} />
+				<Route path='/messages/:message' component={Message} />
+				<Route
+					path='/profile/:profile'
+					component={Profile}
+					preload={({ params }) => getProfileData(params.profile)}
+				>
 					<Route
-						path='/profile/:profile'
-						component={Profile}
-						load={({ params }) => getProfileData(params.profile)}
+						preload={({ params }) => getPostsData(params.profile)}
 					>
-						<Route
-							load={({ params }) => getPostsData(params.profile)}
-						>
-							<Route path='/' component={Posts} />
-							<Route path='/replies' component={Replies} />
-							<Route path='/media' component={Media} />
-						</Route>
-						<Route
-							path='/likes'
-							component={Likes}
-							load={({ params }) => getLikesData(params.profile)}
-						/>
-						<Route
-							path='/feed'
-							component={UserFeeds}
-							load={({ params }) => getFeedsData(params.profile)}
-						/>
-						<Route
-							path='/lists'
-							component={Lists}
-							load={({ params }) => getListsData(params.profile)}
-						/>
-						<Route>
-							<Route
-								component={Followers}
-								path='/followers'
-								load={({ params }) =>
-									getFollowersData(params.profile)
-								}
-							/>
-							<Route
-								component={Following}
-								path='/following'
-								load={({ params }) =>
-									getFollowsData(params.profile)
-								}
-							/>
-						</Route>
+						<Route path='/' component={Posts} />
+						<Route path='/replies' component={Replies} />
+						<Route path='/media' component={Media} />
 					</Route>
 					<Route
-						path='/profile/:profile/post/:post'
-						component={Post}
-						load={({ params }) =>
-							getPostData({
-								profile: params.profile,
-								post: params.post
-							})
-						}
+						path='/likes'
+						component={Likes}
+						preload={({ params }) => getLikesData(params.profile)}
 					/>
 					<Route
-						path='/profile/:profile/feed/:feed'
-						component={Feed}
-						load={({ params }) =>
-							feedGeneratorData({
-								profile: params.profile,
-								feed: params.feed
-							})
-						}
+						path='/feed'
+						component={UserFeeds}
+						preload={({ params }) => getFeedsData(params.profile)}
 					/>
 					<Route
-						path='/profile/:profile/lists/:list'
-						component={List}
-						load={({ params }) =>
-							getListData({
-								profile: params.profile,
-								list: params.list
-							})
-						}
+						path='/lists'
+						component={Lists}
+						preload={({ params }) => getListsData(params.profile)}
 					/>
-				</Router>
-			</MetaProvider>
-		</Suspense>
-	),
-	document.getElementById('root')!
+					<Route>
+						<Route
+							component={Followers}
+							path='/followers'
+							preload={({ params }) =>
+								getFollowersData(params.profile)
+							}
+						/>
+						<Route
+							component={Following}
+							path='/following'
+							preload={({ params }) =>
+								getFollowsData(params.profile)
+							}
+						/>
+					</Route>
+				</Route>
+				<Route
+					path='/profile/:profile/post/:post'
+					component={Post}
+					preload={({ params }) =>
+						getPostData({
+							profile: params.profile,
+							post: params.post
+						})
+					}
+				/>
+				<Route
+					path='/profile/:profile/feed/:feed'
+					component={Feed}
+					preload={({ params }) =>
+						feedGeneratorData({
+							profile: params.profile,
+							feed: params.feed
+						})
+					}
+				/>
+				<Route
+					path='/profile/:profile/lists/:list'
+					component={List}
+					preload={({ params }) =>
+						getListData({
+							profile: params.profile,
+							list: params.list
+						})
+					}
+				/>
+			</Router>
+		</MetaProvider>
+	</Suspense>
 )
+
+render(() => <Root />, document.getElementById('root')!)

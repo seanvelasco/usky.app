@@ -1,6 +1,6 @@
-import { createSignal } from 'solid-js'
+import { createSignal, Show } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
-import { action } from '@solidjs/router'
+import { action, useSubmission } from '@solidjs/router'
 import Dialog from '../Dialog'
 import Button from '../Button'
 import createSession from '../../api/identity/createSession'
@@ -140,11 +140,16 @@ const Login = () => {
 	const authenticate = action(async () => {
 		const session = await createSession(credentials())
 		if (session) {
-			setSession(session)
-			setIdentifier('')
-			setPassword('')
+			setSession({ ...session })
+			// setIdentifier('')
+			// setPassword('')
+			submission.clear()
+			return new Response(undefined, { status: 200 })
 		}
+		return new Error('Invalid login')
 	})
+
+	const submission = useSubmission(authenticate)
 
 	return (
 		<form action={authenticate} method='post' class={styles.content}>
@@ -182,6 +187,9 @@ const Login = () => {
 				value={password()}
 				onInput={(event) => setPassword(event.target.value)}
 			/>
+			<Show when={submission.error}>
+				<div>{JSON.stringify(submission.error)}</div>
+			</Show>
 			<div class={styles.controls}>
 				<button
 					onClick={() => setSelected('register')}
@@ -198,7 +206,7 @@ const Login = () => {
 					disabled={isLoginDisabled()}
 					type='submit'
 				>
-					Submit
+					{submission.pending ? 'Submitting' : 'Submit'}
 				</button>
 			</div>
 		</form>

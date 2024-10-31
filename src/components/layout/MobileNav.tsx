@@ -27,7 +27,7 @@ const MobileNavigation = () => {
 		},
 		{
 			label: 'Chat',
-			href: '/chat',
+			href: '/messages',
 			icon: <BubbleIcon />,
 			authenticated: true
 		},

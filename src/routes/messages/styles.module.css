@@ -1,0 +1,56 @@
+.xxx {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	width: 100%;
+}
+
+.message {
+	display: flex;
+	align-items: center;
+	padding: 0.75rem 1.5rem;
+	gap: 1rem;
+	animation: incomingMessageAnimation 0.15s linear;
+	transition: background-color 0.2s ease;
+	overflow: hidden;
+}
+
+.mid {
+	overflow: hidden;
+}
+
+.name {
+	font-weight: 500;
+	width: fit-content;
+	display: block;
+	color: var(--text-primary);
+}
+
+.handle {
+	display: block;
+	width: fit-content;
+	color: var(--text-secondary);
+}
+
+.text {
+	/*white-space: nowrap;*/
+	/*text-overflow: ellipsis;*/
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	color: var(--text-primary);
+}
+
+@keyframes incomingMessageAnimation {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@media (hover: hover) and (pointer: fine) {
+	.message:hover {
+		background-color: var(--background-secondary);
+	}
+}
