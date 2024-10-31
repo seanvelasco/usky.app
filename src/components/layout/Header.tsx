@@ -131,6 +131,56 @@ const ListHeader = () => {
 	)
 }
 
+import getConvo from '../../api/convo/getConvo'
+import Avatar from '../../components/Avatar'
+
+const ChatHeader = () => {
+	const params = useParams()
+	const convo = createAsync(() => getConvo({ id: params.message }))
+	return (
+		<Suspense>
+			<A
+				style={{
+					'border-radius': '50%'
+				}}
+				href={`/profile/${convo()?.members[0].handle}`}
+			>
+				<Avatar size='2.5rem' src={convo()?.members[0].avatar} />
+			</A>
+			<div>
+				<A
+					style={{
+						display: 'block',
+						width: 'fit-content'
+					}}
+					href={`/profile/${convo()?.members[0].handle}`}
+				>
+					{convo()?.members[0].displayName}
+				</A>
+				<A
+					href={`/profile/${convo()?.members[0].handle}`}
+					style={{
+						color: 'var(--text-secondary)',
+						display: 'block'
+					}}
+				>
+					@{convo()?.members[0].handle}
+				</A>
+			</div>
+			{/*<p>*/}
+			{/*	{list()?.list.name}{' '}*/}
+			{/*	<span>*/}
+			{/*		list by{' '}*/}
+			{/*		<A href={`/profile/${list()?.list.creator.handle}`}>*/}
+			{/*			{list()?.list.creator?.displayName ??*/}
+			{/*				list()?.list.creator.handle}*/}
+			{/*		</A>*/}
+			{/*	</span>*/}
+			{/*</p>*/}
+		</Suspense>
+	)
+}
+
 const GenericHeader = (props: { children: JSXElement }) => (
 	<p>{props.children}</p>
 )
@@ -146,6 +196,7 @@ const Header = () => {
 	const isTrends = useMatch(() => '/trends')
 	const isFeeds = useMatch(() => '/feeds')
 	const isAbout = useMatch(() => '/about')
+	// const isChat = useMatch(() => '/messages/:message')
 	const isSearch = () =>
 		['/search', '/hashtag'].some((path) =>
 			location.pathname.startsWith(path)
@@ -191,6 +242,9 @@ const Header = () => {
 					</Match>
 					<Match when={params.profile}>
 						<ProfilePageHeader />
+					</Match>
+					<Match when={params.message}>
+						<ChatHeader />
 					</Match>
 				</Switch>
 			</div>

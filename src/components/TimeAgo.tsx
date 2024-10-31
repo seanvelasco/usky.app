@@ -1,3 +1,5 @@
+import { JSX } from 'solid-js'
+
 const ranges: { [key: string]: number } = {
 	year: 3600 * 24 * 365,
 	month: 3600 * 24 * 30,
@@ -31,7 +33,7 @@ const timeAgo = (date: Date) => {
 	}
 }
 
-const TimeAgo = (props: { time: Date }) => {
+const TimeAgo = (props: { time: Date; style?: JSX.CSSProperties }) => {
 	return (
 		<time
 			datetime={props.time.toLocaleString()}
@@ -39,7 +41,8 @@ const TimeAgo = (props: { time: Date }) => {
 				color: 'var(--text-secondary)',
 				cursor: 'default',
 				'font-size': '0.875rem',
-				'white-space': 'nowrap'
+				'white-space': 'nowrap',
+				...props.style
 			}}
 		>
 			{timeAgo(props.time)}

@@ -107,8 +107,8 @@ const Navigation = () => {
 
 const App = (props: RouteSectionProps) => {
 	return (
-		<Suspense fallback={<Spinner />}>
-			<SessionProvider>
+		<SessionProvider>
+			<Suspense fallback={<Spinner />}>
 				<div
 					style={{
 						display: 'flex',
@@ -143,8 +143,8 @@ const App = (props: RouteSectionProps) => {
 					</aside>
 					<Banner />
 				</div>
-			</SessionProvider>
-		</Suspense>
+			</Suspense>
+		</SessionProvider>
 	)
 }
 

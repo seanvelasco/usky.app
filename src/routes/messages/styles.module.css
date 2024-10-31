@@ -1,3 +1,10 @@
+.xxx {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	width: 100%;
+}
+
 .message {
 	display: flex;
 	align-items: center;
@@ -5,12 +12,33 @@
 	gap: 1rem;
 	animation: incomingMessageAnimation 0.15s linear;
 	transition: background-color 0.2s ease;
+	overflow: hidden;
 }
 
 .mid {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
+	overflow: hidden;
+}
+
+.name {
+	font-weight: 500;
+	width: fit-content;
+	display: block;
+	color: var(--text-primary);
+}
+
+.handle {
+	display: block;
+	width: fit-content;
+	color: var(--text-secondary);
+}
+
+.text {
+	/*white-space: nowrap;*/
+	/*text-overflow: ellipsis;*/
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	color: var(--text-primary);
 }
 
 @keyframes incomingMessageAnimation {
