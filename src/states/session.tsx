@@ -1,6 +1,6 @@
 import { createContext, useContext, type JSXElement } from 'solid-js'
-import { reconcile } from 'solid-js/store'
 import { createAsync, cache, action, redirect } from '@solidjs/router'
+import { reconcile } from 'solid-js/store'
 import createSession from '../api/identity/createSession'
 import getSession from '../api/identity/getSession'
 import refreshSession from '../api/identity/refreshSession'
@@ -10,31 +10,19 @@ import {
 } from '../storage/session'
 import type { Session } from '../types'
 
-const getBlueskySession = cache(
-	async (accessJwt: string) => getSession(accessJwt),
-	'session'
-)
-
-const refreshBlueskySession = cache(
-	(refreshJwt: string) => refreshSession(refreshJwt),
-	'refresh_session'
-)
-
 const runSessionLogic = async () => {
 	// "bruh" moment
 	// accessors are undefined, logic does not work
 	// also, if an inner IF is false, it does evaluate the outer ELSE, it will just return
 	console.log(sessionStorage.accessJwt)
 	if (sessionStorage.accessJwt) {
-		const session = await getBlueskySession(sessionStorage.accessJwt)
-		if (session) {
-			console.log('This is a valid session')
+		const session = await getSession(sessionStorage.accessJwt)
+		if (session.active) {
+			console.log('This is a valid session', session)
 			// setSessionStorage(session() as Session)
 		} else if (sessionStorage.refreshJwt) {
 			console.log(`Unable to getSession, attempting to refresh`)
-			const session = await refreshBlueskySession(
-				sessionStorage.refreshJwt
-			)
+			const session = await refreshSession(sessionStorage.refreshJwt)
 			if (session) {
 				console.log('Tokens refreshed', session)
 				setSessionStorage('accessJwt', session.accessJwt!)
