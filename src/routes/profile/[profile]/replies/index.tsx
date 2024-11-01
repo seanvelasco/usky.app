@@ -1,14 +1,15 @@
 import { ErrorBoundary, For, Suspense } from 'solid-js'
 import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import { Title, Meta, Link } from '@solidjs/meta'
-import { getPostsData, getProfileData } from '..'
 import Post from '../../../../components/Post'
 import { Fallback } from '..'
 import Spinner from '../../../../components/Spinner'
+import getAuthorFeed from '../../../../api/feed/getAuthorFeed.ts'
+import getProfile from '../../../../api/actor/getProfile.ts'
 
 export const Replies = (props: RouteSectionProps) => {
-	const posts = createAsync(() => getPostsData(props.params.profile))
-	const profile = createAsync(() => getProfileData(props.params.profile))
+	const posts = createAsync(() => getAuthorFeed(props.params.profile))
+	const profile = createAsync(() => getProfile(props.params.profile))
 
 	const title = () =>
 		`Posts with replies by ${profile()?.displayName || profile()?.handle} (@${profile()?.handle}) - Bluesky (usky.app)`

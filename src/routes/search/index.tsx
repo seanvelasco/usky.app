@@ -1,7 +1,6 @@
 import { ErrorBoundary, For, Show, Suspense } from 'solid-js'
 import {
 	createAsync,
-	cache,
 	useSearchParams,
 	A,
 	useLocation,
@@ -16,25 +15,17 @@ import MediaCarousel from '../../components/MediaCarousel'
 import Spinner from '../../components/Spinner'
 import styles from './styles.module.css'
 
-export const actorSearch = cache(
-	async (query: string, limit: number = 3) =>
-		await searchActors(encodeURIComponent(query), limit),
-	'actors_search'
-)
-
-export const postSearch = cache(
-	async (query: string, sort: 'latest' | 'top') =>
-		await searchPosts({ query, limit: 100, sort }),
-	'posts_search'
-)
-
 const Empty = () => <></>
 
 export const Media = () => {
 	const [searchParams] = useSearchParams()
 
 	const posts = createAsync(() =>
-		postSearch(decodeURIComponent(searchParams.q || ''), 'top')
+		searchPosts({
+			query: decodeURIComponent(searchParams.q || ''),
+			sort: 'top',
+			limit: 100
+		})
 	)
 
 	return (
@@ -53,10 +44,14 @@ export const Top = () => {
 	const location = useLocation()
 
 	const actors = createAsync(() =>
-		actorSearch(decodeURIComponent(searchParams.q || ''))
+		searchActors(decodeURIComponent(searchParams.q || ''), 3)
 	)
 	const posts = createAsync(() =>
-		postSearch(decodeURIComponent(searchParams.q || ''), 'top')
+		searchPosts({
+			query: decodeURIComponent(searchParams.q || ''),
+			sort: 'top',
+			limit: 100
+		})
 	)
 
 	return (
@@ -96,7 +91,11 @@ export const Latest = () => {
 	const [searchParams] = useSearchParams()
 
 	const posts = createAsync(() =>
-		postSearch(decodeURIComponent(searchParams.q || ''), 'latest')
+		searchPosts({
+			query: decodeURIComponent(searchParams.q || ''),
+			sort: 'latest',
+			limit: 100
+		})
 	)
 
 	return (
@@ -109,7 +108,7 @@ export const Latest = () => {
 export const People = () => {
 	const [searchParams] = useSearchParams()
 	const actors = createAsync(() =>
-		actorSearch(decodeURIComponent(searchParams.q || ''), 100)
+		searchActors(decodeURIComponent(searchParams.q || ''), 100)
 	)
 	return (
 		<Suspense fallback={<Spinner />}>
@@ -187,7 +186,11 @@ export const Search = (props: RouteSectionProps) => {
 
 export const HashtagPage = (props: RouteSectionProps) => {
 	const posts = createAsync(() =>
-		postSearch(decodeURIComponent(`#${props.params.hashtag}`), 'top')
+		searchPosts({
+			query: decodeURIComponent(`#${props.params.hashtag}`),
+			sort: 'top',
+			limit: 100
+		})
 	)
 	const title = () =>
 		`#${decodeURIComponent(props.params.hashtag)} - Bluesky (usky.app)`

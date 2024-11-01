@@ -8,9 +8,7 @@ import {
 	useMatch
 } from '@solidjs/router'
 import Search from '../Search'
-import { getProfileData } from '../../routes/profile/[profile]'
 import { getPostData } from '../../routes/profile/[profile]/post/[post]'
-import { feedGeneratorData } from '../../routes/profile/[profile]/feed/[feed]'
 import { getListData } from '../../routes/profile/[profile]/lists/[list]'
 import { ChevronLeft } from '../../assets/ChevronLeft'
 import EllipsisIcon from '../../assets/EllipsisIcon'
@@ -22,7 +20,7 @@ import { logout } from '../../states/session'
 
 export const ProfilePageHeader = () => {
 	const params = useParams()
-	const profile = createAsync(() => getProfileData(params.profile))
+	const profile = createAsync(() => getProfile(params.profile))
 	const logoutAction = useAction(logout)
 	return (
 		<Show when={profile()}>
@@ -89,7 +87,7 @@ export const TimelineHeader = () => (
 const FeedHeader = () => {
 	const params = useParams()
 	const feedGenerator = createAsync(() =>
-		feedGeneratorData({ profile: params.profile, feed: params.feed })
+		getFeedGenerator({ profile: params.profile, feed: params.feed })
 	)
 	return (
 		<Suspense>
@@ -133,6 +131,8 @@ const ListHeader = () => {
 
 import getConvo from '../../api/convo/getConvo'
 import Avatar from '../../components/Avatar'
+import getProfile from '../../api/actor/getProfile.ts'
+import getFeedGenerator from '../../api/feed/getFeedGenerator.ts'
 
 const ChatHeader = () => {
 	const params = useParams()

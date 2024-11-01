@@ -1,14 +1,9 @@
 import { For } from 'solid-js'
-import { cache, createAsync, RouteSectionProps } from '@solidjs/router'
+import { createAsync, RouteSectionProps } from '@solidjs/router'
 import { Meta, Title, Link } from '@solidjs/meta'
 import getFeed from '../api/feed/getFeed'
 import FeedPost from '../components/Post'
 import Spinner from '../components/Spinner'
-
-export const getDiscoveryFeed = cache(
-	async (feed: string) => await getFeed(feed),
-	'home'
-)
 
 const Discover = (props: RouteSectionProps) => {
 	const feeds: Record<string, string> = {
@@ -16,9 +11,7 @@ const Discover = (props: RouteSectionProps) => {
 		'/hot': 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
 	}
 
-	const feed = createAsync(() =>
-		getDiscoveryFeed(feeds[props.location.pathname])
-	)
+	const feed = createAsync(() => getFeed(feeds[props.location.pathname]))
 	return (
 		<>
 			<Title>Bluesky (usky.app)</Title>

@@ -1,5 +1,5 @@
 import { For, Show, Suspense, ErrorBoundary, lazy } from 'solid-js'
-import { A, createAsync, cache, type RouteSectionProps } from '@solidjs/router'
+import { A, createAsync, type RouteSectionProps } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
 import Post from '../../../components/Post'
 import getProfile from '../../../api/actor/getProfile'
@@ -15,20 +15,9 @@ export const Fallback = (props: { text?: string }) => (
 	</div>
 )
 
-export const getProfileData = cache(async (profile: string) => {
-	if (profile) {
-		return await getProfile(profile)
-	}
-}, 'profile')
-
-export const getPostsData = cache(
-	async (profile: string) => await getAuthorFeed(profile),
-	'profile_posts'
-)
-
 export const Posts = (props: RouteSectionProps) => {
-	const posts = createAsync(() => getPostsData(props.params.profile))
-	const profile = createAsync(() => getProfileData(props.params.profile))
+	const posts = createAsync(() => getAuthorFeed(props.params.profile))
+	const profile = createAsync(() => getProfile(props.params.profile))
 
 	const title = () =>
 		`${profile()?.displayName || profile()?.handle} (@${profile()?.handle}) - Bluesky (usky.app)`
@@ -81,7 +70,7 @@ export const ProfileNav = (
 }
 
 const Profile = (props: RouteSectionProps) => {
-	const profile = createAsync(() => getProfileData(props.params.profile))
+	const profile = createAsync(() => getProfile(props.params.profile))
 
 	const routes = [
 		{

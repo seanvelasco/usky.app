@@ -5,7 +5,7 @@ interface SearchActorsBody {
 	cursor?: string
 }
 
-const search = async (
+export const search = async (
 	query: string,
 	timeout = 20000
 ): Promise<SearchActorsBody | undefined> => {
@@ -21,21 +21,13 @@ const search = async (
 				signal: controller.signal
 			})
 
-			if (response.status !== 200) {
-				return
-			}
-
-			const body = await response.json()
-
-			return body
+			return await response.json()
 		}
 	} catch (error) {
-		console.error(`Cancelled searchActors()`, error)
+		console.error(`Cancelled search()`, error)
 	} finally {
 		clearTimeout(abortTimeout)
 	}
 }
-
-export { search }
 
 export default search

@@ -1,7 +1,6 @@
 import { For, Suspense } from 'solid-js'
-import { createAsync, cache, type RouteSectionProps } from '@solidjs/router'
+import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
-import { getDiscoveryFeed } from '../../../..'
 import getFeedGenerator from '../../../../../api/feed/getFeedGenerator'
 import Avatar from '../../../../../components/Avatar'
 import Post from '../../../../../components/Post'
@@ -9,22 +8,7 @@ import Spinner from '../../../../../components/Spinner'
 import { LikesIcon } from '../../../../../assets/likes'
 import styles from './styles.module.css'
 import { FeedGenerator } from '../../../../../types'
-
-export const feedGeneratorData = cache(
-	async ({ profile, feed }: { profile: string; feed: string }) =>
-		await getFeedGenerator(
-			`at://${profile}/app.bsky.feed.generator/${feed}`
-		),
-	'feed_generator'
-)
-
-export const feedsData = cache(
-	async ({ profile, feed }: { profile: string; feed: string }) =>
-		await getDiscoveryFeed(
-			`at://${profile}/app.bsky.feed.generator/${feed}`
-		),
-	'profile_feed'
-)
+import getFeed from '../../../../../api/feed/getFeed.ts'
 
 const Fallback = (props: { feed: FeedGenerator | undefined }) => (
 	<>
@@ -35,14 +19,16 @@ const Fallback = (props: { feed: FeedGenerator | undefined }) => (
 
 const Feed = (props: RouteSectionProps) => {
 	const feedGenerator = createAsync(() =>
-		feedGeneratorData({
+		getFeedGenerator({
 			profile: props.params.profile,
 			feed: props.params.feed
 		})
 	)
 
 	const feeds = createAsync(() =>
-		feedsData({ profile: props.params.profile, feed: props.params.feed })
+		getFeed(
+			`at://${props.params.profile}/app.bsky.feed.generator/${props.params.feed}`
+		)
 	)
 
 	const title = () =>

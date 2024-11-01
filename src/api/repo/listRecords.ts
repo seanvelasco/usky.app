@@ -1,6 +1,6 @@
 import { SERVICE_BASE_URL } from '../../constants'
 
-const listRecords = async (
+export const listRecords = async (
 	repo: string,
 	collection: string,
 	limit = 100,
@@ -24,9 +24,7 @@ const listRecords = async (
 			return
 		}
 
-		const body = await response.json()
-
-		return body
+		return await response.json()
 	} catch (error) {
 		console.error(
 			`Cancelled getRecord(${repo}, ${collection}, ${limit})`,
@@ -36,7 +34,5 @@ const listRecords = async (
 		clearTimeout(abortTimeout)
 	}
 }
-
-export { listRecords }
 
 export default listRecords

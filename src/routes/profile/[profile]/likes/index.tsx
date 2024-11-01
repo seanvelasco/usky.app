@@ -4,9 +4,10 @@ import getPosts from '../../../../api/getPostsOld'
 import listRecords from '../../../../api/repo/listRecords'
 import Post from '../../../../components/Post'
 import Spinner from '../../../../components/Spinner'
-import { Fallback, getProfileData } from '..'
+import { Fallback } from '..'
 import type { FeedPost } from '../../../../types'
 import { Link, Meta, Title } from '@solidjs/meta'
+import getProfile from '../../../../api/actor/getProfile.ts'
 
 const getLikes = async (profile: string): Promise<{ posts: FeedPost[] }> => {
 	const likes = await listRecords(profile, 'app.bsky.feed.like')
@@ -29,7 +30,7 @@ export const getLikesData = cache(
 
 export const Likes = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getLikesData(props.params.profile))
-	const profile = createAsync(() => getProfileData(props.params.profile))
+	const profile = createAsync(() => getProfile(props.params.profile))
 
 	const title = () =>
 		`Posts liked by ${profile()?.displayName || profile()?.handle} (@${profile()?.handle}) - Bluesky (usky.app)`

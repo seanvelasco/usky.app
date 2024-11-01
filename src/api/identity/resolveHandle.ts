@@ -1,6 +1,7 @@
+import { cache } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 
-const resolveHandle = async (handle: string): Promise<string> => {
+export const resolveHandle = cache(async (handle: string): Promise<string> => {
 	const response = await fetch(
 		`${PUBLIC_API_BASE_URL}/xrpc/com.atproto.identity.resolveHandle?handle=${handle}`
 	)
@@ -8,8 +9,6 @@ const resolveHandle = async (handle: string): Promise<string> => {
 	const body = await response.json()
 
 	return body.did
-}
-
-export { resolveHandle }
+}, 'handle')
 
 export default resolveHandle

@@ -1,22 +1,24 @@
+import { cache } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Actor, List } from '../../types'
 
-const getList = async (
-	list: string
-): Promise<{
-	list: List
-	items: {
-		subject: Omit<Actor, 'viewer'>
-	}[]
-	cursor?: string
-}> => {
-	const request = new Request(
-		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.graph.getList?list=${list}`
-	)
+export const getList = cache(
+	async (
+		list: string
+	): Promise<{
+		list: List
+		items: {
+			subject: Omit<Actor, 'viewer'>
+		}[]
+		cursor?: string
+	}> => {
+		const response = await fetch(
+			`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.graph.getList?list=${list}`
+		)
 
-	const response = await fetch(request)
-
-	return await response.json()
-}
+		return await response.json()
+	},
+	'profile_list'
+)
 
 export default getList

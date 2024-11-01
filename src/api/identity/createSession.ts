@@ -1,13 +1,13 @@
 import { SERVICE_BASE_URL } from '../../constants'
 import type { Session } from '../../types'
 
-const createSession = async ({
+export const createSession = async ({
 	identifier,
 	password
 }: {
 	identifier: string
 	password: string
-}): Promise<Session | undefined> => {
+}): Promise<Session> => {
 	const response = await fetch(
 		`${SERVICE_BASE_URL}/xrpc/com.atproto.server.createSession`,
 		{
@@ -22,11 +22,7 @@ const createSession = async ({
 		}
 	)
 
-	if (!response.ok) return
-
 	return await response.json()
 }
-
-export { createSession }
 
 export default createSession

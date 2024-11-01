@@ -4,9 +4,10 @@ import getLists from '../../../../api/graph/getLists'
 import resolveHandle from '../../../../api/identity/resolveHandle'
 import Entry from '../../../../components/Entry'
 import { id } from '../../../../utils'
-import { Fallback, getProfileData } from '..'
+import { Fallback } from '..'
 import Spinner from '../../../../components/Spinner'
 import { Link, Meta, Title } from '@solidjs/meta'
+import getProfile from '../../../../api/actor/getProfile.ts'
 
 export const getListsData = cache(async (profile: string) => {
 	const did = await resolveHandle(profile)
@@ -15,7 +16,7 @@ export const getListsData = cache(async (profile: string) => {
 
 export const Lists = (props: RouteSectionProps) => {
 	const lists = createAsync(() => getListsData(props.params.profile))
-	const profile = createAsync(() => getProfileData(props.params.profile))
+	const profile = createAsync(() => getProfile(props.params.profile))
 
 	const title = () =>
 		`Lists by ${profile()?.displayName || profile()?.handle} (@${profile()?.handle}) - Bluesky (usky.app)`

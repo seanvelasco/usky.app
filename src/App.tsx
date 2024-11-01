@@ -1,7 +1,13 @@
 import { For, Suspense, Show, ErrorBoundary } from 'solid-js'
-import { A, useMatch, type RouteSectionProps } from '@solidjs/router'
+import {
+	A,
+	useMatch,
+	createAsync,
+	type RouteSectionProps
+} from '@solidjs/router'
 import Header from './components/layout/Header'
 import Sidebar from './components/layout/Sidebar'
+import MobileNav from './components/layout/MobileNav'
 import { FeedsIcon } from './assets/FeedsIcon'
 import { HomeIcon } from './assets/HomeIcon'
 import { SearchIcon } from './assets/SearchIcon'
@@ -9,21 +15,15 @@ import { BellIcon } from './assets/BellIcon'
 import { BubbleIcon } from './assets/BubbleIcon'
 import { ListIcon } from './assets/ListIcon'
 import Spinner from './components/Spinner'
-import styles from './App.module.css'
-
-// this is for auth
-import { createAsync } from '@solidjs/router'
-import { getProfileData } from './routes/profile/[profile]'
 import Avatar from './components/Avatar'
-import { SessionProvider, useSession } from './states/session'
-
-import MobileNav from './components/layout/MobileNav'
-
 import Banner from './components/Banner'
+import { SessionProvider, useSession } from './states/session'
+import styles from './App.module.css'
+import getProfile from './api/actor/getProfile.ts'
 
 const Navigation = () => {
 	const session = useSession()
-	const profile = createAsync(() => getProfileData(session.did))
+	const profile = createAsync(() => getProfile(session.did))
 	const isHome = useMatch(() => '/:home?', {
 		home: ['hot', 'live']
 	})
@@ -89,18 +89,15 @@ const Navigation = () => {
 					</Show>
 				)}
 			</For>
-			<ErrorBoundary fallback={<></>}>
-				<Show when={profile()}>
-					{(profile) => (
-						<div class={styles.icon}>
-							<A href={`/profile/${profile().handle}`}>
-								<Avatar src={profile().avatar} size='1.5rem' />
-							</A>
-						</div>
-					)}
-				</Show>
-			</ErrorBoundary>
-			{/* <AuthModal /> */}
+			<Show when={profile()}>
+				{(profile) => (
+					<div class={styles.icon}>
+						<A href={`/profile/${profile().handle}`}>
+							<Avatar src={profile().avatar} size='1.5rem' />
+						</A>
+					</div>
+				)}
+			</Show>
 		</nav>
 	)
 }

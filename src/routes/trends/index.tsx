@@ -3,7 +3,7 @@ import { cache, createAsync, A } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
 import Spinner from '../../components/Spinner'
 import styles from '../../components/Entry.module.css'
-import getPopularTags from '../../api/custom/trends'
+import getPopularTags from '../../api/custom/getPopularTags.ts'
 
 export const getTranding = cache(
 	async (limit?: number) => await getPopularTags(limit),

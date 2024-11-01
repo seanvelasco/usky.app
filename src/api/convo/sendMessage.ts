@@ -1,21 +1,23 @@
+import { action } from '@solidjs/router'
+import { ATPROTO_PROXY } from '../../constants'
 import type { Message, Session } from '../../types'
 
-const sendMessage = async ({
-	session,
-	id,
-	message
-}: {
-	session: Session
-	id: string
-	message: string
-}): Promise<Message | undefined> => {
-	try {
+export const sendMessage = action(
+	async ({
+		session,
+		id,
+		message
+	}: {
+		session: Session
+		id: string
+		message: string
+	}): Promise<Message> => {
 		const response = await fetch(
 			`${session.didDoc?.service[0]?.serviceEndpoint}/xrpc/chat.bsky.convo.sendMessage`,
 			{
 				method: 'POST',
 				headers: {
-					'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat',
+					'atproto-proxy': ATPROTO_PROXY,
 					Authorization: `Bearer ${session.accessJwt}`,
 					'Content-Type': 'application/json'
 				},
@@ -27,13 +29,8 @@ const sendMessage = async ({
 				})
 			}
 		)
-
-		if (!response.ok) return
-
 		return await response.json()
-	} catch (e) {
-		console.log('ASD', e)
 	}
-}
+)
 
 export default sendMessage

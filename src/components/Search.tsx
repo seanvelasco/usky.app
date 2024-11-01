@@ -1,7 +1,6 @@
 import { createSignal, Show, For, Suspense, createEffect } from 'solid-js'
 import {
 	useSearchParams,
-	cache,
 	A,
 	useMatch,
 	action,
@@ -12,15 +11,10 @@ import {
 	useBeforeLeave
 } from '@solidjs/router'
 import searchActorsTypeahead from '../api/actor/searchActorsTypeahead'
-import styles from './Search.module.css'
 import { ListItem } from './Section'
-import listStyles from './Section.module.css'
 import Spinner from './Spinner'
-
-const typeaheadSearch = cache(
-	async (query: string) => await searchActorsTypeahead(query),
-	'typeahead_search'
-)
+import styles from './Search.module.css'
+import listStyles from './Section.module.css'
 
 const goToSearch = action(async (query: string) => {
 	throw redirect(`/search?q=${encodeURIComponent(query)}`)
@@ -65,7 +59,9 @@ const Search = () => {
 			setSearchParams({ q: value })
 		} else {
 			setQuery(decodeURIComponent(value.trim()))
-			setSearchResults(await typeaheadSearch(encodeURIComponent(query())))
+			setSearchResults(
+				await searchActorsTypeahead(encodeURIComponent(query()))
+			)
 		}
 	}
 

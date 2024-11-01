@@ -1,3 +1,4 @@
+import { cache } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Profile } from '../../types'
 
@@ -9,6 +10,4 @@ const getProfile = async (actor: string): Promise<Profile> => {
 	return await response.json()
 }
 
-export { getProfile }
-
-export default getProfile
+export default cache(getProfile, 'profile')

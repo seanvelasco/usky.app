@@ -1,22 +1,27 @@
-import type { Convo } from '../../types'
+import { cache } from '@solidjs/router'
 import { useSession } from '../../states/session'
+import { ATPROTO_PROXY } from '../../constants'
+import type { Convo } from '../../types'
 
-const getConvo = async ({ id }: { id: string }): Promise<Convo> => {
-	const session = useSession()
-	const response = await fetch(
-		`${session.didDoc?.service[0]?.serviceEndpoint}/xrpc/chat.bsky.convo.getConvo?convoId=${id}`,
-		{
-			method: 'GET',
-			headers: {
-				'atproto-proxy': 'did:web:api.bsky.chat#bsky_chat',
-				Authorization: `Bearer ${session.accessJwt}`
+export const getConvo = cache(
+	async ({ id }: { id: string }): Promise<Convo> => {
+		const session = useSession()
+		const response = await fetch(
+			`${session.didDoc?.service[0]?.serviceEndpoint}/xrpc/chat.bsky.convo.getConvo?convoId=${id}`,
+			{
+				method: 'GET',
+				headers: {
+					'atproto-proxy': ATPROTO_PROXY,
+					Authorization: `Bearer ${session.accessJwt}`
+				}
 			}
-		}
-	)
+		)
 
-	const { convo } = await response.json()
+		const body = await response.json()
 
-	return convo
-}
+		return body.convo
+	},
+	'convo'
+)
 
 export default getConvo

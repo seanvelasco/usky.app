@@ -1,21 +1,23 @@
+import { cache } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Feed } from '../../types'
 
-const getActorFeeds = async (
-	actor = 'bsky.app'
-): Promise<{
-	feeds: Feed[]
-}> => {
-	const response = await fetch(
-		`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.getActorFeeds?actor=${actor}&limit=100
+export const getActorFeeds = cache(
+	async (
+		actor = 'bsky.app',
+		limit = 100
+	): Promise<{
+		feeds: Feed[]
+		limit?: number
+	}> => {
+		const response = await fetch(
+			`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.getActorFeeds?actor=${actor}&limit=${limit}
         `
-	)
+		)
 
-	const body = await response.json()
-
-	return body
-}
-
-export { getActorFeeds }
+		return await response.json()
+	},
+	'profile_feeds'
+)
 
 export default getActorFeeds

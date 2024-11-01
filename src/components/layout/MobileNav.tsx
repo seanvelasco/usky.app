@@ -2,17 +2,17 @@ import { For, Show } from 'solid-js'
 import { A, createAsync } from '@solidjs/router'
 import Avatar from '../Avatar'
 import { useSession } from '../../states/session'
-import { getProfileData } from '../../routes/profile/[profile]'
 import { HomeIcon } from '../../assets/HomeIcon'
 import { SearchIcon } from '../../assets/SearchIcon'
 import { BellIcon } from '../../assets/BellIcon'
 import { BubbleIcon } from '../../assets/BubbleIcon'
 import styles from './MobileNav.module.css'
+import getProfile from '../../api/actor/getProfile.ts'
 
 const MobileNavigation = () => {
 	// To-do: reconcile this component with main Navigation
 	const session = useSession()
-	const profile = createAsync(() => getProfileData(session.did))
+	const profile = createAsync(() => getProfile(session.did))
 
 	const links = [
 		{

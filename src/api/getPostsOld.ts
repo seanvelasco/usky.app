@@ -1,6 +1,6 @@
 import { PUBLIC_API_BASE_URL } from '../constants'
 
-const getPosts = async (uris: string[], timeout = 20000) => {
+export const getPosts = async (uris: string[], timeout = 20000) => {
 	const controller = new AbortController()
 
 	const abortTimeout = setTimeout(() => {
@@ -23,16 +23,12 @@ const getPosts = async (uris: string[], timeout = 20000) => {
 			return
 		}
 
-		const body = await response.json()
-
-		return body
+		return await response.json()
 	} catch (error) {
 		console.error(`Cancelled getPosts()`, error)
 	} finally {
 		clearTimeout(abortTimeout)
 	}
 }
-
-export { getPosts }
 
 export default getPosts

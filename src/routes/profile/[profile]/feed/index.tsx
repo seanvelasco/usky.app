@@ -1,20 +1,16 @@
 import { ErrorBoundary, For, Suspense } from 'solid-js'
-import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
+import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import getActorFeeds from '../../../../api/feed/getActorFeeds'
 import Entry from '../../../../components/Entry'
 import Spinner from '../../../../components/Spinner'
-import { Fallback, getProfileData } from '..'
+import { Fallback } from '..'
+import getProfile from '../../../../api/actor/getProfile'
 import { id } from '../../../../utils'
 import { Link, Meta, Title } from '@solidjs/meta'
 
-export const getFeedsData = cache(
-	async (profile: string) => await getActorFeeds(profile),
-	'profile_feeds'
-)
-
 export const Feeds = (props: RouteSectionProps) => {
-	const feeds = createAsync(() => getFeedsData(props.params.profile))
-	const profile = createAsync(() => getProfileData(props.params.profile))
+	const feeds = createAsync(() => getActorFeeds(props.params.profile))
+	const profile = createAsync(() => getProfile(props.params.profile))
 
 	const title = () =>
 		`Feeds by ${profile()?.displayName || profile()?.handle} (@${profile()?.handle}) - Bluesky (usky.app)`

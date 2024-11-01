@@ -1,7 +1,8 @@
+import { cache } from '@solidjs/router'
 import { SERVICE_BASE_URL } from '../../constants'
 import type { Session } from '../../types'
 
-const getSession = async (accessJwt: string): Promise<Session | undefined> => {
+export const getSession = cache(async (accessJwt: string): Promise<Session> => {
 	const response = await fetch(
 		`${SERVICE_BASE_URL}/xrpc/com.atproto.server.getSession`,
 		{
@@ -12,11 +13,7 @@ const getSession = async (accessJwt: string): Promise<Session | undefined> => {
 		}
 	)
 
-	if (!response.ok) return
-
 	return await response.json()
-}
-
-export { getSession }
+}, 'session')
 
 export default getSession

@@ -1,9 +1,10 @@
+import { cache } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { FeedPost } from '../../types'
 
 type SearchActorsQuery = {
 	query: string
-	sort?: string
+	sort?: 'latest' | 'top'
 	since?: string
 	until?: string
 	mentions?: string
@@ -16,53 +17,56 @@ type SearchActorsQuery = {
 	cursor?: string
 }
 
-const searchActors = async ({
-	query,
-	sort,
-	since,
-	until,
-	mentions,
-	author,
-	lang,
-	domain,
-	url,
-	tag,
-	limit,
-	cursor
-}: SearchActorsQuery): Promise<{
-	posts: FeedPost[]
-	cursor: string
-}> => {
-	if (query) {
-		const params = JSON.parse(
-			JSON.stringify({
-				q: query,
-				sort,
-				since,
-				until,
-				mentions,
-				author,
-				lang,
-				domain,
-				url,
-				tag: tag?.join(),
-				limit: limit?.toString() ?? 25,
-				cursor
-			})
-		)
+export const searchPosts = cache(
+	async ({
+		query,
+		sort,
+		since,
+		until,
+		mentions,
+		author,
+		lang,
+		domain,
+		url,
+		tag,
+		limit = 25,
+		cursor
+	}: SearchActorsQuery): Promise<{
+		posts: FeedPost[]
+		cursor: string
+	}> => {
+		if (query) {
+			const params = JSON.parse(
+				JSON.stringify({
+					q: query,
+					sort,
+					since,
+					until,
+					mentions,
+					author,
+					lang,
+					domain,
+					url,
+					tag: tag?.join(),
+					limit: limit?.toString() ?? 25,
+					cursor
+				})
+			)
 
-		const searchParams = new URLSearchParams(params)
+			const searchParams = new URLSearchParams(params)
 
-		const response = await fetch(
-			`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.searchPosts?${searchParams.toString()}`
-		)
+			const response = await fetch(
+				`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.searchPosts?${searchParams.toString()}`
+			)
 
-		return await response.json()
-	}
-	return {
-		posts: [],
-		cursor: ''
-	}
-}
+			return await response.json()
+		}
+		return {
+			posts: [],
+			cursor: '' // todo
+		}
+	},
+	'posts_search'
+)
 
-export default searchActors
+export default searchPosts

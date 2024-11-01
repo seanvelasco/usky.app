@@ -1,18 +1,13 @@
-import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
 import { For } from 'solid-js'
-import getFollowers from '../../../../api/graph/getFollowers'
-import Entry from '../../../../components/Entry'
+import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
-import { getProfileData } from '..'
-
-export const getFollowersData = cache(
-	async (profile: string) => await getFollowers(profile),
-	'profile_followers'
-)
+import getFollowers from '../../../../api/graph/getFollowers'
+import getProfile from '../../../../api/actor/getProfile'
+import Entry from '../../../../components/Entry'
 
 export const Followers = (props: RouteSectionProps) => {
-	const followers = createAsync(() => getFollowersData(props.params.profile))
-	const profile = createAsync(() => getProfileData(props.params.profile))
+	const followers = createAsync(() => getFollowers(props.params.profile))
+	const profile = createAsync(() => getProfile(props.params.profile))
 
 	const title = () =>
 		`People following ${profile()?.displayName || profile()?.handle} (@${profile()?.handle}) - Bluesky (usky.app)`

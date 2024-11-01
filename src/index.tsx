@@ -4,46 +4,39 @@ import { render } from 'solid-js/web'
 /* @refresh reload */
 import App from './App'
 import { lazy, Suspense } from 'solid-js'
-// HOME
-import Discover, { getDiscoveryFeed } from './routes'
+import Discover from './routes'
 import PopularFeeds from './routes/feeds'
-import SearchPage, {
-	actorSearch,
-	HashtagPage,
-	postSearch
-} from './routes/search'
+import SearchPage, { HashtagPage } from './routes/search'
 import About from './routes/about'
-// LIVE
 const Firehose = lazy(() => import('./routes/live'))
-// PROFILE
-import Profile, { getProfileData } from './routes/profile/[profile]'
-import { Posts, getPostsData } from './routes/profile/[profile]'
+import Profile from './routes/profile/[profile]'
+import { Posts } from './routes/profile/[profile]'
 import Replies from './routes/profile/[profile]/replies'
 import Likes, { getLikesData } from './routes/profile/[profile]/likes'
 import Media from './routes/profile/[profile]/media'
-import UserFeeds, { getFeedsData } from './routes/profile/[profile]/feed'
+import UserFeeds from './routes/profile/[profile]/feed'
 import Lists, { getListsData } from './routes/profile/[profile]/lists'
-import Following, { getFollowsData } from './routes/profile/[profile]/following'
-import Followers, {
-	getFollowersData
-} from './routes/profile/[profile]/followers'
-// POST
+import Following from './routes/profile/[profile]/following'
+import Followers from './routes/profile/[profile]/followers'
 import Post, { getPostData } from './routes/profile/[profile]/post/[post]'
-// FEED
-import Feed, { feedGeneratorData } from './routes/profile/[profile]/feed/[feed]'
-// LIST
+import Feed from './routes/profile/[profile]/feed/[feed]'
 import List, { getListData } from './routes/profile/[profile]/lists/[list]'
-// to-do: loaders should be in a separate file
 import { Top, People, Latest, Media as MediaSearch } from './routes/search'
 import Trends, { getTranding } from './routes/trends'
 import Spinner from './components/Spinner'
-// NOTIFICATIONS
 import Notifications, { getNotifications } from './routes/notifications'
-// Session and auth
-import { session } from './storage/session'
 import Login from './routes/(auth)/login'
 import Messages from './routes/messages'
 import Message from './routes/messages/[message]'
+import { session } from './storage/session'
+import getFeed from './api/feed/getFeed.ts'
+import searchActors from './api/actor/searchActors.ts'
+import searchPosts from './api/feed/searchPosts.ts'
+import getProfile from './api/actor/getProfile.ts'
+import getAuthorFeed from './api/feed/getAuthorFeed.ts'
+import getFollowers from './api/graph/getFollowers.ts'
+import getFollows from './api/graph/getFollows.ts'
+import getFeedGenerator from './api/feed/getFeedGenerator.ts'
 
 const Root = () => (
 	<Suspense fallback={<Spinner />}>
@@ -55,7 +48,7 @@ const Root = () => (
 						<Route
 							path='/'
 							preload={() =>
-								getDiscoveryFeed(
+								getFeed(
 									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot'
 								)
 							}
@@ -63,7 +56,7 @@ const Root = () => (
 						<Route
 							path='/hot'
 							preload={() =>
-								getDiscoveryFeed(
+								getFeed(
 									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
 								)
 							}
@@ -79,26 +72,28 @@ const Root = () => (
 							const query =
 								new URLSearchParams(location.query).get('q') ??
 								''
-							actorSearch(query)
-							postSearch(query, 'top')
+							searchActors(query)
+							searchPosts({ query, sort: 'top' })
 						}}
 					/>
 					<Route
 						path='/latest'
 						component={Latest}
 						preload={({ location }) =>
-							postSearch(
-								new URLSearchParams(location.query).get('q') ??
-									'',
-								'latest'
-							)
+							searchPosts({
+								query:
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? '',
+								sort: 'latest'
+							})
 						}
 					/>
 					<Route
 						path='/people'
 						component={People}
 						preload={({ location }) =>
-							actorSearch(
+							searchActors(
 								new URLSearchParams(location.query).get('q') ??
 									''
 							)
@@ -108,11 +103,13 @@ const Root = () => (
 						path='/media'
 						component={MediaSearch}
 						preload={({ location }) =>
-							postSearch(
-								new URLSearchParams(location.query).get('q') ??
-									'',
-								'top'
-							)
+							searchPosts({
+								query:
+									new URLSearchParams(location.query).get(
+										'q'
+									) ?? '',
+								sort: 'top'
+							})
 						}
 					/>
 				</Route>
@@ -120,10 +117,10 @@ const Root = () => (
 					path='/hashtag/:hashtag'
 					component={HashtagPage}
 					preload={({ params }) =>
-						postSearch(
-							decodeURIComponent(`#${params.hashtag}`),
-							'top'
-						)
+						searchPosts({
+							query: decodeURIComponent(`#${params.hashtag}`),
+							sort: 'top'
+						})
 					}
 				/>
 				<Route
@@ -144,10 +141,10 @@ const Root = () => (
 				<Route
 					path='/profile/:profile'
 					component={Profile}
-					preload={({ params }) => getProfileData(params.profile)}
+					preload={({ params }) => getProfile(params.profile)}
 				>
 					<Route
-						preload={({ params }) => getPostsData(params.profile)}
+						preload={({ params }) => getAuthorFeed(params.profile)}
 					>
 						<Route path='/' component={Posts} />
 						<Route path='/replies' component={Replies} />
@@ -161,7 +158,7 @@ const Root = () => (
 					<Route
 						path='/feed'
 						component={UserFeeds}
-						preload={({ params }) => getFeedsData(params.profile)}
+						preload={({ params }) => getFeed(params.profile)}
 					/>
 					<Route
 						path='/lists'
@@ -173,15 +170,13 @@ const Root = () => (
 							component={Followers}
 							path='/followers'
 							preload={({ params }) =>
-								getFollowersData(params.profile)
+								getFollowers(params.profile)
 							}
 						/>
 						<Route
 							component={Following}
 							path='/following'
-							preload={({ params }) =>
-								getFollowsData(params.profile)
-							}
+							preload={({ params }) => getFollows(params.profile)}
 						/>
 					</Route>
 				</Route>
@@ -199,7 +194,7 @@ const Root = () => (
 					path='/profile/:profile/feed/:feed'
 					component={Feed}
 					preload={({ params }) =>
-						feedGeneratorData({
+						getFeedGenerator({
 							profile: params.profile,
 							feed: params.feed
 						})

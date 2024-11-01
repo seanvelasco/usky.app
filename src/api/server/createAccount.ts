@@ -7,7 +7,7 @@ const createAccount = async ({
 	handle,
 	inviteCode,
 	verificationCode
-}: CreateAccountProps): Promise<Session | undefined> => {
+}: CreateAccountProps): Promise<Session> => {
 	const response = await fetch(
 		`${SERVICE_BASE_URL}/xrpc/com.atproto.server.createAccount`,
 		{
@@ -24,8 +24,6 @@ const createAccount = async ({
 			})
 		}
 	)
-
-	if (!response.ok) return
 
 	return await response.json()
 }
