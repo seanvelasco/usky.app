@@ -30,6 +30,7 @@ const VideoEmbed = (props: VideoEmbedView) => {
 			autoplay={true}
 			loop={true}
 			muted={true}
+			playsinline={true}
 			onCanPlayThrough={() => setLoaded(true)}
 		/>
 	)
