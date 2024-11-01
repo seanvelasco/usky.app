@@ -1,20 +1,23 @@
 import { cache } from '@solidjs/router'
-import { useSession } from '../../states/session'
 import { ATPROTO_PROXY } from '../../constants'
-import type { Message } from '../../types'
+import type { Message, Session } from '../../types'
 
 export const getMessages = cache(
 	async ({
+		session,
 		id,
 		limit = 60
 	}: {
+		session: Session
 		id: string
 		limit?: number
 	}): Promise<{
 		cursor?: string
 		messages: Message[]
 	}> => {
-		const session = useSession()
+		if (!session?.accessJwt) {
+			throw new Error('Not authenticated')
+		}
 		const response = await fetch(
 			`${session.didDoc?.service[0]?.serviceEndpoint}/xrpc/chat.bsky.convo.getMessages?convoId=${id}&limit=${limit}`,
 			{

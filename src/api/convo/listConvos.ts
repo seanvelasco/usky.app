@@ -1,14 +1,20 @@
 import { cache } from '@solidjs/router'
-import { useSession } from '../../states/session'
 import { ATPROTO_PROXY } from '../../constants'
-import type { Convo } from '../../types'
+import type { Convo, Session } from '../../types'
 
 export const listConvos = cache(
-	async (): Promise<{
+	async ({
+		session
+	}: {
+		session: Session
+	}): Promise<{
 		cursor?: string
 		convos: Convo[]
 	}> => {
-		const session = useSession()
+		if (!session.accessJwt) {
+			throw new Error('Not authenticated')
+		}
+
 		const response = await fetch(
 			`${session.didDoc?.service[0]?.serviceEndpoint}/xrpc/chat.bsky.convo.listConvos`,
 			{

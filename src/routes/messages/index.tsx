@@ -1,11 +1,13 @@
-import { Show, For } from 'solid-js'
+import { Show, For, ErrorBoundary } from 'solid-js'
 import { A, createAsync } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
-import Avatar from '../../components/Avatar'
 import listConvos from '../../api/convo/listConvos'
+import { useSession } from '../../states/session'
+import Avatar from '../../components/Avatar'
 import TimeAgo from '../../components/TimeAgo'
 import styles from './styles.module.css'
 import type { Convo } from '../../types'
+import Fallback from '../../components/Fallback'
 
 const MessagePreview = (props: { convo: Convo }) => (
 	<A class={styles.message} href={`/messages/${props.convo.id}`}>
@@ -25,9 +27,10 @@ const MessagePreview = (props: { convo: Convo }) => (
 )
 
 const Messages = () => {
+	const session = useSession()
 	const title = () => 'Messages - Bluesky (usky.app)'
 	const url = () => 'https://usky.app/messages'
-	const convos = createAsync(() => listConvos())
+	const convos = createAsync(() => listConvos({ session }))
 	return (
 		<>
 			<Title>{title()}</Title>
@@ -36,15 +39,19 @@ const Messages = () => {
 			<Meta name='twitter:title' content={title()} />
 			<Meta property='twitter:url' content={url()} />
 			<Link rel='canonical' href={url()} />
-			<div class={styles.xxx}>
-				<Show when={convos()}>
-					{(convos) => (
-						<For each={convos().convos}>
-							{(convo) => <MessagePreview convo={convo} />}
-						</For>
-					)}
-				</Show>
-			</div>
+			<ErrorBoundary
+				fallback={(err, reset) => <Fallback err={err} reset={reset} />}
+			>
+				<div class={styles.xxx}>
+					<Show when={convos()}>
+						{(convos) => (
+							<For each={convos().convos}>
+								{(convo) => <MessagePreview convo={convo} />}
+							</For>
+						)}
+					</Show>
+				</div>
+			</ErrorBoundary>
 		</>
 	)
 }

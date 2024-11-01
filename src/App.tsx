@@ -16,13 +16,15 @@ import { BubbleIcon } from './assets/BubbleIcon'
 import { ListIcon } from './assets/ListIcon'
 import Spinner from './components/Spinner'
 import Avatar from './components/Avatar'
-import Banner from './components/Banner'
+// import Banner from './components/Banner'
 import { SessionProvider, useSession } from './states/session'
 import styles from './App.module.css'
-import getProfile from './api/actor/getProfile.ts'
+import getProfile from './api/actor/getProfile'
+import Fallback from './components/Fallback'
 
 const Navigation = () => {
 	const session = useSession()
+
 	const profile = createAsync(() => getProfile(session.did))
 	const isHome = useMatch(() => '/:home?', {
 		home: ['hot', 'live']
@@ -125,7 +127,11 @@ const App = (props: RouteSectionProps) => {
 							}}
 						>
 							<Header />
-							<ErrorBoundary fallback={<p>An error occurred</p>}>
+							<ErrorBoundary
+								fallback={(error, reset) => (
+									<Fallback err={error} reset={reset} />
+								)}
+							>
 								<Suspense fallback={<Spinner />}>
 									{props.children}
 								</Suspense>
@@ -138,7 +144,7 @@ const App = (props: RouteSectionProps) => {
 							<Sidebar />
 						</ErrorBoundary>
 					</aside>
-					<Banner />
+					{/*<Banner />*/}
 				</div>
 			</Suspense>
 		</SessionProvider>

@@ -1,4 +1,11 @@
-import { Show, Switch, Match, Suspense, JSXElement } from 'solid-js'
+import {
+	Show,
+	Switch,
+	Match,
+	Suspense,
+	JSXElement,
+	ErrorBoundary
+} from 'solid-js'
 import {
 	A,
 	useNavigate,
@@ -16,7 +23,11 @@ import { isOwnProfile } from '../../utils'
 import styles from './Header.module.css'
 import Dropdown from '../Dropdown'
 import { useAction } from '@solidjs/router'
-import { logout } from '../../states/session'
+import { logout, useSession } from '../../states/session'
+import getConvo from '../../api/convo/getConvo'
+import Avatar from '../../components/Avatar'
+import getProfile from '../../api/actor/getProfile'
+import getFeedGenerator from '../../api/feed/getFeedGenerator'
 
 export const ProfilePageHeader = () => {
 	const params = useParams()
@@ -129,16 +140,12 @@ const ListHeader = () => {
 	)
 }
 
-import getConvo from '../../api/convo/getConvo'
-import Avatar from '../../components/Avatar'
-import getProfile from '../../api/actor/getProfile.ts'
-import getFeedGenerator from '../../api/feed/getFeedGenerator.ts'
-
 const ChatHeader = () => {
 	const params = useParams()
-	const convo = createAsync(() => getConvo({ id: params.message }))
+	const session = useSession()
+	const convo = createAsync(() => getConvo({ session, id: params.message }))
 	return (
-		<Suspense>
+		<>
 			<A
 				style={{
 					'border-radius': '50%'
@@ -177,7 +184,7 @@ const ChatHeader = () => {
 			{/*		</A>*/}
 			{/*	</span>*/}
 			{/*</p>*/}
-		</Suspense>
+		</>
 	)
 }
 
@@ -197,6 +204,7 @@ const Header = () => {
 	const isFeeds = useMatch(() => '/feeds')
 	const isAbout = useMatch(() => '/about')
 	// const isChat = useMatch(() => '/messages/:message')
+	const isMessages = useMatch(() => '/messages')
 	const isSearch = () =>
 		['/search', '/hashtag'].some((path) =>
 			location.pathname.startsWith(path)
@@ -213,40 +221,45 @@ const Header = () => {
 						<ChevronLeft />
 					</button>
 				</Show>
-				<Switch>
-					<Match when={isHome()}>
-						<TimelineHeader />
-					</Match>
-					<Match when={isSearch()}>
-						<Search />
-					</Match>
-					<Match when={isTrends()}>
-						<GenericHeader>
-							Trending in the past 2 days
-						</GenericHeader>
-					</Match>
-					<Match when={isFeeds()}>
-						<GenericHeader>Feeds</GenericHeader>
-					</Match>
-					<Match when={isAbout()}>
-						<GenericHeader>About usky.app</GenericHeader>
-					</Match>
-					<Match when={params.post}>
-						<PostPageHeader />
-					</Match>
-					<Match when={params.feed}>
-						<FeedHeader />
-					</Match>
-					<Match when={params.list}>
-						<ListHeader />
-					</Match>
-					<Match when={params.profile}>
-						<ProfilePageHeader />
-					</Match>
-					<Match when={params.message}>
-						<ChatHeader />
-					</Match>
-				</Switch>
+				<ErrorBoundary fallback={(_) => <></>}>
+					<Switch>
+						<Match when={isHome()}>
+							<TimelineHeader />
+						</Match>
+						<Match when={isSearch()}>
+							<Search />
+						</Match>
+						<Match when={isTrends()}>
+							<GenericHeader>
+								Trending in the past 2 days
+							</GenericHeader>
+						</Match>
+						<Match when={isFeeds()}>
+							<GenericHeader>Feeds</GenericHeader>
+						</Match>
+						<Match when={isAbout()}>
+							<GenericHeader>About usky.app</GenericHeader>
+						</Match>
+						<Match when={params.post}>
+							<PostPageHeader />
+						</Match>
+						<Match when={params.feed}>
+							<FeedHeader />
+						</Match>
+						<Match when={params.list}>
+							<ListHeader />
+						</Match>
+						<Match when={params.profile}>
+							<ProfilePageHeader />
+						</Match>
+						<Match when={isMessages()}>
+							<GenericHeader>Messages</GenericHeader>
+						</Match>
+						<Match when={params.message}>
+							<ChatHeader />
+						</Match>
+					</Switch>
+				</ErrorBoundary>
 			</div>
 		</header>
 	)
