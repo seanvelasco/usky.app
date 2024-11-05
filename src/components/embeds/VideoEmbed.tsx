@@ -1,7 +1,7 @@
 import { createSignal, createEffect } from 'solid-js'
 import HLS from 'hls.js'
 import styles from './VideoEmbed.module.css'
-import { VideoEmbedView } from '../../types'
+import type { VideoEmbedView } from '../../types'
 
 const VideoEmbed = (props: VideoEmbedView) => {
 	const player = new HLS({ debug: false })

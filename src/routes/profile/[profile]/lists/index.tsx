@@ -4,10 +4,10 @@ import getLists from '../../../../api/graph/getLists'
 import resolveHandle from '../../../../api/identity/resolveHandle'
 import Entry from '../../../../components/Entry'
 import { id } from '../../../../utils'
-import { Fallback } from '..'
+import Fallback from '../../../../components/ListFallback'
 import Spinner from '../../../../components/Spinner'
 import { Link, Meta, Title } from '@solidjs/meta'
-import getProfile from '../../../../api/actor/getProfile.ts'
+import getProfile from '../../../../api/actor/getProfile'
 
 export const getListsData = cache(async (profile: string) => {
 	const did = await resolveHandle(profile)

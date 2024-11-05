@@ -2,9 +2,9 @@
 
 # usky.app
 
-usky.app is a lightweight (29.91 kB gzipped) and minimalist web client for the decentralized social network, Bluesky.
+usky.app is a lightweight (221.33 kB gzipped) and minimalist web client for the decentralized social network, Bluesky.
 
-usky.app allows you to see what's happening in Bluesky, join the conversation, discover new things, and look up people you know.
+usky.app allows you to see what's happening in Bluesky, join the conversation, discover new things, look up creators you know, and and find your people.
 
 [![usky.app Home](https://img.sean.app/usky-home.png)](https://img.sean.app/usky-home.png)
 [![usky.app profile](https://img.sean.app/usky-profile.png)](https://img.sean.app/usky-profile.png)
@@ -31,4 +31,24 @@ npm run dev
 
 ## Stack
 
-usky.app is a statically exported [Solid.js](https://www.solidjs.com/) SPA and PWA (previously a server-rendered SvelteKit app). Uses CSS modules for styling. Has two external dependencies: solid-router and solid-meta. All icons are from [Heroicons](https://heroicons.com/) (including app logo). Runs on [Cloudflare Pages](https://pages.cloudflare.com).
+usky.app is a statically exported [Solid.js](https://www.solidjs.com/) SPA and PWA (previously a server-rendered SvelteKit app). Uses CSS modules for styling. All icons are from [Heroicons](https://heroicons.com/) (including app logo). Runs on [Cloudflare Pages](https://pages.cloudflare.com).
+
+usky.app has only 10 dependencies. The official bsky.app client has 152 dependencies.
+
+### Dependencies
+
+-   solid-js
+-   @solidjs/router
+-   @solidjs/meta
+-   @solid-primitives/storage
+-   @ipld/car
+-   @ipld/dag-cbor
+-   @cbor-x
+-   hls.js
+-   graphemer
+-   tlds
+
+### Icons
+
+-   Fluent Icons
+-   Heroicons

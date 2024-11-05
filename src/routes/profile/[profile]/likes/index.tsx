@@ -4,10 +4,10 @@ import getPosts from '../../../../api/getPostsOld'
 import listRecords from '../../../../api/repo/listRecords'
 import Post from '../../../../components/Post'
 import Spinner from '../../../../components/Spinner'
-import { Fallback } from '..'
+import Fallback from '../../../../components/ListFallback'
 import type { FeedPost } from '../../../../types'
 import { Link, Meta, Title } from '@solidjs/meta'
-import getProfile from '../../../../api/actor/getProfile.ts'
+import getProfile from '../../../../api/actor/getProfile'
 
 const getLikes = async (profile: string): Promise<{ posts: FeedPost[] }> => {
 	const likes = await listRecords(profile, 'app.bsky.feed.like')

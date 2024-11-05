@@ -2,7 +2,7 @@ import { For } from 'solid-js'
 import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
 import getFollows from '../../../../api/graph/getFollows'
-import getProfile from '../../../../api/actor/getProfile.ts'
+import getProfile from '../../../../api/actor/getProfile'
 import Entry from '../../../../components/Entry'
 
 export const Following = (props: RouteSectionProps) => {

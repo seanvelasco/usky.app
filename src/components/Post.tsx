@@ -5,11 +5,10 @@ import Avatar from './Avatar'
 import PostHeader from './PostHeader'
 import PostFooter from './PostFooter'
 import TimeAgo from './TimeAgo'
-import Embed from './embeds/Embed'
+const RichText = lazy(() => import('./RichText'))
+const Embed = lazy(() => import('./embeds/Embed'))
 import styles from './Post.module.css'
 import type { FeedPost, Thread, ThreadParentOrReply } from '../types'
-
-const RichText = lazy(() => import('./RichText'))
 
 export const FallbackPost = (props: {
 	post: ThreadParentOrReply | FeedPost | undefined

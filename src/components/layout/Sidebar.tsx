@@ -11,11 +11,11 @@ import getPopularFeedGenerators from '../../api/unspecced/getPopularFeedGenerato
 import Search from '../Search'
 import Section, { ActorsSection, TagsSection } from '../Section'
 import { getPostData } from '../../routes/profile/[profile]/post/[post]'
-import { getTranding } from '../../routes/trends'
+import getPopularTags from '../../api/custom/getPopularTags'
 import styles from './Sidebar.module.css'
 
 const TrendingSection = () => {
-	const tags = createAsync(() => getTranding())
+	const tags = createAsync(() => getPopularTags())
 
 	return <Show when={tags()}>{(tags) => <TagsSection tags={tags()} />}</Show>
 }

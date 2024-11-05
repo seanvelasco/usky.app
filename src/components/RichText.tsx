@@ -1,4 +1,4 @@
-import { RichText } from '@atproto/api'
+import RichText from '../utils/rt'
 import type { Facet } from '../types'
 
 const rter = ({
@@ -32,12 +32,6 @@ const rter = ({
 
 	return output
 }
-
-// todo: implement own rich text parser
-// old bundle size before using @atproto/api : 110.34 kB │ gzip: 156.46 kB
-// new bundle size after using @atproto/api: 721.38 kB │ gzip: 33.56 kB
-// difference of 611.04 kB │ gzip: 122.9 kB
-// the edge of usky.app is its lightweightness, so we should limit the use of external libs
 
 const RichTextComponent = (props: { text: string; facets?: Facet[] }) => (
 	<span

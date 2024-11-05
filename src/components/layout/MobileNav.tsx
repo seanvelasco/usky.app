@@ -7,7 +7,7 @@ import { SearchIcon } from '../../assets/SearchIcon'
 import { BellIcon } from '../../assets/BellIcon'
 import { BubbleIcon } from '../../assets/BubbleIcon'
 import styles from './MobileNav.module.css'
-import getProfile from '../../api/actor/getProfile.ts'
+import getProfile from '../../api/actor/getProfile'
 
 const MobileNavigation = () => {
 	// To-do: reconcile this component with main Navigation

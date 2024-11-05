@@ -1,11 +1,11 @@
 import { ErrorBoundary, Show, Suspense } from 'solid-js'
 import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import { Title, Meta, Link } from '@solidjs/meta'
-import { Fallback } from '..'
+import Fallback from '../../../../components/ListFallback'
 import MediaCarousel from '../../../../components/MediaCarousel'
 import Spinner from '../../../../components/Spinner'
-import getProfile from '../../../../api/actor/getProfile.ts'
-import getAuthorFeed from '../../../../api/feed/getAuthorFeed.ts'
+import getProfile from '../../../../api/actor/getProfile'
+import getAuthorFeed from '../../../../api/feed/getAuthorFeed'
 
 export const Media = (props: RouteSectionProps) => {
 	const thread = createAsync(() => getAuthorFeed(props.params.profile))

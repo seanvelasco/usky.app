@@ -8,7 +8,7 @@ import Spinner from '../../../../../components/Spinner'
 import { LikesIcon } from '../../../../../assets/likes'
 import styles from './styles.module.css'
 import { FeedGenerator } from '../../../../../types'
-import getFeed from '../../../../../api/feed/getFeed.ts'
+import getFeed from '../../../../../api/feed/getFeed'
 
 const Fallback = (props: { feed: FeedGenerator | undefined }) => (
 	<>

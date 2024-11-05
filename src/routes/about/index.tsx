@@ -21,13 +21,13 @@ const About = () => {
 				<img alt='usky.app logo' src='/usky.svg' />
 				<h3>About usky.app</h3>
 				<p>
-					usky.app is a lightweight (29.91 kB gzipped) and minimalist
+					usky.app is a lightweight (221.33 kB gzipped) and minimalist
 					web client for the decentralized social network, Bluesky.
 				</p>
 				<p>
 					usky.app allows you to see what's happening in Bluesky, join
-					the conversation, discover new things, and look up people
-					you know.
+					the conversation, discover new things, look up creators you
+					know, and find your people.
 				</p>
 				<h3>History</h3>
 				<p>
@@ -68,12 +68,27 @@ const About = () => {
 				<h3>Stack</h3>
 				<p>
 					usky.app is a statically exported Solid.js SPA and PWA
-					(previously a server-rendered SvelteKit app). Uses CSS
-					modules for styling. Has 9 external dependencies: solid-js
-					@solidjs/router, @solidjs/meta, @solid-primitives/storage,
-					@ipld/car, @ipld/dag-cbor, cbor-x, hls.js, and @atproto/api.
-					All icons are from Heroicons (including app logo).
+					(previously a server-rendered SvelteKit app). Uses Fluent
+					Icons by Microsoft for app icons and uses Heroicons for the
+					app logo.
 				</p>
+				<h3>Dependencies</h3>
+				<p>
+					usky.app has only 10 dependencies. The official bsky.app
+					client has 152 dependencies.
+				</p>
+				<ul>
+					<li>solid-js</li>
+					<li>@solidjs/router</li>
+					<li>@solidjs/meta</li>
+					<li>@solid-primitives/storage</li>
+					<li>@ipld/car</li>
+					<li>@ipld/dag-cbor</li>
+					<li>cbor-x</li>
+					<li>hls.js</li>
+					<li>graphemer</li>
+					<li>tlds</li>
+				</ul>
 				<h3>Developer</h3>
 				<p>
 					Developed by{' '}

@@ -1,12 +1,12 @@
 import { ErrorBoundary, For, Suspense } from 'solid-js'
 import { createAsync, type RouteSectionProps } from '@solidjs/router'
+import { Link, Meta, Title } from '@solidjs/meta'
 import getActorFeeds from '../../../../api/feed/getActorFeeds'
 import Entry from '../../../../components/Entry'
 import Spinner from '../../../../components/Spinner'
-import { Fallback } from '..'
+import Fallback from '../../../../components/ListFallback'
 import getProfile from '../../../../api/actor/getProfile'
 import { id } from '../../../../utils'
-import { Link, Meta, Title } from '@solidjs/meta'
 
 export const Feeds = (props: RouteSectionProps) => {
 	const feeds = createAsync(() => getActorFeeds(props.params.profile))

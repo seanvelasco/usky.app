@@ -1,14 +1,9 @@
 import { ErrorBoundary, For, Suspense } from 'solid-js'
-import { cache, createAsync, A } from '@solidjs/router'
+import { createAsync, A } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
 import Spinner from '../../components/Spinner'
 import styles from '../../components/Entry.module.css'
-import getPopularTags from '../../api/custom/getPopularTags.ts'
-
-export const getTranding = cache(
-	async (limit?: number) => await getPopularTags(limit),
-	'trends'
-)
+import getPopularTags from '../../api/custom/getPopularTags'
 
 const Entry = (props: { hashtag: string; count: number; order: number }) => (
 	<div class={styles.entry}>
@@ -27,7 +22,7 @@ const Entry = (props: { hashtag: string; count: number; order: number }) => (
 )
 
 const Trends = () => {
-	const trends = createAsync(() => getTranding(100))
+	const trends = createAsync(() => getPopularTags(100))
 	const title = 'Trends - Bluesky (usky.app)'
 	const description = 'Trending hashtags on Bluesky'
 	const url = 'https://usky.app/trends'

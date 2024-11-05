@@ -19,13 +19,13 @@ import {
 import Avatar from '../../../../../components/Avatar'
 import { PostExpandedChildPost } from '../../../../../components/Post'
 import PostFooter from '../../../../../components/PostFooter'
-import Embed from '../../../../../components/embeds/Embed'
-import getPostThread from '../../../../../api/feed/getPostThread'
-import resolveHandle from '../../../../../api/identity/resolveHandle'
+const Embed = lazy(() => import('../../../../../components/embeds/Embed'))
 import Spinner from '../../../../../components/Spinner'
 const RichText = lazy(() => import('../../../../../components/RichText'))
 import { did, isDID } from '../../../../../utils'
 import postStyles from '../../../../../components/Post.module.css'
+import getPostThread from '../../../../../api/feed/getPostThread'
+import resolveHandle from '../../../../../api/identity/resolveHandle'
 import styles from './styles.module.css'
 import type { ThreadParentOrReply, ThreadPost } from '../../../../../types'
 

@@ -2,10 +2,10 @@ import { ErrorBoundary, For, Suspense } from 'solid-js'
 import { createAsync, type RouteSectionProps } from '@solidjs/router'
 import { Title, Meta, Link } from '@solidjs/meta'
 import Post from '../../../../components/Post'
-import { Fallback } from '..'
+import Fallback from '../../../../components/ListFallback'
 import Spinner from '../../../../components/Spinner'
-import getAuthorFeed from '../../../../api/feed/getAuthorFeed.ts'
-import getProfile from '../../../../api/actor/getProfile.ts'
+import getAuthorFeed from '../../../../api/feed/getAuthorFeed'
+import getProfile from '../../../../api/actor/getProfile'
 
 export const Replies = (props: RouteSectionProps) => {
 	const posts = createAsync(() => getAuthorFeed(props.params.profile))

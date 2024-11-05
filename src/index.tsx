@@ -1,48 +1,68 @@
+// 22.98 24.47 42.24 123.98
+import { lazy, Suspense } from 'solid-js'
 import { MetaProvider } from '@solidjs/meta'
 import { Router, Route } from '@solidjs/router'
 import { render } from 'solid-js/web'
 /* @refresh reload */
 import App from './App'
-import { lazy, Suspense } from 'solid-js'
-import Discover from './routes'
-import PopularFeeds from './routes/feeds'
-import SearchPage, { HashtagPage } from './routes/search'
-import About from './routes/about'
-const Firehose = lazy(() => import('./routes/live'))
-import Profile from './routes/profile/[profile]'
-import { Posts } from './routes/profile/[profile]'
-import Replies from './routes/profile/[profile]/replies'
-import Likes, { getLikesData } from './routes/profile/[profile]/likes'
-import Media from './routes/profile/[profile]/media'
-import UserFeeds from './routes/profile/[profile]/feed'
-import Lists, { getListsData } from './routes/profile/[profile]/lists'
-import Following from './routes/profile/[profile]/following'
-import Followers from './routes/profile/[profile]/followers'
-import Post, { getPostData } from './routes/profile/[profile]/post/[post]'
-import Feed from './routes/profile/[profile]/feed/[feed]'
-import List, { getListData } from './routes/profile/[profile]/lists/[list]'
-import { Top, People, Latest, Media as MediaSearch } from './routes/search'
-import Trends, { getTranding } from './routes/trends'
-import Spinner from './components/Spinner'
-import Notifications, { getNotifications } from './routes/notifications'
-import Login from './routes/(auth)/login'
-import Messages from './routes/messages'
-import Message from './routes/messages/[message]'
 import { session } from './storage/session'
-import getFeed from './api/feed/getFeed.ts'
-import searchActors from './api/actor/searchActors.ts'
-import searchPosts from './api/feed/searchPosts.ts'
-import getProfile from './api/actor/getProfile.ts'
-import getAuthorFeed from './api/feed/getAuthorFeed.ts'
-import getFollowers from './api/graph/getFollowers.ts'
-import getFollows from './api/graph/getFollows.ts'
-import getFeedGenerator from './api/feed/getFeedGenerator.ts'
+// Home pages
+const Discover = lazy(() => import('./routes'))
+const Firehose = lazy(() => import('./routes/live'))
+// Profile pages
+const Profile = lazy(() => import('./routes/profile/[profile]'))
+const Posts = lazy(() => import('./routes/profile/[profile]/posts'))
+const Replies = lazy(() => import('./routes/profile/[profile]/replies'))
+const Media = lazy(() => import('./routes/profile/[profile]/media'))
+const UserFeeds = lazy(() => import('./routes/profile/[profile]/feed'))
+const Following = lazy(() => import('./routes/profile/[profile]/following'))
+const Followers = lazy(() => import('./routes/profile/[profile]/followers'))
+const Lists = lazy(() => import('./routes/profile/[profile]/lists'))
+const Likes = lazy(() => import('./routes/profile/[profile]/likes'))
+// Lists pages for feeds and lists
+const Feed = lazy(() => import('./routes/profile/[profile]/feed/[feed]'))
+const List = lazy(() => import('./routes/profile/[profile]/lists/[list]'))
+// Post page
+const Post = lazy(() => import('./routes/profile/[profile]/post/[post]'))
+// Search pages
+const SearchPage = lazy(() => import('./routes/search'))
+import {
+	Top,
+	People,
+	Latest,
+	Media as MediaSearch,
+	HashtagPage
+} from './routes/search' // todo, vite warning
+// Sidebar pages
+const About = lazy(() => import('./routes/about'))
+const Trends = lazy(() => import('./routes/trends'))
+const PopularFeeds = lazy(() => import('./routes/feeds'))
+// Pages that require auth
+const Notifications = lazy(() => import('./routes/notifications'))
+const Messages = lazy(() => import('./routes/messages'))
+const Message = lazy(() => import('./routes/messages/[message]'))
+// Components
+import Spinner from './components/Spinner'
+// API calls
+import { getPostData } from './routes/profile/[profile]/post/[post]' // todo, vite warning
+import { getListData } from './routes/profile/[profile]/lists/[list]' // todo, vite warning
+import { getListsData } from './routes/profile/[profile]/lists' // todo // vite warning
+import { getLikesData } from './routes/profile/[profile]/likes' // todo, vite warning
+import getFeed from './api/feed/getFeed'
+import searchActors from './api/actor/searchActors'
+import searchPosts from './api/feed/searchPosts'
+import getProfile from './api/actor/getProfile'
+import getAuthorFeed from './api/feed/getAuthorFeed'
+import getFollowers from './api/graph/getFollowers'
+import getFollows from './api/graph/getFollows'
+import getFeedGenerator from './api/feed/getFeedGenerator'
+import getPopularTags from './api/custom/getPopularTags'
+import listNotifications from './api/notification/listNotifications'
 
 const Root = () => (
 	<Suspense fallback={<Spinner />}>
 		<MetaProvider>
 			<Router root={App}>
-				<Route path='/login' component={Login} />
 				<Route path='/'>
 					<Route component={Discover}>
 						<Route
@@ -126,7 +146,7 @@ const Root = () => (
 				<Route
 					path='/trends'
 					component={Trends}
-					preload={() => getTranding(100)}
+					preload={() => getPopularTags(100)}
 				/>
 
 				<Route path='/feeds' component={PopularFeeds} />
@@ -134,7 +154,7 @@ const Root = () => (
 				<Route
 					path='/notifications'
 					component={Notifications}
-					preload={() => getNotifications(session.accessJwt)}
+					preload={() => listNotifications(session.accessJwt)}
 				/>
 				<Route path='/messages' component={Messages} />
 				<Route path='/messages/:message' component={Message} />

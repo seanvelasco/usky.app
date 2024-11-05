@@ -1,6 +1,8 @@
 import { ImageBlob, Profile } from '../types'
 import { session } from '../storage/session'
 
+export const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value))
+
 export const id = (uri: string) => {
 	if (!uri) return null
 	// const regex = /\/(\w+)$/
