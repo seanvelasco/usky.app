@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { SERVICE_BASE_URL } from '../../constants'
 import type { Notification } from '../../types'
 
-export const listNotifications = cache(
+export const listNotifications = query(
 	async (
 		token: string
 	): Promise<{

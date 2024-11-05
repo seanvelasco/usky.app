@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { FeedPost } from '../../types'
 
-export const getFeed = cache(
+export const getFeed = query(
 	async (
 		feed: string
 		// accessJwt: string

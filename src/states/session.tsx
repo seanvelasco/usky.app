@@ -1,5 +1,5 @@
 import { createContext, useContext, type JSXElement } from 'solid-js'
-import { createAsync, cache, action, redirect } from '@solidjs/router'
+import { createAsync, query, action, redirect } from '@solidjs/router'
 import { reconcile } from 'solid-js/store'
 import createSession from '../api/identity/createSession'
 import getSession from '../api/identity/getSession'
@@ -38,7 +38,7 @@ const runSessionLogic = async () => {
 	}
 }
 
-export const checkSession = cache(() => runSessionLogic(), 'check_session')
+export const checkSession = query(() => runSessionLogic(), 'check_session')
 
 const SessionContext = createContext<Session>()
 

@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { ThreadPost } from '../../types'
 
-export const getPostThread = cache(
+export const getPostThread = query(
 	async (
 		uri: string
 	): Promise<{

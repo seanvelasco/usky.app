@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Actor } from '../../types'
 
-export const searchActorsTypeahead = cache(
+export const searchActorsTypeahead = query(
 	async (
 		query: string,
 		limit: number = 10

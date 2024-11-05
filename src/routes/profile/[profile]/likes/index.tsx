@@ -1,4 +1,4 @@
-import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
+import { query, createAsync, type RouteSectionProps } from '@solidjs/router'
 import { ErrorBoundary, For, Suspense } from 'solid-js'
 import getPosts from '../../../../api/getPostsOld'
 import listRecords from '../../../../api/repo/listRecords'
@@ -23,7 +23,7 @@ const getLikes = async (profile: string): Promise<{ posts: FeedPost[] }> => {
 	return await getPosts(likedUris)
 }
 
-export const getLikesData = cache(
+export const getLikesData = query(
 	async (profile: string) => await getLikes(profile),
 	'profile_likes'
 )

@@ -22,7 +22,7 @@ export const Media = () => {
 
 	const posts = createAsync(() =>
 		searchPosts({
-			query: decodeURIComponent(searchParams.q || ''),
+			query: decodeURIComponent((searchParams.q as string) || ''),
 			sort: 'top',
 			limit: 100
 		})
@@ -44,11 +44,11 @@ export const Top = () => {
 	const location = useLocation()
 
 	const actors = createAsync(() =>
-		searchActors(decodeURIComponent(searchParams.q || ''), 3)
+		searchActors(decodeURIComponent((searchParams.q as string) || ''), 3)
 	)
 	const posts = createAsync(() =>
 		searchPosts({
-			query: decodeURIComponent(searchParams.q || ''),
+			query: decodeURIComponent((searchParams.q as string) || ''),
 			sort: 'top',
 			limit: 100
 		})
@@ -92,7 +92,7 @@ export const Latest = () => {
 
 	const posts = createAsync(() =>
 		searchPosts({
-			query: decodeURIComponent(searchParams.q || ''),
+			query: decodeURIComponent((searchParams.q as string) || ''),
 			sort: 'latest',
 			limit: 100
 		})
@@ -108,7 +108,7 @@ export const Latest = () => {
 export const People = () => {
 	const [searchParams] = useSearchParams()
 	const actors = createAsync(() =>
-		searchActors(decodeURIComponent(searchParams.q || ''), 100)
+		searchActors(decodeURIComponent((searchParams.q as string) || ''), 100)
 	)
 	return (
 		<Suspense fallback={<Spinner />}>

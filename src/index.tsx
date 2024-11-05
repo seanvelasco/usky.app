@@ -90,8 +90,9 @@ const Root = () => (
 						component={Top}
 						preload={({ location }) => {
 							const query =
-								new URLSearchParams(location.query).get('q') ??
-								''
+								new URLSearchParams(
+									location.query as unknown as string
+								).get('q') ?? ''
 							searchActors(query)
 							searchPosts({ query, sort: 'top' })
 						}}
@@ -102,9 +103,9 @@ const Root = () => (
 						preload={({ location }) =>
 							searchPosts({
 								query:
-									new URLSearchParams(location.query).get(
-										'q'
-									) ?? '',
+									new URLSearchParams(
+										location.query as unknown as string
+									).get('q') ?? '',
 								sort: 'latest'
 							})
 						}
@@ -114,8 +115,9 @@ const Root = () => (
 						component={People}
 						preload={({ location }) =>
 							searchActors(
-								new URLSearchParams(location.query).get('q') ??
-									''
+								new URLSearchParams(
+									location.query as unknown as string
+								).get('q') ?? ''
 							)
 						}
 					/>
@@ -125,9 +127,9 @@ const Root = () => (
 						preload={({ location }) =>
 							searchPosts({
 								query:
-									new URLSearchParams(location.query).get(
-										'q'
-									) ?? '',
+									new URLSearchParams(
+										location.query as unknown as string
+									).get('q') ?? '',
 								sort: 'top'
 							})
 						}

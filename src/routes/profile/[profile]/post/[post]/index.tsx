@@ -12,7 +12,7 @@ import {
 	useLocation,
 	A,
 	createAsync,
-	cache,
+	query,
 	useParams,
 	type RouteSectionProps
 } from '@solidjs/router'
@@ -67,7 +67,7 @@ const getThread = async ({
 	}
 }
 
-export const getPostData = cache(
+export const getPostData = query(
 	async ({ profile, post }: { profile: string; post: string }) =>
 		await getThread({ profile, post }),
 	'post'

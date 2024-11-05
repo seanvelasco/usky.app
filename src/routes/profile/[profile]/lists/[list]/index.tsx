@@ -1,5 +1,5 @@
 import { For, Suspense } from 'solid-js'
-import { createAsync, cache, type RouteSectionProps } from '@solidjs/router'
+import { createAsync, query, type RouteSectionProps } from '@solidjs/router'
 import Avatar from '../../../../../components/Avatar'
 import Post from '../../../../../components/Post'
 import { Link, Meta, Title } from '@solidjs/meta'
@@ -9,7 +9,7 @@ import getListFeed from '../../../../../api/feed/getListFeed'
 import resolveHandle from '../../../../../api/identity/resolveHandle'
 import styles from '../../../[profile]/feed/[feed]/styles.module.css'
 
-export const getListData = cache(
+export const getListData = query(
 	async ({ profile, list }: { profile: string; list: string }) => {
 		const did = await resolveHandle(profile)
 

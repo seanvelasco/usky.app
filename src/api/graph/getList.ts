@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Actor, List } from '../../types'
 
-export const getList = cache(
+export const getList = query(
 	async (
 		list: string
 	): Promise<{

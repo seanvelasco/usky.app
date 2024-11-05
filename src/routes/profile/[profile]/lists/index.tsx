@@ -1,4 +1,4 @@
-import { cache, createAsync, type RouteSectionProps } from '@solidjs/router'
+import { query, createAsync, type RouteSectionProps } from '@solidjs/router'
 import { ErrorBoundary, For, Suspense } from 'solid-js'
 import getLists from '../../../../api/graph/getLists'
 import resolveHandle from '../../../../api/identity/resolveHandle'
@@ -9,7 +9,7 @@ import Spinner from '../../../../components/Spinner'
 import { Link, Meta, Title } from '@solidjs/meta'
 import getProfile from '../../../../api/actor/getProfile'
 
-export const getListsData = cache(async (profile: string) => {
+export const getListsData = query(async (profile: string) => {
 	const did = await resolveHandle(profile)
 	return await getLists(did)
 }, 'profile_lists')

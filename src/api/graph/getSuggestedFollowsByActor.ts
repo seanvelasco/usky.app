@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { SERVICE_BASE_URL } from '../../constants'
 import type { Profile } from '../../types'
 
-export const getSuggestedFollowsByActor = cache(
+export const getSuggestedFollowsByActor = query(
 	async (
 		actor?: string,
 		accessJwt?: string

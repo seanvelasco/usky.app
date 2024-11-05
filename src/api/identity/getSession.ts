@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { SERVICE_BASE_URL } from '../../constants'
 import type { Session } from '../../types'
 
-export const getSession = cache(async (accessJwt: string): Promise<Session> => {
+export const getSession = query(async (accessJwt: string): Promise<Session> => {
 	const response = await fetch(
 		`${SERVICE_BASE_URL}/xrpc/com.atproto.server.getSession`,
 		{

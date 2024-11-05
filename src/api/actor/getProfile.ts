@@ -1,4 +1,4 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Profile } from '../../types'
 
@@ -13,4 +13,4 @@ const getProfile = async (actor: string): Promise<Profile | undefined> => {
 	return await response.json()
 }
 
-export default cache(getProfile, 'profile')
+export default query(getProfile, 'profile')

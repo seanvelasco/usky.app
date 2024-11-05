@@ -1,4 +1,4 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { FeedPost } from '../../types'
 
@@ -17,7 +17,7 @@ type SearchActorsQuery = {
 	cursor?: string
 }
 
-export const searchPosts = cache(
+export const searchPosts = query(
 	async ({
 		query,
 		sort,

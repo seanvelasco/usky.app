@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Thread } from '../../types'
 
-export const getAuthorFeed = cache(
+export const getAuthorFeed = query(
 	async (
 		actor: string,
 		limit = 100

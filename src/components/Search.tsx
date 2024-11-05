@@ -35,7 +35,7 @@ const Search = () => {
 
 	createEffect(() => {
 		if (searchParams.q) {
-			setQuery(searchParams.q)
+			setQuery(searchParams.q as string)
 		}
 		if (params.hashtag) {
 			setQuery(decodeURIComponent(`#${params.hashtag}`))

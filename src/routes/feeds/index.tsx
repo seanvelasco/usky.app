@@ -1,12 +1,12 @@
 import { For, Suspense } from 'solid-js'
-import { cache, createAsync } from '@solidjs/router'
+import { query, createAsync } from '@solidjs/router'
 import { Link, Meta, Title } from '@solidjs/meta'
 import Entry from '../../components/Entry'
 import Spinner from '../../components/Spinner'
 import getPopularFeedGenerators from '../../api/unspecced/getPopularFeedGenerators'
 import { id } from '../../utils'
 
-export const getPopularFeeds = cache(
+export const getPopularFeeds = query(
 	async () => await getPopularFeedGenerators(),
 	'feeds'
 )

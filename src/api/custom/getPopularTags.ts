@@ -1,6 +1,6 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 
-export const getPopularTags = cache(
+export const getPopularTags = query(
 	async (
 		limit = 25
 	): Promise<

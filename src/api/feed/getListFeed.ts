@@ -1,9 +1,9 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { FeedPost } from '../../types'
 
 // TODO: break up getListData
-export const getListFeed = cache(
+export const getListFeed = query(
 	async (
 		list: string
 	): Promise<{

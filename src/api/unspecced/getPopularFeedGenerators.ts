@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Feed } from '../../types'
 
-export const getPopularFeedGenerators = cache(
+export const getPopularFeedGenerators = query(
 	async (): Promise<{
 		feeds: Feed[]
 	}> => {

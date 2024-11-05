@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { ATPROTO_PROXY } from '../../constants'
 import type { Message, Session } from '../../types'
 
-export const getMessages = cache(
+export const getMessages = query(
 	async ({
 		session,
 		id,

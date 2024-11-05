@@ -1,8 +1,8 @@
-import { cache } from '@solidjs/router'
+import { query } from '@solidjs/router'
 import { PUBLIC_API_BASE_URL } from '../../constants'
 import type { Profile } from '../../types'
 
-export const getSuggestions = cache(
+export const getSuggestions = query(
 	async () // actor?: string,
 	: Promise<
 		| {
