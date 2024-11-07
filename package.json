@@ -16,10 +16,8 @@
 		"@solidjs/meta": "^0.29.4",
 		"@solidjs/router": "^0.15.0",
 		"cbor-x": "^1.6.0",
-		"graphemer": "^1.4.0",
 		"hls.js": "^1.5.15",
-		"solid-js": "^1.8.23",
-		"tlds": "^1.255.0"
+		"solid-js": "^1.8.23"
 	},
 	"devDependencies": {
 		"prettier": "3.2.5",

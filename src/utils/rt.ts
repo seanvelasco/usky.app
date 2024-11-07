@@ -1,5 +1,4 @@
-import Graphemer from 'graphemer'
-import TLDs from 'tlds'
+import { tlds } from '../constants'
 import { clone } from '.'
 import resolveHandle from '../api/identity/resolveHandle'
 
@@ -39,7 +38,7 @@ type Facet = {
 		| FacetMention
 		| FacetLink
 		| FacetTag
-		| { $type: string; [k: string]: unknown }
+		| { $type: string;[k: string]: unknown }
 	)[]
 	[k: string]: unknown
 }
@@ -54,11 +53,6 @@ const TAG_REGEX =
 
 const EXCESS_SPACE_RE = /[\r\n]([\u00AD\u2060\u200D\u200C\u200B\s]*[\r\n]){2,}/
 const REPLACEMENT_STR = '\n\n'
-
-const graphemeLen = (str: string) => {
-	const splitter = new Graphemer()
-	return splitter.countGraphemes(str)
-}
 
 const facetSort = (a: Facet, b: Facet) => a.index.byteStart - b.index.byteStart
 
@@ -97,7 +91,6 @@ const decoder = new TextDecoder()
 class UnicodeString {
 	utf16: string
 	utf8: Uint8Array
-	private _graphemeLen?: number | undefined
 
 	constructor(utf16: string) {
 		this.utf16 = utf16
@@ -108,12 +101,7 @@ class UnicodeString {
 		return this.utf8.byteLength
 	}
 
-	get graphemeLength() {
-		if (!this._graphemeLen) {
-			this._graphemeLen = graphemeLen(this.utf16)
-		}
-		return this._graphemeLen
-	}
+
 
 	slice(start?: number, end?: number): string {
 		return decoder.decode(this.utf8.slice(start, end))
@@ -157,8 +145,7 @@ const detectFacets = (text: UnicodeString): Facet[] | undefined => {
 		}
 	}
 	{
-		const re = URL_REGEX
-		while ((match = re.exec(text.utf16))) {
+		while ((match = URL_REGEX.exec(text.utf16))) {
 			let uri = match[2]
 			if (!uri.startsWith('http')) {
 				const domain = match.groups?.domain
@@ -223,7 +210,7 @@ const detectFacets = (text: UnicodeString): Facet[] | undefined => {
 }
 
 const isValidDomain = (str: string): boolean => {
-	return !!TLDs.find((tld) => {
+	return !!tlds.find((tld) => {
 		const i = str.lastIndexOf(tld)
 		if (i === -1) {
 			return false
@@ -245,7 +232,7 @@ class RichTextSegment {
 	constructor(
 		public text: string,
 		public facet?: Facet
-	) {}
+	) { }
 
 	get link(): FacetLink | undefined {
 		const link = this.facet?.features.find(isLink)
@@ -297,9 +284,6 @@ class RichText {
 		return this.unicodeText.length
 	}
 
-	get graphemeLength() {
-		return this.unicodeText.graphemeLength
-	}
 
 	clone() {
 		return new RichText({
@@ -359,8 +343,8 @@ class RichText {
 	insert(insertIndex: number, insertText: string) {
 		this.unicodeText = new UnicodeString(
 			this.unicodeText.slice(0, insertIndex) +
-				insertText +
-				this.unicodeText.slice(insertIndex)
+			insertText +
+			this.unicodeText.slice(insertIndex)
 		)
 
 		if (!this.facets?.length) {
@@ -385,7 +369,7 @@ class RichText {
 	delete(removeStartIndex: number, removeEndIndex: number) {
 		this.unicodeText = new UnicodeString(
 			this.unicodeText.slice(0, removeStartIndex) +
-				this.unicodeText.slice(removeEndIndex)
+			this.unicodeText.slice(removeEndIndex)
 		)
 
 		if (!this.facets?.length) {

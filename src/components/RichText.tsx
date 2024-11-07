@@ -20,6 +20,12 @@ const rter = ({
 
 	for (const segment of rt.segments()) {
 		if (segment.link) {
+			if (
+				segment.link.uri.startsWith('http://') &&
+				segment.text.startsWith('http://')
+			) {
+				segment.text = segment.text.replace('http://', '')
+			}
 			output += `<A target='_blank' rel='nofollow' href="${segment.link.uri}">${segment.text}</A>`
 		} else if (segment.mention) {
 			output += `<A href="/profile/${segment.mention.did}">${segment.text}</A>`
