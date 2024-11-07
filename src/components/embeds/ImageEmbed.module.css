@@ -1,5 +1,5 @@
 .wrapper {
-	background-color: rgba(43, 45, 48, 255);
+	background-color: var(--background-secondary);
 	border-radius: 16px;
 	border: 1px solid var(--border);
 	overflow: hidden;
