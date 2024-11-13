@@ -33,7 +33,7 @@ npm run dev
 
 usky.app is a statically exported [Solid.js](https://www.solidjs.com/) SPA and PWA (previously a server-rendered SvelteKit app). Uses CSS modules for styling. All icons are from [Heroicons](https://heroicons.com/) (including app logo). Runs on [Cloudflare Pages](https://pages.cloudflare.com).
 
-usky.app has only 10 dependencies. The official bsky.app client has 152 dependencies.
+usky.app has only 8 dependencies. The official bsky.app client has 152 dependencies.
 
 ### Dependencies
 
@@ -45,8 +45,6 @@ usky.app has only 10 dependencies. The official bsky.app client has 152 dependen
 -   @ipld/dag-cbor
 -   @cbor-x
 -   hls.js
--   graphemer
--   tlds
 
 ### Icons
 
