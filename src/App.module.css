@@ -1,3 +1,9 @@
+.container {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+}
+
 .section {
 	width: 100%;
 	align-self: center;
@@ -9,6 +15,12 @@
 	max-height: 17.5rem;
 	padding-bottom: 0.5rem;
 	flex-shrink: 0;
+}
+
+.timeline {
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
 }
 
 .title {

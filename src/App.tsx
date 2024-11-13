@@ -1,91 +1,107 @@
-import { For, Suspense, Show, ErrorBoundary } from 'solid-js'
+import { For, Suspense, Show, ErrorBoundary, createMemo } from 'solid-js'
 import {
 	A,
 	useMatch,
 	createAsync,
 	type RouteSectionProps
 } from '@solidjs/router'
+import getProfile from './api/actor/getProfile'
+import { SessionProvider, useSession } from './states/session'
 import Header from './components/layout/Header'
 import Sidebar from './components/layout/Sidebar'
 import MobileNav from './components/layout/MobileNav'
+import Spinner from './components/Spinner'
+import Avatar from './components/Avatar'
+import Fallback from './components/Fallback'
 import { FeedsIcon } from './assets/FeedsIcon'
 import { HomeIcon } from './assets/HomeIcon'
 import { SearchIcon } from './assets/SearchIcon'
 import { BellIcon } from './assets/BellIcon'
 import { BubbleIcon } from './assets/BubbleIcon'
 import { ListIcon } from './assets/ListIcon'
-import Spinner from './components/Spinner'
-import Avatar from './components/Avatar'
-// import Banner from './components/Banner'
-import { SessionProvider, useSession } from './states/session'
 import styles from './App.module.css'
-import getProfile from './api/actor/getProfile'
-import Fallback from './components/Fallback'
 
 const Navigation = () => {
 	const session = useSession()
-
 	const profile = createAsync(() => getProfile(session.did))
+
 	const isHome = useMatch(() => '/:home?', {
 		home: ['hot', 'live']
 	})
-	const isSearch = useMatch(() => '/search/*')
+	const isSearch = useMatch(() => '/:search/:filter?/*?', {
+		search: ['search', 'hashtag'],
+		filter: ['latest', 'people', 'media']
+	})
+
 	const isNotifications = useMatch(() => '/notifications')
 
-	const links = [
+	const links = createMemo(() => [
 		{
 			label: 'Home',
 			href: '/',
-			active: isHome(),
-			icon: <HomeIcon filled={Boolean(isHome())} />
+			icon: () => <HomeIcon filled={Boolean(isHome())} />
 		},
 		{
 			label: 'Search',
 			href: '/search',
-			active: isSearch(),
-			icon: <SearchIcon />
+			icon: () => <SearchIcon />
 		},
 		{
 			label: 'Notifications',
 			href: '/notifications',
-			icon: <BellIcon filled={Boolean(isNotifications())} />,
+			icon: () => <BellIcon filled={Boolean(isNotifications())} />,
 			authenticated: true
 		},
 		{
 			label: 'Chat',
 			href: '/messages',
-			icon: <BubbleIcon />,
+			icon: () => <BubbleIcon />,
 			authenticated: true
 		},
 		{
 			label: 'Feeds',
 			href: '/feeds',
-			icon: <FeedsIcon />
+			icon: () => <FeedsIcon />
 		},
 		{
 			label: 'Lists',
 			href: '/lists',
-			icon: <ListIcon />,
+			icon: () => <ListIcon />,
 			authenticated: true
 		}
-	]
+	])
+
+	const isLinkActive = (href: string) => {
+		switch (href) {
+			case '/':
+				return isHome()
+			case '/search':
+				return isSearch()
+			case '/notifications':
+				return isNotifications()
+			default:
+				return false
+		}
+	}
 
 	return (
 		<nav class={styles.nav}>
-			<For each={links}>
+			<For each={links()}>
 				{(link) => (
 					<Show when={!link.authenticated || profile()}>
 						<div class={styles.icon}>
 							<A
-								end
 								classList={{
-									highlight_alt: Boolean(link.active)
+									highlight_alt: Boolean(
+										isLinkActive(link.href)
+									)
 								}}
+								end
 								activeClass='highlight'
 								aria-label={link.label}
 								href={link.href}
 							>
-								{link.icon}
+								{link.icon()}
 							</A>
 						</div>
 					</Show>
@@ -104,51 +120,32 @@ const Navigation = () => {
 	)
 }
 
-const App = (props: RouteSectionProps) => {
-	return (
-		<SessionProvider>
-			<Suspense fallback={<Spinner />}>
-				<div
-					style={{
-						display: 'flex',
-						'flex-flow': 'row nowrap',
-						'justify-content': 'center'
-					}}
-				>
-					<aside class={`${styles.sidebar} ${styles.left}`}>
-						<Navigation />
-					</aside>
-					<main class={styles.main}>
-						<div
-							style={{
-								display: 'flex',
-								'flex-direction': 'column',
-								'min-height': '100%'
-							}}
-						>
-							<Header />
-							<ErrorBoundary
-								fallback={(error, reset) => (
-									<Fallback err={error} reset={reset} />
-								)}
-							>
-								<Suspense fallback={<Spinner />}>
-									{props.children}
-								</Suspense>
-							</ErrorBoundary>
-						</div>
-						<MobileNav />
-					</main>
-					<aside class={`${styles.sidebar} ${styles.right}`}>
-						<ErrorBoundary fallback={<p>An error occurred</p>}>
-							<Sidebar />
+const App = (props: RouteSectionProps) => (
+	<SessionProvider>
+		<Suspense fallback={<Spinner />}>
+			<div class={styles.container}>
+				<aside class={`${styles.sidebar} ${styles.left}`}>
+					<Navigation />
+				</aside>
+				<main class={styles.main}>
+					<div class={styles.timeline}>
+						<Header />
+						<ErrorBoundary fallback={Fallback}>
+							<Suspense fallback={<Spinner />}>
+								{props.children}
+							</Suspense>
 						</ErrorBoundary>
-					</aside>
-					{/*<Banner />*/}
-				</div>
-			</Suspense>
-		</SessionProvider>
-	)
-}
+					</div>
+					<MobileNav />
+				</main>
+				<aside class={`${styles.sidebar} ${styles.right}`}>
+					<ErrorBoundary fallback={<p>An error occurred</p>}>
+						<Sidebar />
+					</ErrorBoundary>
+				</aside>
+			</div>
+		</Suspense>
+	</SessionProvider>
+)
 
 export default App
