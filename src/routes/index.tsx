@@ -20,35 +20,35 @@ const Discover = (props: RouteSectionProps) => {
 		'/hot': 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
 	}
 
-	const [posts, setPosts] = createSignal<t>([])
-	const [cursor, setCursor] = createSignal('')
+	// const [posts, setPosts] = createSignal<t>([])
+	// const [cursor, setCursor] = createSignal('')
 
-	const io = new IntersectionObserver((entry) => {
-		if (entry.length && entry[0].isIntersecting) {
-			setCursor(response()?.cursor as string)
-		}
-	})
+	// const io = new IntersectionObserver((entry) => {
+	// 	if (entry.length && entry[0].isIntersecting) {
+	// 		setCursor(response()?.cursor as string)
+	// 	}
+	// })
 
-	onCleanup(() => io.disconnect())
+	// onCleanup(() => io.disconnect())
 
-	const setRef = (element: Element) => {
-		io.observe(element)
-	}
+	// const setRef = (element: Element) => {
+	// 	io.observe(element)
+	// }
 
 	const response = createAsync(() =>
-		getFeed(feeds[props.location.pathname] || feeds[0], 20, cursor())
+		getFeed(feeds[props.location.pathname], 50)
 	)
 
-	createEffect(() => {
-		if (response()?.feed) {
-			batch(() => {
-				setPosts((prev) => [...prev, ...(response()?.feed as t)])
-			})
-		}
-	})
+	// createEffect(() => {
+	// 	if (response()?.feed) {
+	// 		batch(() => {
+	// 			setPosts((prev) => [...prev, ...(response()?.feed as t)])
+	// 		})
+	// 	}
+	// })
 
 	return (
-		<Suspense>
+		<>
 			<Title>Bluesky (usky.app)</Title>
 			<Meta
 				name='description'
@@ -69,16 +69,20 @@ const Discover = (props: RouteSectionProps) => {
 			/>
 			<Meta property='twitter:url' content='https://usky.app' />
 			<Link rel='canonical' href='https://usky.app' />
-			<For each={posts()}>{(post) => <FeedPost {...post} />}</For>
-			<Show when={posts().length}>
-				<div
-					style={{
-						visibility: 'hidden'
-					}}
-					ref={setRef}
-				></div>
-			</Show>
-		</Suspense>
+			<Suspense>
+				<For each={response()?.feed}>
+					{(post) => <FeedPost {...post} />}
+				</For>
+				{/* <Show when={posts().length}>
+					<div
+						style={{
+							visibility: 'hidden'
+						}}
+						ref={setRef}
+					></div>
+				</Show> */}
+			</Suspense>
+		</>
 	)
 }
 
