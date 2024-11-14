@@ -1,9 +1,30 @@
-import { For } from 'solid-js'
+import {
+	Accessor,
+	batch,
+	createEffect,
+	createSignal,
+	For,
+	onCleanup,
+	Show,
+	Suspense
+} from 'solid-js'
 import { createAsync, RouteSectionProps } from '@solidjs/router'
 import { Meta, Title, Link } from '@solidjs/meta'
 import getFeed from '../api/feed/getFeed'
 import FeedPost from '../components/Post'
-import Spinner from '../components/Spinner'
+
+type t = Awaited<ReturnType<typeof getFeed>>['feed']
+
+type r = [
+	setRef: (element: Element) => void,
+	posts: Accessor<t>,
+	end: Accessor<boolean>
+]
+
+// const createInfiniteScroll = (): r => {
+
+// 	return [setRef, posts, end]
+// }
 
 const Discover = (props: RouteSectionProps) => {
 	const feeds: Record<string, string> = {
@@ -11,7 +32,34 @@ const Discover = (props: RouteSectionProps) => {
 		'/hot': 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
 	}
 
-	const feed = createAsync(() => getFeed(feeds[props.location.pathname]))
+	const [posts, setPosts] = createSignal<t>([])
+	const [cursor, setCursor] = createSignal('')
+	// const [end, setEnd] = createSignal(false)
+
+	const io = new IntersectionObserver((entry) => {
+		if (entry.length && entry[0].isIntersecting) {
+			setCursor(response()?.cursor as string)
+		}
+	})
+
+	onCleanup(() => io.disconnect())
+
+	const setRef = (element: Element) => {
+		io.observe(element)
+	}
+
+	const response = createAsync(() =>
+		getFeed(feeds[props.location.pathname] || feeds[0], 5, cursor())
+	)
+
+	createEffect(() => {
+		if (response()?.feed) {
+			batch(() => {
+				setPosts((prev) => [...prev, ...(response()?.feed as t)])
+			})
+		}
+	})
+
 	return (
 		<>
 			<Title>Bluesky (usky.app)</Title>
@@ -33,11 +81,18 @@ const Discover = (props: RouteSectionProps) => {
 				}
 			/>
 			<Meta property='twitter:url' content='https://usky.app' />
-
 			<Link rel='canonical' href='https://usky.app' />
-			<For each={feed()?.feed} fallback={<Spinner />}>
-				{(post) => <FeedPost {...post} />}
-			</For>
+			<Suspense>
+				<For each={posts()}>{(post) => <FeedPost {...post} />}</For>
+				<Show when={posts().length}>
+					<div
+						style={{
+							visibility: 'hidden'
+						}}
+						ref={setRef}
+					></div>
+				</Show>
+			</Suspense>
 		</>
 	)
 }
