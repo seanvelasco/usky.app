@@ -67,21 +67,21 @@ const Root = () => (
 					<Route component={Discover}>
 						<Route
 							path='/'
-							// preload={() =>
-							// 	getFeed(
-							// 		'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
-							// 		10
-							// 	)
-							// }
+							preload={() =>
+								getFeed(
+									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
+									20
+								)
+							}
 						/>
 						<Route
 							path='/hot'
-							// preload={() =>
-							// 	getFeed(
-							// 		'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic',
-							// 		10
-							// 	)
-							// }
+							preload={() =>
+								getFeed(
+									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic',
+									20
+								)
+							}
 						/>
 					</Route>
 					<Route path='/live' component={Firehose} />

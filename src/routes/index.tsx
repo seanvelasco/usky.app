@@ -36,7 +36,7 @@ const Discover = (props: RouteSectionProps) => {
 	}
 
 	const response = createAsync(() =>
-		getFeed(feeds[props.location.pathname] || feeds[0], 5, cursor())
+		getFeed(feeds[props.location.pathname] || feeds[0], 20, cursor())
 	)
 
 	createEffect(() => {
@@ -48,7 +48,7 @@ const Discover = (props: RouteSectionProps) => {
 	})
 
 	return (
-		<>
+		<Suspense>
 			<Title>Bluesky (usky.app)</Title>
 			<Meta
 				name='description'
@@ -69,18 +69,16 @@ const Discover = (props: RouteSectionProps) => {
 			/>
 			<Meta property='twitter:url' content='https://usky.app' />
 			<Link rel='canonical' href='https://usky.app' />
-			<Suspense>
-				<For each={posts()}>{(post) => <FeedPost {...post} />}</For>
-				<Show when={posts().length}>
-					<div
-						style={{
-							visibility: 'hidden'
-						}}
-						ref={setRef}
-					></div>
-				</Show>
-			</Suspense>
-		</>
+			<For each={posts()}>{(post) => <FeedPost {...post} />}</For>
+			<Show when={posts().length}>
+				<div
+					style={{
+						visibility: 'hidden'
+					}}
+					ref={setRef}
+				></div>
+			</Show>
+		</Suspense>
 	)
 }
 
