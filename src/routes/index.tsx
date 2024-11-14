@@ -1,10 +1,10 @@
 import {
-	batch,
-	createEffect,
-	createSignal,
+	// batch,
+	// createEffect,
+	// createSignal,
 	For,
-	onCleanup,
-	Show,
+	// onCleanup,
+	// Show,
 	Suspense
 } from 'solid-js'
 import { createAsync, RouteSectionProps } from '@solidjs/router'
@@ -12,7 +12,7 @@ import { Meta, Title, Link } from '@solidjs/meta'
 import getFeed from '../api/feed/getFeed'
 import FeedPost from '../components/Post'
 
-type t = Awaited<ReturnType<typeof getFeed>>['feed']
+// type t = Awaited<ReturnType<typeof getFeed>>['feed']
 
 const Discover = (props: RouteSectionProps) => {
 	const feeds: Record<string, string> = {
