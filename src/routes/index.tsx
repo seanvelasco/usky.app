@@ -15,17 +15,6 @@ import FeedPost from '../components/Post'
 
 type t = Awaited<ReturnType<typeof getFeed>>['feed']
 
-type r = [
-	setRef: (element: Element) => void,
-	posts: Accessor<t>,
-	end: Accessor<boolean>
-]
-
-// const createInfiniteScroll = (): r => {
-
-// 	return [setRef, posts, end]
-// }
-
 const Discover = (props: RouteSectionProps) => {
 	const feeds: Record<string, string> = {
 		'/': 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
