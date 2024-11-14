@@ -1,5 +1,4 @@
 import {
-	Accessor,
 	batch,
 	createEffect,
 	createSignal,
@@ -23,7 +22,6 @@ const Discover = (props: RouteSectionProps) => {
 
 	const [posts, setPosts] = createSignal<t>([])
 	const [cursor, setCursor] = createSignal('')
-	// const [end, setEnd] = createSignal(false)
 
 	const io = new IntersectionObserver((entry) => {
 		if (entry.length && entry[0].isIntersecting) {
