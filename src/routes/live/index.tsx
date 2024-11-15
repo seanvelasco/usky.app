@@ -1,10 +1,9 @@
 import { onMount, onCleanup, For, createSignal } from 'solid-js'
-// import { Suspense } from 'solid-js'
+import { Suspense } from 'solid-js'
 import { Link, Meta, Title } from '@solidjs/meta'
 import { CarReader } from '@ipld/car'
 import { decode } from '@ipld/dag-cbor'
 import { decodeMultiple } from 'cbor-x'
-
 import Post from '../../components/Post'
 // import Spinner from '../../components/Spinner'
 
@@ -104,7 +103,9 @@ const Firehose = () => {
 			<Meta name='twitter:description' content={description} />
 			<Meta property='twitter:url' content={url} />
 			<Link rel='canonical' href={url} />
-			<For each={posts()}>{(post) => <Post post={post} />}</For>
+			<Suspense>
+				<For each={posts()}>{(post) => <Post post={post} />}</For>
+			</Suspense>
 		</>
 	)
 }

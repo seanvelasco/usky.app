@@ -28,6 +28,7 @@ import getConvo from '../../api/convo/getConvo'
 import Avatar from '../../components/Avatar'
 import getProfile from '../../api/actor/getProfile'
 import getFeedGenerator from '../../api/feed/getFeedGenerator'
+import Blink from '../Blink'
 
 export const ProfilePageHeader = () => {
 	const params = useParams()
@@ -89,8 +90,19 @@ export const TimelineHeader = () => (
 		<A activeClass='highlight' end href='/hot'>
 			What's Hot
 		</A>
-		<A activeClass='highlight' end href='/live'>
+		<A
+			style={{
+				display: 'flex',
+				'align-items': 'center',
+				'justify-content': 'center',
+				gap: '0.5rem'
+			}}
+			activeClass='highlight'
+			end
+			href='/live'
+		>
 			Live
+			<Blink />
 		</A>
 	</div>
 )

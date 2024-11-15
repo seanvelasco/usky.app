@@ -21,7 +21,6 @@ export const getFeed = query(
 		const response = await fetch(
 			`${PUBLIC_API_BASE_URL}/xrpc/app.bsky.feed.getFeed?${params.toString()}`,
 			{
-				method: 'GET'
 				// headers: {
 				// 	Authorization: 'Bearer ' + accessJwt
 				// }

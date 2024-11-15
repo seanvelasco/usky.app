@@ -1,51 +1,42 @@
-import {
-	// batch,
-	// createEffect,
-	// createSignal,
-	For,
-	// onCleanup,
-	// Show,
-	Suspense
-} from 'solid-js'
-import { createAsync, RouteSectionProps } from '@solidjs/router'
+import { Show, createSignal, For, onCleanup, Suspense, onMount } from 'solid-js'
+import { createAsync } from '@solidjs/router'
+import { createStore } from 'solid-js/store'
 import { Meta, Title, Link } from '@solidjs/meta'
 import getFeed from '../api/feed/getFeed'
 import FeedPost from '../components/Post'
+import Spinner from '../components/Spinner'
 
-// type t = Awaited<ReturnType<typeof getFeed>>['feed']
+const Discover = () => {
+	let ref: HTMLDivElement
+	const [posts, setPosts] = createStore<
+		Awaited<ReturnType<typeof getFeed>>['feed']
+	>([])
+	const [cursor, setCursor] = createSignal('')
+	const [tempCursor, setTempCursor] = createSignal('')
+	const [end, setEnd] = createSignal(false)
 
-const Discover = (props: RouteSectionProps) => {
-	const feeds: Record<string, string> = {
-		'/': 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
-		'/hot': 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic'
-	}
+	onMount(() => {
+		const observer = new IntersectionObserver((entry) => {
+			if (entry.length && entry[0].isIntersecting) {
+				setCursor(tempCursor())
+			}
+		})
+		if (ref) observer.observe(ref)
+		onCleanup(() => observer.disconnect())
+	})
 
-	// const [posts, setPosts] = createSignal<t>([])
-	// const [cursor, setCursor] = createSignal('')
+	createAsync(async () => {
+		const response = await getFeed(
+			'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
+			5,
+			cursor()
+		)
+		if (response.feed.length)
+			setPosts((prev) => [...prev, ...response.feed])
 
-	// const io = new IntersectionObserver((entry) => {
-	// 	if (entry.length && entry[0].isIntersecting) {
-	// 		setCursor(response()?.cursor as string)
-	// 	}
-	// })
-
-	// onCleanup(() => io.disconnect())
-
-	// const setRef = (element: Element) => {
-	// 	io.observe(element)
-	// }
-
-	const response = createAsync(() =>
-		getFeed(feeds[props.location.pathname], 50)
-	)
-
-	// createEffect(() => {
-	// 	if (response()?.feed) {
-	// 		batch(() => {
-	// 			setPosts((prev) => [...prev, ...(response()?.feed as t)])
-	// 		})
-	// 	}
-	// })
+		if (response.cursor) setTempCursor(response.cursor)
+		else setEnd(true)
+	})
 
 	return (
 		<>
@@ -69,18 +60,17 @@ const Discover = (props: RouteSectionProps) => {
 			/>
 			<Meta property='twitter:url' content='https://usky.app' />
 			<Link rel='canonical' href='https://usky.app' />
-			<Suspense>
-				<For each={response()?.feed}>
-					{(post) => <FeedPost {...post} />}
-				</For>
-				{/* <Show when={posts().length}>
+			<Suspense fallback={<Spinner />}>
+				<For each={posts}>{(post) => <FeedPost {...post} />}</For>
+				<Show when={!end()}>
 					<div
+						ref={ref!}
 						style={{
+							height: '1px',
 							visibility: 'hidden'
 						}}
-						ref={setRef}
 					></div>
-				</Show> */}
+				</Show>
 			</Suspense>
 		</>
 	)

@@ -8,6 +8,7 @@ import App from './App'
 import { session } from './storage/session'
 // Home pages
 const Discover = lazy(() => import('./routes'))
+const Hot = lazy(() => import('./routes/hot'))
 const Firehose = lazy(() => import('./routes/live'))
 // Profile pages
 const Profile = lazy(() => import('./routes/profile/[profile]'))
@@ -64,22 +65,24 @@ const Root = () => (
 		<MetaProvider>
 			<Router root={App}>
 				<Route path='/'>
-					<Route component={Discover}>
+					<Route>
 						<Route
 							path='/'
+							component={Discover}
 							preload={() =>
 								getFeed(
 									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
-									20
+									5
 								)
 							}
 						/>
 						<Route
+							component={Hot}
 							path='/hot'
 							preload={() =>
 								getFeed(
 									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic',
-									20
+									5
 								)
 							}
 						/>

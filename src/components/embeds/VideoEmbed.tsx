@@ -1,4 +1,4 @@
-import { createSignal, createEffect } from 'solid-js'
+import { createSignal, createEffect, Suspense } from 'solid-js'
 import HLS from 'hls.js'
 import styles from './VideoEmbed.module.css'
 import type { VideoEmbedView } from '../../types'
@@ -16,23 +16,25 @@ const VideoEmbed = (props: VideoEmbedView) => {
 	})
 
 	return (
-		<video
-			ref={setVideo}
-			class={styles.video}
-			poster={props.thumbnail}
-			width={props.aspectRatio.width}
-			height={props.aspectRatio.height}
-			style={{
-				'aspect-ratio':
-					props.aspectRatio.width / props.aspectRatio.height
-			}}
-			controls={loaded()}
-			autoplay={true}
-			loop={true}
-			muted={true}
-			playsinline={true}
-			onCanPlayThrough={() => setLoaded(true)}
-		/>
+		<Suspense>
+			<video
+				ref={setVideo}
+				class={styles.video}
+				poster={props.thumbnail}
+				width={props.aspectRatio.width}
+				height={props.aspectRatio.height}
+				style={{
+					'aspect-ratio':
+						props.aspectRatio.width / props.aspectRatio.height
+				}}
+				controls={loaded()}
+				autoplay={true}
+				loop={true}
+				muted={true}
+				playsinline={true}
+				onCanPlayThrough={() => setLoaded(true)}
+			/>
+		</Suspense>
 	)
 }
 
