@@ -82,30 +82,42 @@ export const PostPageHeader = () => {
 	)
 }
 
-export const TimelineHeader = () => (
-	<div class={styles.timeline}>
-		<A activeClass='highlight' end href='/'>
-			Discover
-		</A>
-		<A activeClass='highlight' end href='/hot'>
-			What's Hot
-		</A>
-		<A
-			style={{
-				display: 'flex',
-				'align-items': 'center',
-				'justify-content': 'center',
-				gap: '0.5rem'
-			}}
-			activeClass='highlight'
-			end
-			href='/live'
-		>
-			Live
-			<Blink />
-		</A>
-	</div>
-)
+export const TimelineHeader = () => {
+	const session = useSession()
+	return (
+		<div class={styles.timeline}>
+			<Show when={session.accessJwt}>
+				<A activeClass='highlight' end href='/'>
+					Following
+				</A>
+			</Show>
+			<A
+				activeClass='highlight'
+				end
+				href={session.accessJwt ? '/discover' : '/'}
+			>
+				Discover
+			</A>
+			<A activeClass='highlight' end href='/hot'>
+				What's Hot
+			</A>
+			<A
+				style={{
+					display: 'flex',
+					'align-items': 'center',
+					'justify-content': 'center',
+					gap: '0.5rem'
+				}}
+				activeClass='highlight'
+				end
+				href='/live'
+			>
+				Live
+				<Blink />
+			</A>
+		</div>
+	)
+}
 
 const FeedHeader = () => {
 	const params = useParams()
@@ -211,7 +223,8 @@ const Header = () => {
 	const location = useLocation()
 	const params = useParams()
 
-	const isHome = () => ['/', '/hot', '/live'].includes(location.pathname)
+	const isHome = () =>
+		['/', '/discover', '/hot', '/live'].includes(location.pathname)
 	const isTrends = useMatch(() => '/trends')
 	const isFeeds = useMatch(() => '/feeds')
 	const isAbout = useMatch(() => '/about')

@@ -2,15 +2,15 @@ import { createSignal, For, onCleanup, Suspense, onMount } from 'solid-js'
 import { createAsync } from '@solidjs/router'
 import { createStore } from 'solid-js/store'
 import { Meta, Title, Link } from '@solidjs/meta'
-import { useSession } from '../states/session'
-import getTimeline from '../api/feed/getTimeline'
-import FeedPost from '../components/Post'
-import Spinner from '../components/Spinner'
+import { useSession } from '../../states/session'
+import getFeed from '../../api/feed/getFeed'
+import FeedPost from '../../components/Post'
+import Spinner from '../../components/Spinner'
 
-const Timeline = () => {
+const Discover = () => {
 	let ref: HTMLDivElement
 	const [posts, setPosts] = createStore<
-		Awaited<ReturnType<typeof getTimeline>>['feed']
+		Awaited<ReturnType<typeof getFeed>>['feed']
 	>([])
 	const [cursor, setCursor] = createSignal('')
 	const [tempCursor, setTempCursor] = createSignal('')
@@ -18,7 +18,6 @@ const Timeline = () => {
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entry) => {
-			console.log(entry)
 			if (entry.length && entry[0].isIntersecting) {
 				setCursor(tempCursor())
 			}
@@ -30,10 +29,11 @@ const Timeline = () => {
 	const session = useSession()
 
 	createAsync(async () => {
-		const response = await getTimeline({
+		const response = await getFeed({
+			feed: 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
 			limit: 5,
 			cursor: cursor(),
-			session: session
+			token: session.accessJwt
 		})
 		if (response.feed.length)
 			setPosts((prev) => [...prev, ...response.feed])
@@ -78,4 +78,4 @@ const Timeline = () => {
 	)
 }
 
-export default Timeline
+export default Discover

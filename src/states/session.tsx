@@ -73,7 +73,7 @@ const login = action(async (formData: FormData) => {
 	const session = await createSession({ identifier, password })
 	if (session) {
 		setSessionStorage(session)
-		return redirect('/', { revalidate: ['getAllTodos'] })
+		return redirect('/', { revalidate: [''] })
 	}
 })
 

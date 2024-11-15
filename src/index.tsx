@@ -7,7 +7,8 @@ import { render } from 'solid-js/web'
 import App from './App'
 import { session } from './storage/session'
 // Home pages
-const Discover = lazy(() => import('./routes'))
+const Timeline = lazy(() => import('./routes'))
+const Discover = lazy(() => import('./routes/discover'))
 const Hot = lazy(() => import('./routes/hot'))
 const Firehose = lazy(() => import('./routes/live'))
 // Profile pages
@@ -68,22 +69,28 @@ const Root = () => (
 					<Route>
 						<Route
 							path='/'
+							component={session.accessJwt ? Timeline : Discover}
+						/>
+						<Route
 							component={Discover}
+							path='/discover'
 							preload={() =>
-								getFeed(
-									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
-									5
-								)
+								getFeed({
+									feed: 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
+									limit: 5,
+									token: session.accessJwt
+								})
 							}
 						/>
 						<Route
 							component={Hot}
 							path='/hot'
 							preload={() =>
-								getFeed(
-									'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic',
-									5
-								)
+								getFeed({
+									feed: 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic',
+									limit: 5,
+									token: session.accessJwt
+								})
 							}
 						/>
 					</Route>
@@ -185,7 +192,9 @@ const Root = () => (
 					<Route
 						path='/feed'
 						component={UserFeeds}
-						preload={({ params }) => getFeed(params.profile)}
+						preload={({ params }) =>
+							getFeed({ feed: params.profile })
+						}
 					/>
 					<Route
 						path='/lists'

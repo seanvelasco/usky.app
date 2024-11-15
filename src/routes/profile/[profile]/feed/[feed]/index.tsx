@@ -26,9 +26,9 @@ const Feed = (props: RouteSectionProps) => {
 	)
 
 	const feeds = createAsync(() =>
-		getFeed(
-			`at://${props.params.profile}/app.bsky.feed.generator/${props.params.feed}`
-		)
+		getFeed({
+			feed: `at://${props.params.profile}/app.bsky.feed.generator/${props.params.feed}`
+		})
 	)
 
 	const title = () =>

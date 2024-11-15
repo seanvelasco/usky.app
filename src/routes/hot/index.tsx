@@ -1,22 +1,27 @@
-import { Show, createSignal, For, onCleanup, Suspense, onMount } from 'solid-js'
+import { createSignal, For, onCleanup, Suspense, onMount } from 'solid-js'
 import { createAsync } from '@solidjs/router'
 import { createStore } from 'solid-js/store'
 import { Meta, Title, Link } from '@solidjs/meta'
 import getFeed from '../../api/feed/getFeed'
 import FeedPost from '../../components/Post'
 import Spinner from '../../components/Spinner'
+import { useSession } from '../../states/session'
 
 const Hot = () => {
-	let ref: HTMLDivElement
+	let ref: HTMLDivElement | undefined
 	const [posts, setPosts] = createStore<
 		Awaited<ReturnType<typeof getFeed>>['feed']
 	>([])
 	const [cursor, setCursor] = createSignal('')
 	const [tempCursor, setTempCursor] = createSignal('')
-	const [end, setEnd] = createSignal(false)
+	const [_, setEnd] = createSignal(false)
+
+	const session = useSession()
 
 	onMount(() => {
+		console.log('MOUNTED', ref)
 		const observer = new IntersectionObserver((entry) => {
+			console.log('OBSERVED')
 			if (entry.length && entry[0].isIntersecting) {
 				setCursor(tempCursor())
 			}
@@ -26,11 +31,12 @@ const Hot = () => {
 	})
 
 	createAsync(async () => {
-		const response = await getFeed(
-			'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic',
-			5,
-			cursor()
-		)
+		const response = await getFeed({
+			feed: 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic',
+			limit: 5,
+			cursor: cursor(),
+			token: session.accessJwt
+		})
 		if (response.feed.length)
 			setPosts((prev) => [...prev, ...response.feed])
 
@@ -55,15 +61,13 @@ const Hot = () => {
 			<Link rel='canonical' href={url()} />
 			<Suspense fallback={<Spinner />}>
 				<For each={posts}>{(post) => <FeedPost {...post} />}</For>
-				<Show when={!end()}>
-					<div
-						ref={ref!}
-						style={{
-							height: '1px',
-							visibility: 'hidden'
-						}}
-					></div>
-				</Show>
+				<div
+					ref={ref!}
+					style={{
+						height: '1px',
+						visibility: 'hidden'
+					}}
+				></div>
 			</Suspense>
 		</>
 	)
