@@ -34,7 +34,6 @@ const Content = (props: { children: JSXElement }) => {
 	let dialog: HTMLDialogElement
 
 	createEffect(() => {
-		console.log(context.open())
 		if (context.open()) {
 			handleOpen()
 		} else {

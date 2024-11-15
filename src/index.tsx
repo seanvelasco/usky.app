@@ -51,6 +51,7 @@ import { getListData } from './routes/profile/[profile]/lists/[list]' // todo, v
 import { getListsData } from './routes/profile/[profile]/lists' // todo // vite warning
 import { getLikesData } from './routes/profile/[profile]/likes' // todo, vite warning
 import getFeed from './api/feed/getFeed'
+import getTimeline from './api/feed/getTimeline'
 import searchActors from './api/actor/searchActors'
 import searchPosts from './api/feed/searchPosts'
 import getProfile from './api/actor/getProfile'
@@ -60,6 +61,7 @@ import getFollows from './api/graph/getFollows'
 import getFeedGenerator from './api/feed/getFeedGenerator'
 import getPopularTags from './api/custom/getPopularTags'
 import listNotifications from './api/notification/listNotifications'
+import { type Session } from './types'
 
 const Root = () => (
 	<Suspense fallback={<Spinner />}>
@@ -70,6 +72,18 @@ const Root = () => (
 						<Route
 							path='/'
 							component={session.accessJwt ? Timeline : Discover}
+							preload={() => {
+								session.accessJwt
+									? getTimeline({
+											limit: 10,
+											session: session as Session
+										})
+									: getFeed({
+											feed: 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
+											limit: 10,
+											token: session.accessJwt
+										})
+							}}
 						/>
 						<Route
 							component={Discover}
@@ -77,7 +91,7 @@ const Root = () => (
 							preload={() =>
 								getFeed({
 									feed: 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot',
-									limit: 5,
+									limit: 10,
 									token: session.accessJwt
 								})
 							}
@@ -88,7 +102,7 @@ const Root = () => (
 							preload={() =>
 								getFeed({
 									feed: 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic',
-									limit: 5,
+									limit: 10,
 									token: session.accessJwt
 								})
 							}

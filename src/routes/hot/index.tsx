@@ -19,10 +19,8 @@ const Hot = () => {
 	const session = useSession()
 
 	onMount(() => {
-		console.log('MOUNTED', ref)
 		const observer = new IntersectionObserver((entry) => {
-			console.log('OBSERVED')
-			if (entry.length && entry[0].isIntersecting) {
+			if (entry.length && entry[0].isIntersecting && posts.length) {
 				setCursor(tempCursor())
 			}
 		})
@@ -33,7 +31,7 @@ const Hot = () => {
 	createAsync(async () => {
 		const response = await getFeed({
 			feed: 'at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/hot-classic',
-			limit: 5,
+			limit: 10,
 			cursor: cursor(),
 			token: session.accessJwt
 		})

@@ -18,8 +18,7 @@ const Timeline = () => {
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entry) => {
-			console.log(entry)
-			if (entry.length && entry[0].isIntersecting) {
+			if (entry.length && entry[0].isIntersecting && posts.length) {
 				setCursor(tempCursor())
 			}
 		})
@@ -31,7 +30,7 @@ const Timeline = () => {
 
 	createAsync(async () => {
 		const response = await getTimeline({
-			limit: 5,
+			limit: 10,
 			cursor: cursor(),
 			session: session
 		})

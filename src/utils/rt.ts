@@ -38,7 +38,7 @@ type Facet = {
 		| FacetMention
 		| FacetLink
 		| FacetTag
-		| { $type: string; [k: string]: unknown }
+		| { $type: string;[k: string]: unknown }
 	)[]
 	[k: string]: unknown
 }
@@ -230,7 +230,7 @@ class RichTextSegment {
 	constructor(
 		public text: string,
 		public facet?: Facet
-	) {}
+	) { }
 
 	get link(): FacetLink | undefined {
 		const link = this.facet?.features.find(isLink)
@@ -340,8 +340,8 @@ class RichText {
 	insert(insertIndex: number, insertText: string) {
 		this.unicodeText = new UnicodeString(
 			this.unicodeText.slice(0, insertIndex) +
-				insertText +
-				this.unicodeText.slice(insertIndex)
+			insertText +
+			this.unicodeText.slice(insertIndex)
 		)
 
 		if (!this.facets?.length) {
@@ -366,7 +366,7 @@ class RichText {
 	delete(removeStartIndex: number, removeEndIndex: number) {
 		this.unicodeText = new UnicodeString(
 			this.unicodeText.slice(0, removeStartIndex) +
-				this.unicodeText.slice(removeEndIndex)
+			this.unicodeText.slice(removeEndIndex)
 		)
 
 		if (!this.facets?.length) {
@@ -419,7 +419,6 @@ class RichText {
 				for (const feature of facet.features) {
 					if (isMention(feature)) {
 						const did = await resolveHandle(feature.did)
-						console.log(did)
 						feature.did = did || ''
 					}
 				}

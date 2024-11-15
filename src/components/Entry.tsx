@@ -13,7 +13,6 @@ const Entry = (props: {
 	type?: 'creator'
 	mini?: boolean
 }) => {
-	console.log(props.mini)
 	return (
 		<div class={`${styles.entry} ${props.mini && styles.mini}`}>
 			<Avatar

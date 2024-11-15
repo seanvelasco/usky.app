@@ -18,7 +18,7 @@ const Discover = () => {
 
 	onMount(() => {
 		const observer = new IntersectionObserver((entry) => {
-			if (entry.length && entry[0].isIntersecting) {
+			if (entry.length && entry[0].isIntersecting && posts.length) {
 				setCursor(tempCursor())
 			}
 		})
