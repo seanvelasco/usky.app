@@ -121,33 +121,31 @@ const Navigation = () => {
 }
 
 const App = (props: RouteSectionProps) => (
-	<>
-		<SessionProvider>
-			<Suspense fallback={<Spinner />}>
-				<div class={styles.container}>
-					<aside class={`${styles.sidebar} ${styles.left}`}>
-						<Navigation />
-					</aside>
-					<main class={styles.main}>
-						<div class={styles.timeline}>
-							<Header />
-							<ErrorBoundary fallback={Fallback}>
-								<Suspense fallback={<Spinner />}>
-									{props.children}
-								</Suspense>
-							</ErrorBoundary>
-						</div>
-						<MobileNav />
-					</main>
-					<aside class={`${styles.sidebar} ${styles.right}`}>
-						<ErrorBoundary fallback={<p>An error occurred</p>}>
-							<Sidebar />
+	<SessionProvider>
+		<Suspense fallback={<Spinner />}>
+			<div class={styles.container}>
+				<aside class={`${styles.sidebar} ${styles.left}`}>
+					<Navigation />
+				</aside>
+				<main class={styles.main}>
+					<div class={styles.timeline}>
+						<Header />
+						<ErrorBoundary fallback={Fallback}>
+							<Suspense fallback={<Spinner />}>
+								{props.children}
+							</Suspense>
 						</ErrorBoundary>
-					</aside>
-				</div>
-			</Suspense>
-		</SessionProvider>
-	</>
+					</div>
+					<MobileNav />
+				</main>
+				<aside class={`${styles.sidebar} ${styles.right}`}>
+					<ErrorBoundary fallback={<p>An error occurred</p>}>
+						<Sidebar />
+					</ErrorBoundary>
+				</aside>
+			</div>
+		</Suspense>
+	</SessionProvider>
 )
 
 export default App

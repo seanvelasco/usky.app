@@ -20,7 +20,8 @@ a {
 .inner {
 	display: flex;
 	align-items: center;
-	height: 3.25rem;
+	height: 3.75rem;
+	flex-shrink: 0;
 	gap: 1rem;
 }
 

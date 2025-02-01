@@ -1,17 +1,42 @@
-export const BubbleIcon = () => (
+import { Show } from 'solid-js'
+
+export const BubbleIcon = (props: { filled?: boolean }) => (
 	<svg
-		width='1.5rem'
-		height='1.5rem'
+		width='1.75rem'
+		height='1.75rem'
 		xmlns='http://www.w3.org/2000/svg'
 		fill='none'
-		viewBox='0 0 24 24'
+		viewBox='0 0 28 28'
 		stroke-width='1.5'
 		stroke='currentColor'
 	>
-		<path
-			stroke-linecap='round'
-			stroke-linejoin='round'
-			d='M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z'
-		/>
+		<Show
+			when={props.filled}
+			fallback={
+				<>
+					<path
+						fill-rule='evenodd'
+						clip-rule='evenodd'
+						d='M20.608 3.463c1.204-.794 2.798.126 2.711 1.565l-1.09 18.154c-.089 1.493-1.888 2.193-2.963 1.153l-5.667-5.48a.25.25 0 00-.105-.06l-7.58-2.168c-1.437-.412-1.73-2.32-.483-3.143l15.177-10.02zm1.214 1.476a.25.25 0 00-.387-.224L6.258 14.735a.25.25 0 00.069.45l7.58 2.168c.276.079.528.224.735.424l5.667 5.48a.25.25 0 00.423-.165l1.09-18.153z'
+						fill='#bbb'
+					></path>
+					<path
+						fill-rule='evenodd'
+						clip-rule='evenodd'
+						d='M20.19 7.317l-5.383 11.325-1.732-1L20.19 7.317z'
+						fill='#bbb'
+					></path>
+				</>
+			}
+		>
+			<path
+				fill-rule='evenodd'
+				clip-rule='evenodd'
+				d='M23.319 5.028c.087-1.439-1.507-2.359-2.711-1.565L5.43 13.484c-1.247.823-.954 2.731.483 3.143l6.58 1.882L20.189 7.32l-5.842 12.257 4.92 4.758c1.075 1.04 2.874.34 2.963-1.153l1.09-18.154z'
+				fill='var(--icon)'
+			></path>
+		</Show>
 	</svg>
 )
+
+export default BubbleIcon

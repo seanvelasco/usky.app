@@ -3,8 +3,8 @@ import {
 	Switch,
 	Match,
 	Suspense,
-	JSXElement,
-	ErrorBoundary
+	ErrorBoundary,
+	type JSXElement
 } from 'solid-js'
 import {
 	A,
@@ -28,7 +28,6 @@ import getConvo from '../../api/convo/getConvo'
 import Avatar from '../../components/Avatar'
 import getProfile from '../../api/actor/getProfile'
 import getFeedGenerator from '../../api/feed/getFeedGenerator'
-import Blink from '../Blink'
 
 export const ProfilePageHeader = () => {
 	const params = useParams()
@@ -113,7 +112,7 @@ export const TimelineHeader = () => {
 				href='/live'
 			>
 				Live
-				<Blink />
+				{/* <Blink /> */}
 			</A>
 		</div>
 	)
@@ -246,7 +245,7 @@ const Header = () => {
 						<ChevronLeft />
 					</button>
 				</Show>
-				<ErrorBoundary fallback={(_) => <></>}>
+				<ErrorBoundary fallback={() => <></>}>
 					<Switch>
 						<Match when={isHome()}>
 							<TimelineHeader />
