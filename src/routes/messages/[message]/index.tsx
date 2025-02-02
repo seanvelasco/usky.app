@@ -80,7 +80,7 @@ const Bubble = (props: { message: Message; self: boolean }) => (
 )
 
 const Message = (props: RouteSectionProps) => {
-	let history: HTMLDivElement
+	let history: HTMLDivElement | undefined
 	const session = useSession()
 
 	const title = () => `Chat - Bluesky (usky.app)`
@@ -97,9 +97,11 @@ const Message = (props: RouteSectionProps) => {
 
 	createEffect(() => {
 		if (messages()) {
-			history.scrollTo({
-				top: history.scrollHeight
-			})
+			if (history) {
+				history.scrollTo({
+					top: history.scrollHeight
+				})
+			}
 		}
 	})
 

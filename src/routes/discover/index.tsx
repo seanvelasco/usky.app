@@ -8,7 +8,7 @@ import FeedPost from '../../components/Post'
 import Spinner from '../../components/Spinner'
 
 const Discover = () => {
-	let ref: HTMLDivElement
+	let ref: HTMLDivElement | undefined
 	const [posts, setPosts] = createStore<
 		Awaited<ReturnType<typeof getFeed>>['feed']
 	>([])

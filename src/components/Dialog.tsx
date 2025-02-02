@@ -31,7 +31,7 @@ const Trigger = (props: { children: JSXElement }) => {
 
 const Content = (props: { children: JSXElement }) => {
 	const context = useDialogContext()
-	let dialog: HTMLDialogElement
+	let dialog: HTMLDialogElement | undefined
 
 	createEffect(() => {
 		if (context.open()) {
@@ -42,13 +42,17 @@ const Content = (props: { children: JSXElement }) => {
 	})
 
 	const handleOpen = () => {
-		dialog.showModal()
-		document.body.style.overflow = 'hidden'
+		if (dialog) {
+			dialog.showModal()
+			document.body.style.overflow = 'hidden'
+		}
 	}
 
 	const handleClose = () => {
-		dialog.close()
-		document.body.style.overflow = 'initial'
+		if (dialog) {
+			dialog.close()
+			document.body.style.overflow = 'initial'
+		}
 	}
 
 	const handleOutsideClick = (event: MouseEvent) => {
@@ -56,13 +60,17 @@ const Content = (props: { children: JSXElement }) => {
 	}
 
 	onMount(() => {
-		dialog.addEventListener('click', handleOutsideClick)
-		dialog.addEventListener('close', handleClose)
+		if (dialog) {
+			dialog.addEventListener('click', handleOutsideClick)
+			dialog.addEventListener('close', handleClose)
+		}
 	})
 
 	onCleanup(() => {
-		dialog.removeEventListener('click', handleOutsideClick)
-		dialog.removeEventListener('close', handleClose)
+		if (dialog) {
+			dialog.removeEventListener('click', handleOutsideClick)
+			dialog.removeEventListener('close', handleClose)
+		}
 	})
 
 	return (
